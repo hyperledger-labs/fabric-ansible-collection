@@ -25,7 +25,7 @@ RUN pip3.9 install --user -U 'ansible' fabric-sdk-py python-pkcs11 'openshift' s
 ADD . /tmp/collection
 RUN cd /tmp/collection \
     && ansible-galaxy collection build --output-path /tmp \
-    && ansible-galaxy collection install /tmp/ibm-blockchain_platform-*.tar.gz \
+    && ansible-galaxy collection install /tmp/hyperledger-fabric_ansible_collection-*.tar.gz \
     && ansible-galaxy collection install kubernetes.core \
     && chgrp -R root /home/ibp-user/.ansible \
     && chmod -R g=u /home/ibp-user/.ansible
