@@ -1,8 +1,6 @@
-# ansible-collection
+# Hyperledger Fabric Ansible Collection
 
-The IBM Blockchain Platform provides advanced tooling that allows you to quickly build, operate & govern and grow blockchain networks. It uses Hyperledger Fabric, the open source, industry standard for enterprise blockchain. It also helps you to deploy Hyperledger Fabric networks anywhere, either to cloud or on-premises, using Kubernetes.
-
-This Ansible collection, provided as part of the IBM Blockchain Platform, enables you to automate the building of Hyperledger Fabric networks.
+Hyperledger Fabric is an open source, industry standard, blockchain technology that allows you to build, operate & govern and grow enterprise blockchain networks. This Ansible collection enables you to automate the building of Hyperledger Fabric networks.
 
 *Please Note* the main branch is now set to `2.0.0-beta`, the `release-1.2` branch is available. If you build a local copy of Ansible for production, please work from the `release-1.2` branch.
 
@@ -18,11 +16,9 @@ Please see the [README](./examples/opensource-stack/README.md) in the `opensourc
 
 ## Noteable Updates
 
-- there should be support now for IKS1.25 in the HLFSupport and OpenSource consoles/operators
-- there is now a chaincode information module `chaincode_list_info` to get details of chaincodes in a peer
-- the approved chaincode module can now handle automatic sequence numbers. See the [example](./examples/chaincode_info/00-org1-chaincode-info.yml) playbook for how to use these two new chaincode abilities
-
-- Note only the `fabric-console/fabric-operator-crds` and `hlfsupport-console/hlf-crds` should be used. The IBP-centric `console/crd` should be considered deprecated.
+- Added support for deploying both the Open Source and HLF Support console and operator on IKS v1.25
+- Added a chaincode information module `chaincode_list_info` to get details of chaincodes in a peer
+- Added ability to handle automatic sequence numbers in the approved chaincode module. See the [example](./examples/chaincode_info/00-org1-chaincode-info.yml) playbook for how to use these two new chaincode abilities.
 
 ## Using the collection
 
@@ -30,16 +26,18 @@ The choice will depend on what context you want to use ansible in.
 
 - If you've existing Ansible configurations you can install the v1.2 collection via `ansible-galaxy collection install hyperledger.fabric-ansible-collection`. For v2 install from source (see next option).
 - Install from source; clone this github repo, and run
-```
+
+```shell
     ansible-galaxy collection build -f
     ansible-galaxy collection install $(ls -1 | grep ibm-blockchain_platform) -f
 ```
+
 - Using a Docker container.
   For v1.2, a Docker image, ``ibmcom/ibp-ansible``, has been published to Docker Hub.
 
   You can run a playbook using this Docker image, by volume mounting the playbook into the Docker container and running the ``ansible-playbook`` command:
 
-  ```
+  ```shell
   docker run --rm -u $(id -u) -v /path/to/playbooks:/playbooks ibmcom/ibp-ansible ansible-playbook /playbooks/playbook.yml
   ```
 
@@ -47,7 +45,7 @@ The choice will depend on what context you want to use ansible in.
 
     For v2.0, the docker image is in the `ghcr.io` [registry](https://github.com/IBM-Blockchain/ansible-collection/pkgs/container/ofs-ansibe). It can be run in the same way
 
-  ```
+  ```shell
   docker pull ghcr.io/ibm-blockchain/ofs-ansibe:sha-826e86e
   docker run --rm -u $(id -u) -v /path/to/playbooks:/playbooks ghcr.io/ibm-blockchain/ofs-ansibe:sha-826e86e ansible-playbook /playbooks/playbook.yml
   ```
@@ -55,7 +53,7 @@ The choice will depend on what context you want to use ansible in.
 - If you are using github actions for CI/CD there is a [github action](https://github.com/hyperledgendary/fabric-cloud-infrastructure/tree/main/fabric-ansible-action) that uses the same docker image as the basis.
   For example; note this action needs to still be published. In the interim please copy this to your own repository
 
-  ```
+  ```yaml
     - name: Create the Fabric CRDs/Operator
       id: operatorinstall
       uses: ./fabric-ansible-action
@@ -65,14 +63,10 @@ The choice will depend on what context you want to use ansible in.
 
 ## Documentation
 
-Documentation for this Ansible collection is available here: https://ibm-blockchain.github.io/ansible-collection/
+Documentation for this Ansible collection is available here: <https://labs.hyperledger.org/fabric-ansible-collection/>
 
 The documentation includes installation instructions, tutorials, and reference material for all modules and roles in this collection.
 
 ## License
 
 Apache-2.0
-
-## Author Information
-
-This Ansible collection is maintained by the IBM Blockchain Platform development team. For more information on the IBM Blockchain Platform, visit the following website: https://www.ibm.com/cloud/blockchain-platform

@@ -11,16 +11,18 @@ In brief,
 - Clone this repository
 - Use `poetry` to create a development shell `poetry shell`
 - Run these commands to build locally
-```
+
+```shell
     ansible-galaxy collection build -f
     ansible-galaxy collection install $(ls -1 | grep ibm-blockchain_platform) -f
 ```
 
 You can then run the playbooks as needed
 
-### Pre-requistie tools
+## Pre-requisite tools
 
-In addition you will need the `kubectl` and `git` installed.
+In addition you will need `kubectl` and `git` installed.
+
 ## Kubernetes Connection
 
 The playbooks assume that the kubectl context in the current shell is set to the cluster you wish to install to. NOTE that this has been initially tested using a KIND cluster (see the `sample-network` example in the [Fabric Operator](https://github.com/hyperledger-labs/fabric-operator) for creating a KIND instance)
@@ -29,14 +31,14 @@ The playbooks assume that the kubectl context in the current shell is set to the
 
 ## Post-creation actions
 
-Once installed, you've the choice of using the Console to create Fabric resources.
+Once installed, you have the choice of using the Console to create Fabric resources.
 Alternatively you can use the other Ansible modules to create resources.
 
 It helps to create an API key rather than use the username/password.
 
 For example, assuming the naming as used in the example's `vars.yml` and a local KIND cluster.
 
-```
+```shell
     AUTH=$(curl -X POST https://fabricinfra-hlf-console-console.localho.st:443/ak/api/v2/permissions/keys -u admin:password -k -H 'Content-Type: application/json' -d '{"roles": ["writer", "manager"],"description": "newkey"}')
     KEY=$(echo $AUTH | jq .api_key | tr -d '"')
     SECRET=$(echo $AUTH | jq .api_secret | tr -d '"')
