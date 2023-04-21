@@ -12,7 +12,7 @@ The details and implications of setting the parameters is covered in the Hyperle
 Before you start
 ----------------
 
-This task guide assumes that you have installed Ansible and the IBM Blockchain Platform collection for Ansible, and are familiar with how to use these technologies.
+This task guide assumes that you have installed Ansible and the Hyperledger Fabric Ansible Collection, and are familiar with how to use these technologies.
 
 This task guide also assumes that you have created a PostgresSQL database and that you have the connection details available.
 

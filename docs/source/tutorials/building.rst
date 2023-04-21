@@ -5,9 +5,9 @@
 Building a network
 ==================
 
-This tutorial will demonstrate how to use the IBM Blockchain Platform collection for Ansible to automate the process of building a new Hyperledger Fabric network.
+This tutorial will demonstrate how to use the Hyperledger Fabric Ansible Collection to automate the process of building a new Hyperledger Fabric network.
 
-In this tutorial, you will use the IBM Blockchain Platform collection for Ansible to build a Hyperledger Fabric network with two organizations. One organization "Ordering Org" will be the ordering organization, and that organization will run the ordering service. The other organization "Org1" will be an endorsing organization, and that organization will run a peer. You will also create a channel, and join the endorsing organizations peer into that channel.
+In this tutorial, you will use the Hyperledger Fabric Ansible Collection to build a Hyperledger Fabric network with two organizations. One organization "Ordering Org" will be the ordering organization, and that organization will run the ordering service. The other organization "Org1" will be an endorsing organization, and that organization will run a peer. You will also create a channel, and join the endorsing organizations peer into that channel.
 
 For this tutorial, you can use the IBM Blockchain Platform on IBM Cloud, or the IBM Blockchain Platform software running in a Red Hat OpenShift or Kubernetes cluster.
 

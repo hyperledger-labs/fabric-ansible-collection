@@ -14,7 +14,7 @@ v2 capability should only be enabled when all nodes on the network are running v
 Before you start
 ----------------
 
-This task guide assumes that you have installed Ansible and the IBM Blockchain Platform collection for Ansible, and are familiar with how to use these technologies.
+This task guide assumes that you have installed Ansible and the Hyperledger Fabric Ansible Collection, and are familiar with how to use these technologies.
 
 Cloning the repository
 ----------------------
