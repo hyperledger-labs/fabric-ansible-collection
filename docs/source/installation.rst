@@ -108,20 +108,19 @@ You can also use this Ansible collection to install either of these options. To 
 
 
 ..
-    If you are using the IBM Blockchain Platform on IBM Cloud, you must create service credentials for this Ansible collection to use. The ``api_endpoint`` and ``api_key`` properties in the service credentials must be passed into the modules and roles in this Ansible collection.
+    TODO: Create a new Ansible Galaxy location to push the playbooks to and link the new URL
 
-    If you are using the IBM Blockchain Platform software running in a Red Hat OpenShift or Kubernetes cluster, you must determine the URL of your IBM Blockchain Platform console - this will be the ``api_endpoint`` property. You must also provide a valid API key ``api_key`` and secret ``api_secret`` for the IBM Blockchain Platform console. These properties must be passed into the modules and roles in this Ansible collection.
+[COMING SOON] Installing using Ansible Galaxy
+---------------------------------------------
 
-Installing using Ansible Galaxy
--------------------------------
+Ansible Galaxy is the package manager for Ansible. The collection is published to Ansible Galaxy here: https://galaxy.ansible.com/COMING/SOON
 
-Ansible Galaxy is the package manager for Ansible. The collection is published to Ansible Galaxy on a regular basis: https://galaxy.ansible.com/ibm/blockchain_platform
 
 You can use the ``ansible-galaxy`` command to install a collection from Ansible Galaxy, the package manager for Ansible:
 
 ::
 
-    ansible-galaxy collection install hyperledger.fabric-ansible-collection
+    ansible-galaxy collection install COMING_SOON
 
 Installing from source
 ----------------------
@@ -135,7 +134,7 @@ This will build the stable `release-1.2` branch for v1.2.; use the `main` branch
 
 ::
 
-    git clone --branch main https://github.com/IBM-Blockchain/ansible-collection.git
+    git clone --branch main https://github.com/hyperledger-labs/fabric-ansible-collection.git
 
 2. Build the collection artifact:
 
@@ -150,12 +149,12 @@ This will build the stable `release-1.2` branch for v1.2.; use the `main` branch
 
     ansible-galaxy collection install ibm-blockchain_platform-x.y.z.tar.gz
 
-Using a Docker image
---------------------
+[COMING SOON] Using a Docker image
+----------------------------------
 
 If you do not want to, or cannot, install all of the required software for this collection on your system, you may wish to build a Docker image that contains all of the software required to run Ansible playbooks which use this collection.
 
-A Docker image, ``ghcr.io/ibm-blockchain/ofs-ansibe:sha-826e86e``, has been published to Docker Hub.
+A Docker image, ``ghcr.io/COMING/SOON``, has been published to Docker Hub.
 
 You can run a playbook using this Docker image, by volume mounting the playbook into the Docker container and running the ``ansible-playbook`` command:
 
@@ -167,5 +166,5 @@ Note that the UID flag ``-u $(id -u)`` ensures that Ansible can write connection
 
 The Docker image is supported for use in Docker, Kubernetes, and Red Hat OpenShift.
 
-If you need to build or customize the Docker image, you can find the Dockerfile here: https://github.com/IBM-Blockchain/ansible-collection/blob/main/Dockerfile
+If you need to build or customize the Docker image, you can find the Dockerfile here: https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/Dockerfile
 

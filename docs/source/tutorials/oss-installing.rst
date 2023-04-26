@@ -16,7 +16,7 @@ Before you start
 
 Ensure that you have installed all of the prerequisite software described in `Installation <../installation.html>`_.
 
-You must have access to a Kubernetes Service or Red Hat OpenShift cluster that is supported for use with Hyperledger Fabric Open Source Stack. To get an idea of the supported platforms and resource requirements, you can reference the IBM Hyperledger Fabric Support Offering documentation: https://www.ibm.com/docs/en/hlf-support/1.0.0?topic=kubernetes-deploying-support-hyperledger-fabric
+You must have access to a Kubernetes Service or Red Hat OpenShift cluster that is supported for use with Hyperledger Fabric Open Source Stack. To get an idea of the supported platforms and resource requirements, you can reference the following documentation: https://www.ibm.com/docs/en/hlf-support/1.0.0?topic=kubernetes-deploying-support-hyperledger-fabric
 
 If you have a Kubernetes cluster, you must have the Kubernetes CLI (``kubectl``) installed and configured to use your Kubernetes cluster. Verify that it is working by running the following command:
 
@@ -36,11 +36,16 @@ This namespace or project will contain the Hyperledger Fabric Open Source Stack 
 
 The Ansible collection will attempt to automatically create the namespace or project for you. If you do not have permissions to create a namespace or project, then ask your administrator to create them for you.
 
+Note about IBM Kubernetes Service
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you are using the IBM Kubernetes Service, before attempting to run the playbooks to install the Hyperledger Fabric Open Source Stack, you must customize your ALB deployments to use the nginx ingressclass and enable SSL passthrough. More details can be found here: https://www.ibm.com/docs/en/hlf-support/1.0.0?topic=kubernetes-deploying-support-hyperledger-fabric#console-deploy-k8-iks-passthru
+
 
 Creating the playbook
 ---------------------
 
-Create a new Ansible playbook file called `install-oss-hlf.yml`. Copy and paste the appropriate code block below, depending on the type of cluster that you are using:
+Create a new Ansible playbook file called `install-oss.yml`. Copy and paste the appropriate code block below, depending on the type of cluster that you are using:
 
 **Kubernetes**
 
@@ -58,7 +63,7 @@ Create a new Ansible playbook file called `install-oss-hlf.yml`. Copy and paste 
         namespace: oss-hlf-infra
         wait_timeout: 3600
       roles:
-        - hyperledger.fabric-ansible-collection.fabric_operator_crds
+        - hyperledger.fabric_ansible_collection.fabric_operator_crds
 
     - name: Deploy Hyperledger Fabric Open Source Console
       hosts: localhost
@@ -75,7 +80,7 @@ Create a new Ansible playbook file called `install-oss-hlf.yml`. Copy and paste 
         console_tls_secret: <console_tls_secret>
         wait_timeout: 3600
       roles:
-        - hyperledger.fabric-ansible-collection.fabric_console
+        - hyperledger.fabric_ansible_collection.fabric_console
 
 **Red Hat OpenShift**
 
@@ -93,7 +98,7 @@ Create a new Ansible playbook file called `install-oss-hlf.yml`. Copy and paste 
         project: oss-hlf-infra
         wait_timeout: 3600
       roles:
-        - hyperledger.fabric-ansible-collection.fabric_operator_crds
+        - hyperledger.fabric_ansible_collection.fabric_operator_crds
 
     - name: Deploy Hyperledger Fabric Open Source Console
       hosts: localhost
@@ -102,12 +107,13 @@ Create a new Ansible playbook file called `install-oss-hlf.yml`. Copy and paste 
         target: openshift
         arch: amd64
         project: oss-hlf-infra
+        console_name: <console_name>
         console_domain: <console_domain>
         console_email: <console_email>
         console_default_password: <console_default_password>
         wait_timeout: 3600
       roles:
-        - hyperledger.fabric-ansible-collection.fabric_console
+        - hyperledger.fabric_ansible_collection.fabric_console
 
 Next, you will need to replace the variable placeholders with the required values.
 
@@ -121,7 +127,7 @@ Replace ``<console_default_password>`` with the default password for the Hyperle
 
 Replace ``<console_storage_class>`` with the Kubernetes or Red Hat Openshift StorageClass that must be used for all Hyperledger Fabric components.
 
-Replace ``<console_tls_secret>`` with the Kubernetes or Red Hat Openshift secret to terminate TLS traffic. This secret must be present in the namespace before installing the Hyperledger Fabric Open Source Console.
+Replace ``<console_tls_secret>`` with the Kubernetes or Red Hat Openshift secret to terminate TLS traffic. This secret must be present in the namespace before installing the Hyperledger Fabric Open Source Console. If not supplied, console will generate it's own certficate, but browsers and other networking components may block the console's url. A CA (such as Let's Encrypt) will need to be used to issue a TLS cert.
 
 By default, the ``<wait_timeout>`` variable is set to ``3600`` seconds (1 hour), which should be sufficient for most environments. You only need to change the value for this variable if you find that timeout errors occur during the installation process.
 
@@ -130,34 +136,55 @@ Running the playbook
 
 Run the Ansible playbook file you created in the previous step by running the following command:
 
-    ::
+::
 
-        ansible-playbook install-oss-hlf.yml
+    ansible-playbook install-oss-hlf.yml
 
 The Ansible playbook will take some time to run. As the playbook runs, it will output information on the tasks being executed.
 
 At the end of the output, you should see text similar to the following:
 
-    .. highlight:: none
+.. highlight:: none
 
-    ::
+::
 
-        TASK [console : Wait for console to start] ***********************************************************************
-        ok: [localhost]
+    TASK [console : Wait for console to start] ***********************************************************************
+    ok: [localhost]
 
-        TASK [console : Print console URL] *******************************************************************************
-        ok: [localhost] => {
-            "msg": "Hyperledger Fabric Open Source Stack console available at https://my-namespace-oss-hlf-console-console.apps.my-cluster.example.org"
-        }
+    TASK [console : Print console URL] *******************************************************************************
+    ok: [localhost] => {
+        "msg": "Hyperledger Fabric Open Source Stack console available at https://my-namespace-oss-hlf-console-console.apps.my-cluster.example.org"
+    }
 
-        TASK [console : Delete console] **********************************************************************************
-        skipping: [localhost]
+    TASK [console : Delete console] **********************************************************************************
+    skipping: [localhost]
 
-        PLAY RECAP *******************************************************************************************************
-        localhost                  : ok=19   changed=4    unreachable=0    failed=0    skipped=13   rescued=0    ignored=0
+    PLAY RECAP *******************************************************************************************************
+    localhost                  : ok=19   changed=4    unreachable=0    failed=0    skipped=13   rescued=0    ignored=0
 
 Ensure that no errors are reported in the output. Ensure that the failure count in the final ``PLAY RECAP`` section is 0.
 
 The URL of the Hyperledger Fabric Open Source Console is displayed as part of the output for the ``Print console URL`` task. When you access this URL, you can log in with the email and default password that you specified in your Ansible playbook.
 
-You have now finished installing the Hyperledger Fabric Open Source Stack software.
+The URL can also be found at a later time with one of the following commands:
+
+
+**Kubernetes**
+
+.. highlight:: none
+
+::
+
+    kubectl get ingress -n [NAMESPACE]
+
+
+**OpenShift**
+
+.. highlight:: none
+
+::
+
+    oc get routes -n [PROJECT]
+
+
+Congratulations! You have now installed the Hyperledger Fabric Open Source Stack.

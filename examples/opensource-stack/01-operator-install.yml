@@ -5,9 +5,9 @@
 - name: Deploy Opensource custom resource definitions and operator
   hosts: localhost
   vars_files:
-    - vars.yml
+      - vars.yml
   vars:
-    state: present
-    wait_timeout: 3600
+      state: present
+      wait_timeout: 3600
   roles:
-    - hyperledger.fabric-ansible-collection.fabric_operator_crds
+      - hyperledger.fabric_ansible_collection.fabric_operator_crds
