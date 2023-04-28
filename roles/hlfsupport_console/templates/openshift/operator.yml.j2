@@ -48,6 +48,10 @@ spec:
                 operator: In
                 values:
                 - "{{ arch }}"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 2000
       imagePullSecrets:
         - name: "{{ image_pull_secret }}"
       containers:

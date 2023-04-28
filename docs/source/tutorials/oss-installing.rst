@@ -5,9 +5,7 @@
 Installing the Hyperledger Fabric Open Source Stack
 ===================================================
 
-This tutorial will demonstrate how to use the Hyperledger Fabric Ansible Collection to automate the installation of the Hyperledger Fabric Open Source Stack into an IBM Cloud Kubernetes Service or Red Hat OpenShift cluster.
-
-Once you have created an instance, follow the `Building a network <./building.html>`_ tutorial.
+This tutorial will demonstrate how to use the Hyperledger Fabric Ansible Collection to automate the installation of the Hyperledger Fabric Open Source Stack into a Kubernetes Service or Red Hat OpenShift cluster.
 
 This tutorial uses the Ansible Fabric `fabric-operator-crds role <../roles/fabric-operator-crds.html>`_ and `fabric-console role <../roles/fabric-console.html>`_ to install the Hyperledger Fabric Open Source Operator and Console. If you wish to customize the installation process, then you should review the documentation for these roles.
 
@@ -187,4 +185,4 @@ The URL can also be found at a later time with one of the following commands:
     oc get routes -n [PROJECT]
 
 
-Congratulations! You have now installed the Hyperledger Fabric Open Source Stack.
+Congratulations! You have now installed the Hyperledger Fabric Open Source Stack. You can follow the `Building a network <./building.html>`_ tutorial.

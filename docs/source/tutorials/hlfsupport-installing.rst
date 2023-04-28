@@ -3,20 +3,18 @@
 ..
 
 Installing IBM Support for Hyperledger Fabric
-======================================
+=============================================
 
-This tutorial will demonstrate how to use the IBM Support for Hyperledger Fabric collection for Ansible to automate the installation of the IBM Support for Hyperledger Fabric software into a Red Hat OpenShift cluster.
+This tutorial will demonstrate how to use the IBM Support for Hyperledger Fabric collection for Ansible to automate the installation of the IBM Support for Hyperledger Fabric software into a Kubernetes Service or Red Hat OpenShift cluster.
 
-If you are using IBM Support for Hyperledger Fabric on IBM Cloud, you do not need to follow this tutorial. You cannot use this Ansible collection to create an instance of the IBM Support for Hyperledger Fabric service on IBM Cloud. If you want to use IBM Support for Hyperledger Fabric on IBM Cloud, you must create the instance before you attempt to use this Ansible collection. Once you have created an instance, follow the `Building a network <./building.html>`_ tutorial.
-
-This tutorial uses the Ansible roles `crds <../roles/crds.html>`_ and `console <../roles/console.html>`_ to install the IBM Support for Hyperledger Fabric software. If you wish to customize the installation process, then you should review the documentation for these roles.
+This tutorial uses the Ansible HLF Support `hlfsupport_crds role <../roles/hlfsupport_crds.html>`_ and `hlfsupport_console role <../roles/console.html>`_ to install the IBM Support for Hyperledger Fabric software. If you wish to customize the installation process, then you should review the documentation for these roles.
 
 Before you start
 ----------------
 
 Ensure that you have installed all of the prerequisite software described in `Installation <../installation.html>`_.
 
-You must have access to a  Red Hat OpenShift cluster that is supported for use with IBM Support for Hyperledger Fabric. Review the list of supported platforms in the IBM Support for Hyperledger Fabric documentation: `Supported Platforms <https://www.ibm.com/docs/en/hlf-support/1.0.0?topic=started-about-support-hyperledger-fabric#console-ocp-about-prerequisites>`_
+You must have access to a Kubernetes Service or Red Hat OpenShift cluster that is supported for use with IBM Support for Hyperledger Fabric. Review the list of supported platforms in the IBM Support for Hyperledger Fabric documentation: `Supported Platforms <https://www.ibm.com/docs/en/hlf-support/1.0.0?topic=started-about-support-hyperledger-fabric#console-ocp-about-prerequisites>`_
 
 If you have a Kubernetes cluster, you must have the Kubernetes CLI (``kubectl``) installed and configured to use your Kubernetes cluster. Verify that it is working by running the following command:
 
@@ -40,10 +38,15 @@ The Ansible collection will attempt to automatically create both of these namesp
 
 Finally, you must have purchased an entitlement to use the IBM Support for Hyperledger Fabric. You will need your entitlement key in order to complete this tutorial. For more information, see the IBM Support for Hyperledger Fabric documentation: `License and pricing <https://cloud.ibm.com/docs/blockchain-sw-25?topic=blockchain-sw-25-console-ocp-about#console-ocp-about-license>`_
 
+Note about IBM Kubernetes Service
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you are using the IBM Kubernetes Service, before attempting to run the playbooks to install the Hyperledger Fabric Open Source Stack, you must customize your ALB deployments to use the nginx ingressclass and enable SSL passthrough. More details can be found here: https://www.ibm.com/docs/en/hlf-support/1.0.0?topic=kubernetes-deploying-support-hyperledger-fabric#console-deploy-k8-iks-passthru
+
 Creating the playbook
 ---------------------
 
-Create a new Ansible playbook file called `install-ibm-hlfsupport.yml`. Copy and paste the content for  Red Hat OpenShift into this new playbook, depending on the type of cluster that you are using:
+Create a new Ansible playbook file called `install-hlf.yml`. Copy and paste the content for  Red Hat OpenShift into this new playbook, depending on the type of cluster that you are using:
 **Kubernetes**
 
     .. highlight:: yaml
@@ -57,12 +60,12 @@ Create a new Ansible playbook file called `install-ibm-hlfsupport.yml`. Copy and
             state: present
             target: k8s
             arch: amd64
-            namespace: ibm-hlfsupport-infra
-            image_registry_password: <image_registry_password>
-            image_registry_email: <image_registry_email>
+            namespace: <webhoook-namespace>
+            product_version: <hlf_product_version>
+            webhook_version: <hlf_image_date>
             wait_timeout: 3600
           roles:
-            - hyperledger.fabric-ansible-collection.hlfsupport_crds
+            - hyperledger.fabric_ansible_collection.hlfsupport_crds
 
         - name: Deploy IBM Support for Hyperledger Fabric console
           hosts: localhost
@@ -70,15 +73,15 @@ Create a new Ansible playbook file called `install-ibm-hlfsupport.yml`. Copy and
             state: present
             target: k8s
             arch: amd64
-            namespace: <namespace>
-            image_registry_password: <image_registry_password>
-            image_registry_email: <image_registry_email>
+            namespace: <operator-namespace>
+            product_version: <hlf_product_version>
+            operator_version: <hlf_image_date>
             console_domain: <console_domain>
             console_email: <console_email>
             console_default_password: <console_default_password>
             wait_timeout: 3600
           roles:
-            - hyperledger.fabric-ansible-collection.hlfsupport_console
+            - hyperledger.fabric_ansible_collection.hlfsupport_console
 
 **Red Hat OpenShift**
 
@@ -93,12 +96,12 @@ Create a new Ansible playbook file called `install-ibm-hlfsupport.yml`. Copy and
             state: present
             target: openshift
             arch: amd64
-            project: ibm-hlfsupport-infra
-            image_registry_password: <image_registry_password>
-            image_registry_email: <image_registry_email>
+            project: <webhook-project>
+            product_version: <hlf_product_version>
+            webhook_version: <hlf_image_date>
             wait_timeout: 3600
           roles:
-            - hyperledger.fabric-ansible-collection.hlfsupport_crds
+            - hyperledger.fabric_ansible_collection.hlfsupport_crds
 
         - name: Deploy IBM Support for Hyperledger Fabric console
           hosts: localhost
@@ -106,23 +109,23 @@ Create a new Ansible playbook file called `install-ibm-hlfsupport.yml`. Copy and
             state: present
             target: openshift
             arch: amd64
-            project: <project>
-            image_registry_password: <image_registry_password>
-            image_registry_email: <image_registry_email>
+            project: <console-project>
             console_domain: <console_domain>
             console_email: <console_email>
+            product_version: <hlf_product_version>
+            operator_version: <hlf_image_date>
             console_default_password: <console_default_password>
             wait_timeout: 3600
           roles:
-            - hyperledger.fabric-ansible-collection.hlfsupport_console
+            - hyperledger.fabric_ansible_collection.hlfsupport_console
 
 Next, you will need to replace the variable placeholders with the required values.
 
-Replace ``<namespace>`` with the name of the Kubernetes namespace, or ``<project>`` with the name of the Red Hat OpenShift project that you are installing the IBM Support for Hyperledger Fabric operator and console into.
+Replace ``<webhoook-namespace>`` with the name of the Kubernetes namespace, or ``<webhoook-project>`` with the name of the Red Hat OpenShift project that you are installing the IBM Support for Hyperledger Fabric Webhook and CRD.
 
-Replace ``<image_registry_password>`` with your IBM Support for Hyperledger Fabric entitlement key.
+Replace ``<hlf_product_version>`` with the version of the IBM Hyperledger Fabric Support Offering and replace ``<hlf_image_date>`` with the image date of the IBM Hyperledger Fabric Support Offering. Details of the images available can be found here: https://www.ibm.com/support/pages/node/6572761.
 
-Replace ``<image_registry_email>`` with the email address of your IBMid account that you use to access the My IBM dashboard.
+Replace ``<console-namespace>`` with the name of the Kubernetes namespace, or ``<console-project>`` with the name of the Red Hat OpenShift project that you are installing the IBM Support for Hyperledger Fabric Operator and Console. This should be different to the webhook namespace or project.
 
 Replace ``<console_domain>`` with the domain name of your Kubernetes cluster or Red Hat OpenShift cluster. This domain name is used as the base domain name for all ingress or routes created by the IBM Support for Hyperledger Fabric.
 
@@ -167,4 +170,24 @@ Ensure that no errors are reported in the output. Ensure that the failure count 
 
 The URL of the IBM Support for Hyperledger Fabric console is displayed as part of the output for the ``Print console URL`` task. When you access this URL, you can log in with the email and default password that you specified in your Ansible playbook.
 
-You have now finished installing the IBM Support for Hyperledger Fabric software.
+The URL can also be found at a later time with one of the following commands:
+
+
+**Kubernetes**
+
+.. highlight:: none
+
+::
+
+    kubectl get ingress -n [NAMESPACE]
+
+
+**OpenShift**
+
+.. highlight:: none
+
+::
+
+    oc get routes -n [PROJECT]
+
+Congratulations! You have now installed the IBM Hyperledger Fabric Support Offering. You can follow the `Building a network <./building.html>`_ tutorial.

@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 ---
-
 apiVersion: ibp.com/v1beta1
 kind: IBPConsole
 metadata:
@@ -18,33 +17,25 @@ spec:
   registryURL: "{{ image_registry_url }}"
   imagePullSecrets:
   - "{{ image_pull_secret }}"
-  usetags: true
-  images:
-    deployerImage: "{{deployer_image}}"
-    deployerTag: "{{deployer_image_label}}"
-    consoleInitImage: "{{init_image}}"
-    consoleInitTag: "{{init_image_label}}"
-    consoleImage: "{{console_image}}"
-    consoleTag: "{{console_image_label}}"
-    configtxlatorImage: "{{tools_image}}"
-    configtxlatorTag: "{{tools_image_label}}"
-    couchdbImage: "{{couchdb_image}}"
-    couchdbTag: "{{couchdb_image_label}}"
   networkinfo:
     domain: "{{ console_domain }}"
   storage:
     console:
       class: "{{ console_storage_class }}"
       size: "{{ console_storage_size }}"
-{%+ if console_tls_secret is defined %}
-  tlsSecretName: "{{ console_tls_secret }}"
-{% endif %}
-{%+ if zones is defined %}
+  imagePullSecrets:
+  - "{{ image_pull_secret }}"
+  usetags: true
+  version: 1.0.0
+  {%+ if zones is defined %}
   clusterdata:
     zones:
-{%+ for zone in zones %}
-    - "{{ zone }}"
-{% endfor %}
+  {%+ for zone in zones %}
+      - "{{ zone }}"
+  {% endfor %}
+  {% endif %}
+{%+ if console_tls_secret is defined %}
+  tlsSecretName: "{{ console_tls_secret }}"
 {% endif %}
 {%+ if console_images is defined %}
   images:

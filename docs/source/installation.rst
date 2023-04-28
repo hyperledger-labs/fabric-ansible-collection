@@ -149,6 +149,12 @@ This will build the stable `release-1.2` branch for v1.2.; use the `main` branch
 
     ansible-galaxy collection install ibm-blockchain_platform-x.y.z.tar.gz
 
+Alternatively, make sure you have ``just`` installed and run the following command:
+
+::
+
+    just local
+
 [COMING SOON] Using a Docker image
 ----------------------------------
 
