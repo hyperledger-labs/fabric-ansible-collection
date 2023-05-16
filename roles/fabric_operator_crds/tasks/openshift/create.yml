@@ -7,8 +7,6 @@
     definition: "{{ lookup('kubernetes.core.kustomize',dir='https://github.com/hyperledger-labs/fabric-operator.git/config/crd') }}"
   register: resultcrds
 
-# Create the namespace for the operator
-
 - name: Fail if project not specified
   fail:
     msg: project not specified or is empty
@@ -51,7 +49,6 @@
     - hlf-operator-clusterrolebinding.yaml.j2
     - hlf-operator-serviceaccount.yaml
 
-# create the manager
 - name: Create Operator
   kubernetes.core.k8s:
     state: present

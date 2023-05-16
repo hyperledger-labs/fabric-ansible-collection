@@ -7,7 +7,6 @@
     definition: "{{ lookup('kubernetes.core.kustomize', dir='https://github.com/hyperledger-labs/fabric-operator.git/config/crd') }}"
   register: resultcrds
 
-# Create the namespace for the operator
 - name: Fail if namespace not specified
   fail:
     msg: namespace not specified or is empty
@@ -32,7 +31,6 @@
           'pod-security.kubernetes.io/enforce': baseline
   when: not namespace_info.resources
 
-# Create the Role based Access Control
 - name: Create Role Based Access Control
   kubernetes.core.k8s:
     state: present
@@ -44,7 +42,6 @@
     - hlf-operator-clusterrolebinding.yaml.j2
     - hlf-operator-serviceaccount.yaml
 
-# create the manager
 - name: Create Operator
   kubernetes.core.k8s:
     state: present

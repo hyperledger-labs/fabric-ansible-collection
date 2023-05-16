@@ -5,9 +5,9 @@
 Deploying a smart contract
 ==========================
 
-This tutorial will demonstrate how to use the IBM Blockchain Platform collection for Ansible to automate the process of deploying a smart contract to an existing Hyperledger Fabric network.
+This tutorial will demonstrate how to use the Hyperledger Fabric Ansible Collection to automate the process of deploying a smart contract to an existing Hyperledger Fabric network.
 
-In this tutorial, you will use the IBM Blockchain Platform collection for Ansible to deploy the FabCar sample smart contract to an existing Hyperledger Fabric network. The existing Hyperledger Fabric network has three organizations - an ordering organization "Ordering Org", and two endorsing organizations "Org1" and "Org2". Both organizations are members of an existing channel called "mychannel". You will install the FabCar sample smart contract onto the peers for both "Org1" and "Org2", approve the FabCar smart contract definition on the channel "mychannel" as both organizations, and then commit that smart contract definition.
+In this tutorial, you will use the Hyperledger Fabric Ansible Collection to deploy the FabCar sample smart contract to an existing Hyperledger Fabric network. The existing Hyperledger Fabric network has three organizations - an ordering organization "Ordering Org", and two endorsing organizations "Org1" and "Org2". Both organizations are members of an existing channel called "mychannel". You will install the FabCar sample smart contract onto the peers for both "Org1" and "Org2", approve the FabCar smart contract definition on the channel "mychannel" as both organizations, and then commit that smart contract definition.
 
 For this tutorial, you can use the IBM Blockchain Platform on IBM Cloud, or the IBM Blockchain Platform software running in a Red Hat OpenShift or Kubernetes cluster.
 

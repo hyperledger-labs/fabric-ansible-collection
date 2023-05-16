@@ -42,30 +42,8 @@ spec:
         app.kubernetes.io/name: "hlf"
         app.kubernetes.io/instance: "hlf"
         app.kubernetes.io/managed-by: "fabric-operator"
-      annotations:
-        productName: "IBM Support for Hyperledger Fabric"
-        productID: "5d5997a033594f149a534a09802d60f1"
-        productVersion: "1.0.0"
-        productChargedContainers: ""
-        productMetric: "VIRTUAL_PROCESSOR_CORE"
     spec:
-      # hostIPC: false
-      # hostNetwork: false
-      # hostPID: false
       serviceAccountName: hlf-operator
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/arch
-                    operator: In
-                    values:
-                      - amd64
-      # securityContext:
-      #   runAsNonRoot: true
-      #   runAsUser: 1001
-      #   fsGroup: 2000
       containers:
         - name: fabric-operator
           image: {{ fabric_operator_image }}
@@ -73,18 +51,6 @@ spec:
 
           command:
             - ibp-operator
-          # securityContext:
-          #   privileged: false
-          #   allowPrivilegeEscalation: false
-          #   readOnlyRootFilesystem: false
-          #   runAsNonRoot: false
-          #   runAsUser: 1001
-          #   capabilities:
-          #     drop:
-          #       - ALL
-          #     add:
-          #       - CHOWN
-          #       - FOWNER
           livenessProbe:
             tcpSocket:
               port: 8383

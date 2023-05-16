@@ -26,23 +26,11 @@
           'pod-security.kubernetes.io/enforce': baseline
   when: not namespace_info.resources
 
-- name: Create image secret
+- name: Create Role Based Access Control
   kubernetes.core.k8s:
     state: present
     namespace: "{{ namespace }}"
-    resource_definition: "{{ lookup('template', 'k8s/image_pull_secret.yml.j2') }}"
-
-- name: Create role
-  kubernetes.core.k8s:
-    state: present
-    namespace: "{{ namespace }}"
-    resource_definition: "{{ lookup('template', 'k8s/role.yml.j2') }}"
-
-- name: Create role binding
-  kubernetes.core.k8s:
-    state: present
-    namespace: "{{ namespace }}"
-    resource_definition: "{{ lookup('template', 'k8s/role_binding.yml.j2') }}"
+    resource_definition: "{{ lookup('template', 'rbac.yml.j2') }}"
 
 - name: Create deployment
   kubernetes.core.k8s:
@@ -56,7 +44,7 @@
   kubernetes.core.k8s:
     state: present
     namespace: "{{ namespace }}"
-    resource_definition: "{{ lookup('template', 'k8s/service.yml.j2') }}"
+    resource_definition: "{{ lookup('template', 'service.yml') }}"
 
 - name: Wait for secret to exist
   kubernetes.core.k8s_info:

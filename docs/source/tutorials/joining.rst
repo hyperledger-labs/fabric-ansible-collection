@@ -5,9 +5,9 @@
 Joining a network
 =================
 
-This tutorial will demonstrate how to use the IBM Blockchain Platform collection for Ansible to automate the process of joining an existing Hyperledger Fabric network.
+This tutorial will demonstrate how to use the Hyperledger Fabric Ansible Collection to automate the process of joining an existing Hyperledger Fabric network.
 
-In this tutorial, you will use the IBM Blockchain Platform collection for Ansible to join an existing Hyperledger Fabric network. The existing Hyperledger Fabric network has two organizations - an ordering organization "Ordering Org", and an endorsing organization "Org1". You will create a new endorsing organization "Org2", and that organization will run a peer. You will add the new organization "Org2" into an existing channel, and join the new organizations peer into that channel.
+In this tutorial, you will use the Hyperledger Fabric Ansible Collection to join an existing Hyperledger Fabric network. The existing Hyperledger Fabric network has two organizations - an ordering organization "Ordering Org", and an endorsing organization "Org1". You will create a new endorsing organization "Org2", and that organization will run a peer. You will add the new organization "Org2" into an existing channel, and join the new organizations peer into that channel.
 
 For this tutorial, you can use the IBM Blockchain Platform on IBM Cloud, or the IBM Blockchain Platform software running in a Red Hat OpenShift or Kubernetes cluster.
 

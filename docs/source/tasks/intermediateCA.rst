@@ -19,7 +19,7 @@ The playbook has the following steps:
 Before you start
 ----------------
 
-This task guide assumes that you have installed Ansible and the IBM Blockchain Platform collection for Ansible, and are familiar with how to use these technologies.
+This task guide assumes that you have installed Ansible and the Hyperledger Fabric Ansible Collection, and are familiar with how to use these technologies.
 
 This task guide assumes that you have access to the IBM Blockchain Platform documentation and the sections regarding Intermediate CAs.
 

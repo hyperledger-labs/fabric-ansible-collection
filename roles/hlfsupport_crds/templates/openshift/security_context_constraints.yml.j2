@@ -6,13 +6,13 @@ apiVersion: security.openshift.io/v1
 kind: SecurityContextConstraints
 metadata:
   name: "{{ security_context_constraints }}"
-allowHostDirVolumePlugin: true
-allowHostIPC: true
-allowHostNetwork: true
-allowHostPID: true
-allowHostPorts: true
-allowPrivilegeEscalation: true
-allowPrivilegedContainer: true
+allowHostDirVolumePlugin: false
+allowHostIPC: false
+allowHostNetwork: false
+allowHostPID: false
+allowHostPorts: false
+allowPrivilegeEscalation: false
+allowPrivilegedContainer: false
 allowedCapabilities:
 - NET_BIND_SERVICE
 - CHOWN
@@ -20,15 +20,13 @@ allowedCapabilities:
 - SETGID
 - SETUID
 - FOWNER
-defaultAddCapabilities: null
+defaultAddCapabilities: []
 fsGroup:
   type: RunAsAny
 groups:
-- system:cluster-admins
-- system:authenticated
 - system:serviceaccounts:{{ project }}
 readOnlyRootFilesystem: false
-requiredDropCapabilities: null
+requiredDropCapabilities: []
 runAsUser:
   type: RunAsAny
 seLinuxContext:

@@ -16,10 +16,7 @@ spec:
     matchLabels:
       app.kubernetes.io/instance: "ibm-hlfsupport-webhook"
   strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+    type: Recreate
   template:
     metadata:
       labels:
@@ -30,8 +27,10 @@ spec:
         productName: "IBM Support for Hyperledger Fabric"
         productID: "5d5997a033594f149a534a09802d60f1"
         productVersion: "1.0.0"
+        productChargedContainers: ""
+        productMetric: "VIRTUAL_PROCESSOR_CORE"
     spec:
-      serviceAccountName: "{{ service_account }}"
+      serviceAccountName: webhook
       imagePullSecrets:
         - name: "{{ image_pull_secret }}"
       hostIPC: false
