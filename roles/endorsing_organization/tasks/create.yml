@@ -4,193 +4,193 @@
 ---
 - name: Fail if organization MSP ID not specified
   fail:
-    msg: organization_msp_id not specified or is empty
+      msg: organization_msp_id not specified or is empty
   when: not organization_msp_id is defined or not organization_msp_id
 
 - name: Fail if certificate authority admin enrollment ID not specified
   fail:
-    msg: ca_admin_enrollment_id not specified or is empty
+      msg: ca_admin_enrollment_id not specified or is empty
   when: not ca_admin_enrollment_id is defined or not ca_admin_enrollment_id
 
 - name: Fail if certificate authority admin enrollment secret not specified
   fail:
-    msg: ca_admin_enrollment_secret not specified or is empty
+      msg: ca_admin_enrollment_secret not specified or is empty
   when: not ca_admin_enrollment_secret is defined or not ca_admin_enrollment_secret
 
 - name: Fail if organization admin enrollment ID not specified
   fail:
-    msg: organization_admin_enrollment_id not specified or is empty
+      msg: organization_admin_enrollment_id not specified or is empty
   when: not organization_admin_enrollment_id is defined or not organization_admin_enrollment_id
 
 - name: Fail if organization admin enrollment secret not specified
   fail:
-    msg: organization_admin_enrollment_secret not specified or is empty
+      msg: organization_admin_enrollment_secret not specified or is empty
   when: not organization_admin_enrollment_secret is defined or not organization_admin_enrollment_secret
 
 - name: Fail if peer enrollment ID not specified
   fail:
-    msg: peer_enrollment_id not specified or is empty
+      msg: peer_enrollment_id not specified or is empty
   when: not peer_enrollment_id is defined or not peer_enrollment_id
 
 - name: Fail if peer enrollment secret not specified
   fail:
-    msg: peer_enrollment_secret not specified or is empty
+      msg: peer_enrollment_secret not specified or is empty
   when: not peer_enrollment_secret is defined or not peer_enrollment_secret
 
 - name: Create certificate authority
-  hyperledger.fabric-ansible-collection.certificate_authority:
-    state: "{{ state }}"
-    api_endpoint: "{{ api_endpoint }}"
-    api_authtype: "{{ api_authtype }}"
-    api_key: "{{ api_key }}"
-    api_secret: "{{ api_secret | default(omit) }}"
-    api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-    api_timeout: "{{ api_timeout | default(omit) }}"
-    name: "{{ ca_name }}"
-    config_override:
-      ca:
-        registry:
-          maxenrollments: -1
-          identities:
-            - name: "{{ ca_admin_enrollment_id }}"
-              pass: "{{ ca_admin_enrollment_secret }}"
-              type: client
-              maxenrollments: -1
-              attrs:
-                hf.Registrar.Roles: "*"
-                hf.Registrar.DelegateRoles: "*"
-                hf.Revoker: true
-                hf.IntermediateCA: true
-                hf.GenCRL: true
-                hf.Registrar.Attributes: "*"
-                hf.AffiliationMgr: true
-    resources: "{{ ca_resources | default(omit) }}"
-    storage: "{{ ca_storage | default(omit) }}"
-    version: "{{ ca_version | default(omit) }}"
-    wait_timeout: "{{ wait_timeout | default(omit) }}"
+  hyperledger.fabric_ansible_collection.certificate_authority:
+      state: "{{ state }}"
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      api_timeout: "{{ api_timeout | default(omit) }}"
+      name: "{{ ca_name }}"
+      config_override:
+          ca:
+              registry:
+                  maxenrollments: -1
+                  identities:
+                      - name: "{{ ca_admin_enrollment_id }}"
+                        pass: "{{ ca_admin_enrollment_secret }}"
+                        type: client
+                        maxenrollments: -1
+                        attrs:
+                            hf.Registrar.Roles: "*"
+                            hf.Registrar.DelegateRoles: "*"
+                            hf.Revoker: true
+                            hf.IntermediateCA: true
+                            hf.GenCRL: true
+                            hf.Registrar.Attributes: "*"
+                            hf.AffiliationMgr: true
+      resources: "{{ ca_resources | default(omit) }}"
+      storage: "{{ ca_storage | default(omit) }}"
+      version: "{{ ca_version | default(omit) }}"
+      wait_timeout: "{{ wait_timeout | default(omit) }}"
 
 - name: Enroll certificate authority admin
-  hyperledger.fabric-ansible-collection.enrolled_identity:
-    state: "{{ state }}"
-    api_endpoint: "{{ api_endpoint }}"
-    api_authtype: "{{ api_authtype }}"
-    api_key: "{{ api_key }}"
-    api_secret: "{{ api_secret | default(omit) }}"
-    api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-    api_timeout: "{{ api_timeout | default(omit) }}"
-    certificate_authority: "{{ ca_name }}"
-    name: "{{ ca_name }} Admin"
-    enrollment_id: "{{ ca_admin_enrollment_id }}"
-    enrollment_secret: "{{ ca_admin_enrollment_secret }}"
-    path: "{{ ca_admin_identity }}"
+  hyperledger.fabric_ansible_collection.enrolled_identity:
+      state: "{{ state }}"
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      api_timeout: "{{ api_timeout | default(omit) }}"
+      certificate_authority: "{{ ca_name }}"
+      name: "{{ ca_name }} Admin"
+      enrollment_id: "{{ ca_admin_enrollment_id }}"
+      enrollment_secret: "{{ ca_admin_enrollment_secret }}"
+      path: "{{ ca_admin_identity }}"
 
 - name: Register the organization admin
-  hyperledger.fabric-ansible-collection.registered_identity:
-    state: "{{ state }}"
-    api_endpoint: "{{ api_endpoint }}"
-    api_authtype: "{{ api_authtype }}"
-    api_key: "{{ api_key }}"
-    api_secret: "{{ api_secret | default(omit) }}"
-    api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-    api_timeout: "{{ api_timeout | default(omit) }}"
-    certificate_authority: "{{ ca_name }}"
-    registrar: "{{ ca_admin_identity }}"
-    enrollment_id: "{{ organization_admin_enrollment_id }}"
-    enrollment_secret: "{{ organization_admin_enrollment_secret }}"
-    max_enrollments: -1
-    type: admin
+  hyperledger.fabric_ansible_collection.registered_identity:
+      state: "{{ state }}"
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      api_timeout: "{{ api_timeout | default(omit) }}"
+      certificate_authority: "{{ ca_name }}"
+      registrar: "{{ ca_admin_identity }}"
+      enrollment_id: "{{ organization_admin_enrollment_id }}"
+      enrollment_secret: "{{ organization_admin_enrollment_secret }}"
+      max_enrollments: -1
+      type: admin
 
 - name: Register the peer
-  hyperledger.fabric-ansible-collection.registered_identity:
-    state: "{{ state }}"
-    api_endpoint: "{{ api_endpoint }}"
-    api_authtype: "{{ api_authtype }}"
-    api_key: "{{ api_key }}"
-    api_secret: "{{ api_secret | default(omit) }}"
-    api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-    api_timeout: "{{ api_timeout | default(omit) }}"
-    certificate_authority: "{{ ca_name }}"
-    registrar: "{{ ca_admin_identity }}"
-    enrollment_id: "{{ peer_enrollment_id }}"
-    enrollment_secret: "{{ peer_enrollment_secret }}"
-    max_enrollments: -1
-    type: peer
+  hyperledger.fabric_ansible_collection.registered_identity:
+      state: "{{ state }}"
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      api_timeout: "{{ api_timeout | default(omit) }}"
+      certificate_authority: "{{ ca_name }}"
+      registrar: "{{ ca_admin_identity }}"
+      enrollment_id: "{{ peer_enrollment_id }}"
+      enrollment_secret: "{{ peer_enrollment_secret }}"
+      max_enrollments: -1
+      type: peer
 
 - name: Enroll the organization admin
-  hyperledger.fabric-ansible-collection.enrolled_identity:
-    state: "{{ state }}"
-    api_endpoint: "{{ api_endpoint }}"
-    api_authtype: "{{ api_authtype }}"
-    api_key: "{{ api_key }}"
-    api_secret: "{{ api_secret | default(omit) }}"
-    api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-    api_timeout: "{{ api_timeout | default(omit) }}"
-    certificate_authority: "{{ ca_name }}"
-    name: "{{ organization_name }} Admin"
-    enrollment_id: "{{ organization_admin_enrollment_id }}"
-    enrollment_secret: "{{ organization_admin_enrollment_secret }}"
-    path: "{{ organization_admin_identity }}"
+  hyperledger.fabric_ansible_collection.enrolled_identity:
+      state: "{{ state }}"
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      api_timeout: "{{ api_timeout | default(omit) }}"
+      certificate_authority: "{{ ca_name }}"
+      name: "{{ organization_name }} Admin"
+      enrollment_id: "{{ organization_admin_enrollment_id }}"
+      enrollment_secret: "{{ organization_admin_enrollment_secret }}"
+      path: "{{ organization_admin_identity }}"
   register: org_admin
 
 - name: Create organization
-  hyperledger.fabric-ansible-collection.organization:
-    state: "{{ state }}"
-    api_endpoint: "{{ api_endpoint }}"
-    api_authtype: "{{ api_authtype }}"
-    api_key: "{{ api_key }}"
-    api_secret: "{{ api_secret | default(omit) }}"
-    api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-    api_timeout: "{{ api_timeout | default(omit) }}"
-    name: "{{ organization_name }}"
-    msp_id: "{{ organization_msp_id }}"
-    certificate_authority: "{{ ca_name }}"
-    registrar: "{{ ca_admin_identity }}"
-    admins:
-      - "{{ org_admin.enrolled_identity.cert | default(omit) }}"
+  hyperledger.fabric_ansible_collection.organization:
+      state: "{{ state }}"
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      api_timeout: "{{ api_timeout | default(omit) }}"
+      name: "{{ organization_name }}"
+      msp_id: "{{ organization_msp_id }}"
+      certificate_authority: "{{ ca_name }}"
+      registrar: "{{ ca_admin_identity }}"
+      admins:
+          - "{{ org_admin.enrolled_identity.cert | default(omit) }}"
 
 - name: Create peer
-  hyperledger.fabric-ansible-collection.peer:
-    state: "{{ state }}"
-    api_endpoint: "{{ api_endpoint }}"
-    api_authtype: "{{ api_authtype }}"
-    api_key: "{{ api_key }}"
-    api_secret: "{{ api_secret | default(omit) }}"
-    api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-    api_timeout: "{{ api_timeout | default(omit) }}"
-    name: "{{ peer_name }}"
-    msp_id: "{{ organization_msp_id }}"
-    state_db: "{{ peer_state_db }}"
-    certificate_authority: "{{ ca_name }}"
-    enrollment_id: "{{ peer_enrollment_id }}"
-    enrollment_secret: "{{ peer_enrollment_secret }}"
-    admin_certificates:
-      - "{{ org_admin.enrolled_identity.cert | default(omit) }}"
-    resources: "{{ peer_resources | default(omit) }}"
-    storage: "{{ peer_storage | default(omit) }}"
-    version: "{{ peer_version | default(omit) }}"
-    wait_timeout: "{{ wait_timeout | default(omit) }}"
+  hyperledger.fabric_ansible_collection.peer:
+      state: "{{ state }}"
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      api_timeout: "{{ api_timeout | default(omit) }}"
+      name: "{{ peer_name }}"
+      msp_id: "{{ organization_msp_id }}"
+      state_db: "{{ peer_state_db }}"
+      certificate_authority: "{{ ca_name }}"
+      enrollment_id: "{{ peer_enrollment_id }}"
+      enrollment_secret: "{{ peer_enrollment_secret }}"
+      admin_certificates:
+          - "{{ org_admin.enrolled_identity.cert | default(omit) }}"
+      resources: "{{ peer_resources | default(omit) }}"
+      storage: "{{ peer_storage | default(omit) }}"
+      version: "{{ peer_version | default(omit) }}"
+      wait_timeout: "{{ wait_timeout | default(omit) }}"
   when: peers == 1
 
 - name: Create multiple peers
-  hyperledger.fabric-ansible-collection.peer:
-    state: "{{ state }}"
-    api_endpoint: "{{ api_endpoint }}"
-    api_authtype: "{{ api_authtype }}"
-    api_key: "{{ api_key }}"
-    api_secret: "{{ api_secret | default(omit) }}"
-    api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-    api_timeout: "{{ api_timeout | default(omit) }}"
-    name: "{{ peer_name }}{{ item }}"
-    msp_id: "{{ organization_msp_id }}"
-    state_db: "{{ peer_state_db }}"
-    certificate_authority: "{{ ca_name }}"
-    enrollment_id: "{{ peer_enrollment_id }}"
-    enrollment_secret: "{{ peer_enrollment_secret }}"
-    admin_certificates:
-      - "{{ org_admin.enrolled_identity.cert | default(omit) }}"
-    resources: "{{ peer_resources | default(omit) }}"
-    storage: "{{ peer_storage | default(omit) }}"
-    version: "{{ peer_version | default(omit) }}"
-    wait_timeout: "{{ wait_timeout | default(omit) }}"
+  hyperledger.fabric_ansible_collection.peer:
+      state: "{{ state }}"
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      api_timeout: "{{ api_timeout | default(omit) }}"
+      name: "{{ peer_name }}{{ item }}"
+      msp_id: "{{ organization_msp_id }}"
+      state_db: "{{ peer_state_db }}"
+      certificate_authority: "{{ ca_name }}"
+      enrollment_id: "{{ peer_enrollment_id }}"
+      enrollment_secret: "{{ peer_enrollment_secret }}"
+      admin_certificates:
+          - "{{ org_admin.enrolled_identity.cert | default(omit) }}"
+      resources: "{{ peer_resources | default(omit) }}"
+      storage: "{{ peer_storage | default(omit) }}"
+      version: "{{ peer_version | default(omit) }}"
+      wait_timeout: "{{ wait_timeout | default(omit) }}"
   loop: "{{ range(1, peers + 1, 1) | list }}"
   when: peers > 1

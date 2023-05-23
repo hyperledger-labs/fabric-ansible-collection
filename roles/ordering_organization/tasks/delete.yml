@@ -3,56 +3,56 @@
 #
 ---
 - name: Delete certificate authority
-  hyperledger.fabric-ansible-collection.certificate_authority:
-    state: "{{ state }}"
-    api_endpoint: "{{ api_endpoint }}"
-    api_authtype: "{{ api_authtype }}"
-    api_key: "{{ api_key }}"
-    api_secret: "{{ api_secret | default(omit) }}"
-    api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-    api_timeout: "{{ api_timeout | default(omit) }}"
-    name: "{{ ca_name }}"
+  hyperledger.fabric_ansible_collection.certificate_authority:
+      state: "{{ state }}"
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      api_timeout: "{{ api_timeout | default(omit) }}"
+      name: "{{ ca_name }}"
 
 - name: Delete certificate authority admin
-  hyperledger.fabric-ansible-collection.enrolled_identity:
-    state: "{{ state }}"
-    api_endpoint: "{{ api_endpoint }}"
-    api_authtype: "{{ api_authtype }}"
-    api_key: "{{ api_key }}"
-    api_secret: "{{ api_secret | default(omit) }}"
-    api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-    api_timeout: "{{ api_timeout | default(omit) }}"
-    path: "{{ ca_admin_identity }}"
+  hyperledger.fabric_ansible_collection.enrolled_identity:
+      state: "{{ state }}"
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      api_timeout: "{{ api_timeout | default(omit) }}"
+      path: "{{ ca_admin_identity }}"
 
 - name: Delete organization admin
-  hyperledger.fabric-ansible-collection.enrolled_identity:
-    state: "{{ state }}"
-    api_endpoint: "{{ api_endpoint }}"
-    api_authtype: "{{ api_authtype }}"
-    api_key: "{{ api_key }}"
-    api_secret: "{{ api_secret | default(omit) }}"
-    api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-    api_timeout: "{{ api_timeout | default(omit) }}"
-    path: "{{ organization_admin_identity }}"
+  hyperledger.fabric_ansible_collection.enrolled_identity:
+      state: "{{ state }}"
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      api_timeout: "{{ api_timeout | default(omit) }}"
+      path: "{{ organization_admin_identity }}"
 
 - name: Delete organization
-  hyperledger.fabric-ansible-collection.organization:
-    state: "{{ state }}"
-    api_endpoint: "{{ api_endpoint }}"
-    api_authtype: "{{ api_authtype }}"
-    api_key: "{{ api_key }}"
-    api_secret: "{{ api_secret | default(omit) }}"
-    api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-    api_timeout: "{{ api_timeout | default(omit) }}"
-    name: "{{ organization_name }}"
+  hyperledger.fabric_ansible_collection.organization:
+      state: "{{ state }}"
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      api_timeout: "{{ api_timeout | default(omit) }}"
+      name: "{{ organization_name }}"
 
 - name: Delete ordering service
-  hyperledger.fabric-ansible-collection.ordering_service:
-    state: "{{ state }}"
-    api_endpoint: "{{ api_endpoint }}"
-    api_authtype: "{{ api_authtype }}"
-    api_key: "{{ api_key }}"
-    api_secret: "{{ api_secret | default(omit) }}"
-    api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-    api_timeout: "{{ api_timeout | default(omit) }}"
-    name: "{{ ordering_service_name }}"
+  hyperledger.fabric_ansible_collection.ordering_service:
+      state: "{{ state }}"
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      api_timeout: "{{ api_timeout | default(omit) }}"
+      name: "{{ ordering_service_name }}"
