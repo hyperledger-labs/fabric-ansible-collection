@@ -35,7 +35,7 @@
   kubernetes.core.k8s:
     state: present
     namespace: "{{ namespace }}"
-    resource_definition: "{{ lookup('template', 'templates/' + target + '/rbac/'+item) }}"
+    resource_definition: "{{ lookup('template', 'templates/' + target + '/rbac/' + item) }}"
     apply: yes
   loop:
     - hlf-operator-clusterrole.yaml
@@ -46,7 +46,7 @@
   kubernetes.core.k8s:
     state: present
     namespace: "{{ namespace }}"
-    resource_definition: "{{ lookup('template', 'templates/' + target + '/manager/'+item) }}"
+    resource_definition: "{{ lookup('template', 'templates/' + target + '/manager/' + item) }}"
     apply: yes
   loop:
     - hlf-operator-manager.yaml.j2

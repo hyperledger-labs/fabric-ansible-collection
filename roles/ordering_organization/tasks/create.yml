@@ -130,7 +130,7 @@
       enrollment_id: "{{ organization_admin_enrollment_id }}"
       enrollment_secret: "{{ organization_admin_enrollment_secret }}"
       path: "{{ organization_admin_identity }}"
-  register: org_admin
+  register: ordering_organization_org_admin
 
 - name: Create organization
   hyperledger.fabric_ansible_collection.organization:
@@ -146,7 +146,7 @@
       certificate_authority: "{{ ca_name }}"
       registrar: "{{ ca_admin_identity }}"
       admins:
-          - "{{ org_admin.enrolled_identity.cert | default(omit) }}"
+          - "{{ ordering_organization_org_admin.enrolled_identity.cert | default(omit) }}"
 
 - name: Create ordering service
   hyperledger.fabric_ansible_collection.ordering_service:
@@ -164,7 +164,7 @@
       enrollment_id: "{{ ordering_service_enrollment_id }}"
       enrollment_secret: "{{ ordering_service_enrollment_secret }}"
       admin_certificates:
-          - "{{ org_admin.enrolled_identity.cert | default(omit) }}"
+          - "{{ ordering_organization_org_admin.enrolled_identity.cert | default(omit) }}"
       resources: "{{ ordering_service_resources | default(omit) }}"
       storage: "{{ ordering_service_storage | default(omit) }}"
       version: "{{ ordering_service_version | default(omit) }}"

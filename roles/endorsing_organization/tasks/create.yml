@@ -130,7 +130,7 @@
       enrollment_id: "{{ organization_admin_enrollment_id }}"
       enrollment_secret: "{{ organization_admin_enrollment_secret }}"
       path: "{{ organization_admin_identity }}"
-  register: org_admin
+  register: endorsing_organization_org_admin
 
 - name: Create organization
   hyperledger.fabric_ansible_collection.organization:
@@ -146,7 +146,7 @@
       certificate_authority: "{{ ca_name }}"
       registrar: "{{ ca_admin_identity }}"
       admins:
-          - "{{ org_admin.enrolled_identity.cert | default(omit) }}"
+          - "{{ endorsing_organization_org_admin.enrolled_identity.cert | default(omit) }}"
 
 - name: Create peer
   hyperledger.fabric_ansible_collection.peer:
@@ -164,7 +164,7 @@
       enrollment_id: "{{ peer_enrollment_id }}"
       enrollment_secret: "{{ peer_enrollment_secret }}"
       admin_certificates:
-          - "{{ org_admin.enrolled_identity.cert | default(omit) }}"
+          - "{{ endorsing_organization_org_admin.enrolled_identity.cert | default(omit) }}"
       resources: "{{ peer_resources | default(omit) }}"
       storage: "{{ peer_storage | default(omit) }}"
       version: "{{ peer_version | default(omit) }}"
@@ -187,7 +187,7 @@
       enrollment_id: "{{ peer_enrollment_id }}"
       enrollment_secret: "{{ peer_enrollment_secret }}"
       admin_certificates:
-          - "{{ org_admin.enrolled_identity.cert | default(omit) }}"
+          - "{{ endorsing_organization_org_admin.enrolled_identity.cert | default(omit) }}"
       resources: "{{ peer_resources | default(omit) }}"
       storage: "{{ peer_storage | default(omit) }}"
       version: "{{ peer_version | default(omit) }}"
