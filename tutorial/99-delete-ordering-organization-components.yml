@@ -5,27 +5,27 @@
 - name: Delete components for an ordering organization
   hosts: localhost
   vars:
-    state: absent
-    organization_name: "{{ ordering_org_name }}"
+      state: absent
+      organization_name: "{{ ordering_org_name }}"
   vars_files:
-    - common-vars.yml
-    - ordering-org-vars.yml
+      - common-vars.yml
+      - ordering-org-vars.yml
   roles:
-    - hyperledger.fabric-ansible-collection.ordering_organization
+      - hyperledger.fabric_ansible_collection.ordering_organization
 
 - name: Remove imported components
   hosts: localhost
   vars_files:
-    - common-vars.yml
-    - ordering-org-vars.yml
+      - common-vars.yml
+      - ordering-org-vars.yml
   tasks:
-    - name: Remove imported organization
-      hyperledger.fabric-ansible-collection.external_organization:
-        api_endpoint: "{{ api_endpoint }}"
-        api_authtype: "{{ api_authtype }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret | default(omit) }}"
-        api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-        state: absent
-        name: "{{ org1_name }}"
-      when: import_export_used | default(false)
+      - name: Remove imported organization
+        hyperledger.fabric_ansible_collection.external_organization:
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+            state: absent
+            name: "{{ org1_name }}"
+        when: import_export_used | default(false)

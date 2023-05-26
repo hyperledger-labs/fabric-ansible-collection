@@ -5,36 +5,36 @@
 - name: Register application
   hosts: localhost
   vars_files:
-    - common-vars.yml
-    - org1-vars.yml
+      - common-vars.yml
+      - org1-vars.yml
   tasks:
-    - name: Register a new identity
-      hyperledger.fabric-ansible-collection.registered_identity:
-        api_endpoint: "{{ api_endpoint }}"
-        api_authtype: "{{ api_authtype }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret | default(omit) }}"
-        api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-        certificate_authority: "{{ org1_ca_name }}"
-        registrar: "{{ org1_ca_name }} Admin.json"
-        enrollment_id: "{{ application_enrollment_id }}"
-        enrollment_secret: "{{ application_enrollment_secret }}"
-        max_enrollments: "{{ application_max_enrollments }}"
-        type: "{{ application_enrollment_type }}"
-        attributes:
-          - name: "{{ smart_contract_name }}.admin"
-            value: "true"
+      - name: Register a new identity
+        hyperledger.fabric_ansible_collection.registered_identity:
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+            certificate_authority: "{{ org1_ca_name }}"
+            registrar: "{{ org1_ca_name }} Admin.json"
+            enrollment_id: "{{ application_enrollment_id }}"
+            enrollment_secret: "{{ application_enrollment_secret }}"
+            max_enrollments: "{{ application_max_enrollments }}"
+            type: "{{ application_enrollment_type }}"
+            attributes:
+                - name: "{{ smart_contract_name }}.admin"
+                  value: "true"
 
-    - name: Create a connection profile
-      hyperledger.fabric-ansible-collection.connection_profile:
-        api_endpoint: "{{ api_endpoint }}"
-        api_authtype: "{{ api_authtype }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret | default(omit) }}"
-        api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-        name: "{{ org1_name }} Gateway"
-        path: "{{ org1_name }} Gateway.json"
-        organization: "{{ org1_name }}"
-        certificate_authority: "{{ org1_ca_name }}"
-        peers:
-          - "{{ org1_peer_name }}"
+      - name: Create a connection profile
+        hyperledger.fabric_ansible_collection.connection_profile:
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+            name: "{{ org1_name }} Gateway"
+            path: "{{ org1_name }} Gateway.json"
+            organization: "{{ org1_name }}"
+            certificate_authority: "{{ org1_ca_name }}"
+            peers:
+                - "{{ org1_peer_name }}"
