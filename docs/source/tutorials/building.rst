@@ -9,16 +9,16 @@ This tutorial will demonstrate how to use the Hyperledger Fabric Ansible Collect
 
 In this tutorial, you will use the Hyperledger Fabric Ansible Collection to build a Hyperledger Fabric network with two organizations. One organization "Ordering Org" will be the ordering organization, and that organization will run the ordering service. The other organization "Org1" will be an endorsing organization, and that organization will run a peer. You will also create a channel, and join the endorsing organizations peer into that channel.
 
-For this tutorial, you can use the IBM Blockchain Platform on IBM Cloud, or the IBM Blockchain Platform software running in a Red Hat OpenShift or Kubernetes cluster.
+For this tutorial, you can use the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.
 
 Before you start
 ----------------
 
 Ensure that you have installed all of the pre-requisite software described in `Installation <../installation.html>`_.
 
-You must have access to an existing IBM Blockchain Plaform instance, either on IBM Cloud, or using the IBM Blockchain Platform software running in a Red Hat OpenShift or Kubernetes cluster.
+You must have access to an existing IBM Support for Hyperledger Fabric software or a Hyperledger Fabric Open Source Stack instance running in a Red Hat OpenShift or Kubernetes cluster.
 
-If you wish, you can deploy the components for each organization into a separate IBM Blockchain Platform instance. If you choose to do this, then there are additional steps that you must follow which will be described below.
+If you wish, you can deploy the components for each organization into a separate instance. If you choose to do this, then there are additional steps that you must follow which will be described below.
 
 Cloning the repository
 ----------------------
@@ -29,7 +29,7 @@ The playbooks for this tutorial are stored in a GitHub repository. You must clon
 
     ::
 
-        git clone https://github.com/IBM-Blockchain/ansible-collection.git
+        git clone https://github.com/hyperledger-labs/fabric-ansible-collection.git
 
 After cloning the GitHub repository, you must change into the tutorial directory:
 
@@ -42,23 +42,13 @@ After cloning the GitHub repository, you must change into the tutorial directory
 Editing the variable files
 --------------------------
 
-Variable files are used to store variables that are used across multiple Ansible playbooks. Each organization has their own variable file, and you must edit these files to specify the connection details for the IBM Blockchain Platform instance for that organization.
+Variable files are used to store variables that are used across multiple Ansible playbooks. Each organization has their own variable file, and you must edit these files to specify the connection details for the instance for that organization.
 
-Edit the variable files `ordering-org-vars.yml` (for Ordering Org) and `org1-vars.yml` (for Org1). The values you set depend on whether the organization is using the IBM Blockchain Platform on IBM Cloud, or the IBM Blockchain Platform software:
+Edit the variable files `ordering-org-vars.yml` (for Ordering Org) and `org1-vars.yml` (for Org1).
 
-* If the organization is using IBM Blockchain Platform on IBM Cloud:
-
-  1. Create service credentials for the IBM Blockchain Platform service instance, if they have not been created already.
-  2. Set ``api_endpoint`` to the value of ``api_endpoint`` specified in the service credentials.
-  3. Set ``api_authtype`` to ``ibmcloud``.
-  4. Set ``api_key`` to the value of ``api_key`` specified in the service credentials.
-  5. Note that you do not need to specify a value for ``api_secret``.
-
-* If the organization is using IBM Blockchain Platform software:
-
-  1. Determine the URL of your IBM Blockchain Platform console.
-  2. Determine the API key and secret you use to access your IBM Blockchain Platform console. You can also use a username and password instead of an API key and secret.
-  3. Set ``api_endpoint`` to the URL of your IBM Blockchain Platform console.
+  1. Determine the URL of your instance's console.
+  2. Determine the API key and secret you use to access your console. You can also use a username and password instead of an API key and secret.
+  3. Set ``api_endpoint`` to the URL of your console.
   4. Set ``api_authtype`` to ``basic``.
   5. Set ``api_key`` to your API key or username.
   6. Set ``api_secret`` to your API secret or password.
@@ -74,19 +64,19 @@ Building the network
 
 There are multiple Ansible playbooks used in this tutorial. Each Ansible playbook performs a part of the set of tasks required to build the network. Each of the Ansible playbooks is run as either the ordering organization "Ordering Org", or the endorsing organization "Org1".
 
-The contents of these playbooks are explored at the end of this tutorial. For now, a script `build_network.sh <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/build_network.sh>`_ has been provided which runs these Ansible playbooks in order for you.
+The contents of these playbooks are explored at the end of this tutorial. For now, a script `build_network.sh <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/build_network.sh>`_ has been provided which runs these Ansible playbooks in order for you.
 
-Note that if each organization has their own IBM Blockchain Platform instance, you must run a different command. This is required as organization and ordering service information must be exported and then imported into the other IBM Blockchain Platform instance.
+Note that if each organization has their own instance, you must run a different command. This is required as organization and ordering service information must be exported and then imported into the other instance.
 
 If you have installed the collection using Ansible Galaxy, or from source, then run the script as follows:
 
-* Both organizations use the same IBM Blockchain Platform instance:
+* Both organizations use the same instance:
 
     ::
 
         ./build_network.sh build
 
-* Each organization has their own IBM Blockchain Platform instance:
+* Each organization has their own instance:
 
     ::
 
@@ -94,17 +84,21 @@ If you have installed the collection using Ansible Galaxy, or from source, then 
 
 If you have installed the collection by building a Docker image, then run the script as follows:
 
-* Both organizations use the same IBM Blockchain Platform instance:
-
     ::
 
-        docker run --rm -u $(id -u) -v "$PWD:/tutorial" ibmcom/ibp-ansible /tutorial/build_network.sh build
+        COMING SOON
 
-* Each organization has their own IBM Blockchain Platform instance:
+.. * Both organizations use the same instance:
 
-    ::
+..     ::
 
-        docker run --rm -u $(id -u) -v "$PWD:/tutorial" ibmcom/ibp-ansible /tutorial/build_network.sh -i build
+..         docker run --rm -u $(id -u) -v "$PWD:/tutorial" ibmcom/ibp-ansible /tutorial/build_network.sh build
+
+.. * Each organization has their own instance:
+
+..     ::
+
+..         docker run --rm -u $(id -u) -v "$PWD:/tutorial" ibmcom/ibp-ansible /tutorial/build_network.sh -i build
 
 After the script has finished, you should examine the output of the script to check that no errors have occurred whilst running the Ansible playbooks. After each Ansible playbook runs, Ansible outputs a ``PLAY RECAP`` section that details how many tasks have been executed, and how many of those tasks have failed.
 
@@ -137,16 +131,16 @@ The identities created are:
 
   | This is the identity of the administrator for the endorsing organization `Org1`, and the peer `Org1 Peer`. You can use this identity to manage the organization and the peer.
 
-If you log in to the IBM Blockchain Platform console for each organization using a web browser, you should find that these components are now displayed in the list of nodes.
+If you log in to the instance's console for each organization using a web browser, you should find that these components are now displayed in the list of nodes.
 
-You can also import the JSON files containing the identities listed above into the IBM Blockchain Platform console wallet. Once all of the identities have been imported, you can associate each component with the appropriate identity. This will allow you to manage and view those components using the IBM Blockchain Platform console.
+You can also import the JSON files containing the identities listed above into the console wallet. Once all of the identities have been imported, you can associate each component with the appropriate identity. This will allow you to manage and view those components using the console.
 
 Exploring the playbooks
 -----------------------
 
 When you ran the script `build_network.sh`, you ran multiple Ansible playbooks. Each Ansible playbook performed a different part of building the network. This section will explain which organization ran each Ansible playbook, and what each of the playbooks did.
 
-Firstly, each of these Ansible playbooks require information that allows them to connect to the IBM Blockchain Platform instance, so they can interact with the IBM Blockchain Platform APIs. Before you ran the Ansible playbooks, you edited the variable files `ordering-org-vars.yml` and `org1-vars.yml`. These variable files are specified in the Ansible playbooks using the ``vars_files`` argument for each play, for example:
+Firstly, each of these Ansible playbooks require information that allows them to connect to the Fabric Network instance, so they can interact with the Fabric Network APIs. Before you ran the Ansible playbooks, you edited the variable files `ordering-org-vars.yml` and `org1-vars.yml`. These variable files are specified in the Ansible playbooks using the ``vars_files`` argument for each play, for example:
 
   ::
 
@@ -170,7 +164,7 @@ Note that this tutorial instructs you to place secrets (API keys, API secrets, p
 
 Here are the Ansible playbooks that were executed by the script above:
 
-* `01-create-ordering-organization-components.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/01-create-ordering-organization-components.yml>`_
+* `01-create-ordering-organization-components.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/01-create-ordering-organization-components.yml>`_
 
   | Organization: Ordering Org
   | Command:
@@ -181,7 +175,7 @@ Here are the Ansible playbooks that were executed by the script above:
 
   | This playbook creates the components for the ordering organization `Ordering Org`. It makes use of the Ansible role `ordering_organization <../roles/ordering_organization.html>`_ to set up the certificate authority, organization (MSP) and ordering service for this organization, along with the administrator identities for this organization.
 
-* `02-create-endorsing-organization-components.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/02-create-endorsing-organization-components.yml>`_
+* `02-create-endorsing-organization-components.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/02-create-endorsing-organization-components.yml>`_
 
   | Organization: Org1
   | Command:
@@ -192,7 +186,7 @@ Here are the Ansible playbooks that were executed by the script above:
 
   | This playbook creates the components for the endorsing organization `Org1`. It makes use of the Ansible role `endorsing_organization <../roles/endorsing_organization.html>`_ to set up the certificate authority, organization (MSP) and peer for this organization, along with the administrator identities for this organization.
 
-* `03-export-organization.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/03-export-organization.yml>`_
+* `03-export-organization.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/03-export-organization.yml>`_
 
   | Organization: Org1
   | Command:
@@ -201,11 +195,11 @@ Here are the Ansible playbooks that were executed by the script above:
 
       ansible-playbook 03-export-organization.yml
 
-  | This playbook uses the Ansible module `organization_info <../modules/organization_info.html>`_ to export the organization `Org1` to a file. This is so that `Org1` can pass this file to the ordering organization `Ordering Org`. `Ordering Org` can then import this file into their IBM Blockchain Platform console, so they can add `Org1` into the consortium for the ordering service.
+  | This playbook uses the Ansible module `organization_info <../modules/organization_info.html>`_ to export the organization `Org1` to a file. This is so that `Org1` can pass this file to the ordering organization `Ordering Org`. `Ordering Org` can then import this file into their console, so they can add `Org1` into the consortium for the ordering service.
 
-  | Note: this playbook only needs to be executed when the organizations `Ordering Org` and `Org1` are using separate IBM Blockchain Platform instances. If they are using the same instances, then this information is already available to both organizations.
+  | Note: this playbook only needs to be executed when the organizations `Ordering Org` and `Org1` are using separate instances. If they are using the same instances, then this information is already available to both organizations.
 
-* `04-import-organization.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/04-import-organization.yml>`_
+* `04-import-organization.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/04-import-organization.yml>`_
 
   | Organization: Ordering Org
   | Command:
@@ -216,9 +210,9 @@ Here are the Ansible playbooks that were executed by the script above:
 
   | This playbook uses the Ansible module `external_organization <../modules/external_organization.html>`_ to import the organization `Org1` from a file. This file was passed to `Ordering Org` by `Org1`, so that `Ordering Org` could add `Org1` into the consortium for the ordering service.
 
-  | Note: this playbook only needs to be executed when the organizations `Ordering Org` and `Org1` are using separate IBM Blockchain Platform instances. If they are using the same instances, then this information is already available to both organizations.
+  | Note: this playbook only needs to be executed when the organizations `Ordering Org` and `Org1` are using separate instances. If they are using the same instances, then this information is already available to both organizations.
 
-* `05-enable-capabitilies.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/05-enable-capabilities.yml>`_
+* `05-enable-capabitilies.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/05-enable-capabilities.yml>`_
 
   | Organization: Ordering Org
   | Command:
@@ -229,7 +223,7 @@ Here are the Ansible playbooks that were executed by the script above:
 
   | This playbook enables Fabric v2.x capabilities on the ordering service. It uses the Ansible modules `channel_config <../modules/channel_config.html>`_ and `channel_capabilities <../modules/channel_capabilities.html>`_ to update the system channel configuration.
 
-* `06-add-organization-to-consortium.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/06-add-organization-to-consortium.yml>`_
+* `06-add-organization-to-consortium.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/06-add-organization-to-consortium.yml>`_
 
   | Organization: Ordering Org
   | Command:
@@ -240,7 +234,7 @@ Here are the Ansible playbooks that were executed by the script above:
 
   | This playbook adds the organization `Org1` into the consortium for the ordering service. It uses the Ansible modules `channel_config <../modules/channel_config.html>`_ and `consortium_member <../modules/consortium_member.html>`_ to update the system channel configuration, which contains the list of consortium members.
 
-* `07-export-ordering-service.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/07-export-ordering-service.yml>`_
+* `07-export-ordering-service.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/07-export-ordering-service.yml>`_
 
   | Organization: Ordering Org
   | Command:
@@ -249,11 +243,11 @@ Here are the Ansible playbooks that were executed by the script above:
 
       ansible-playbook 07-export-ordering-service.yml
 
-  | This playbook uses the Ansible module `ordering_service_info <../modules/ordering_service_info.html>`_ to export the ordering service to a file. This is so that `Ordering Org` can pass this file to the organization `Org1`. `Org1` can then import this file into their IBM Blockchain Platform console, so they can start to create channels on the ordering service.
+  | This playbook uses the Ansible module `ordering_service_info <../modules/ordering_service_info.html>`_ to export the ordering service to a file. This is so that `Ordering Org` can pass this file to the organization `Org1`. `Org1` can then import this file into their console, so they can start to create channels on the ordering service.
 
-  | Note: this playbook only needs to be executed when the organizations `Ordering Org` and `Org1` are using separate IBM Blockchain Platform instances. If they are using the same instances, then this information is already available to both organizations.
+  | Note: this playbook only needs to be executed when the organizations `Ordering Org` and `Org1` are using separate instances. If they are using the same instances, then this information is already available to both organizations.
 
-* `08-import-ordering-service.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/08-import-ordering-service.yml>`_
+* `08-import-ordering-service.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/08-import-ordering-service.yml>`_
 
   | Organization: Org1
   | Command:
@@ -264,9 +258,9 @@ Here are the Ansible playbooks that were executed by the script above:
 
   | This playbook uses the Ansible module `external_ordering_service <../modules/external_ordering_service.html>`_ to import the ordering service from a file. This file was passed to `Org1` by `Ordering Org`, so that `Org1` could start to create channels on the ordering service.
 
-  | Note: this playbook only needs to be executed when the organizations `Ordering Org` and `Org1` are using separate IBM Blockchain Platform instances. If they are using the same instances, then this information is already available to both organizations.
+  | Note: this playbook only needs to be executed when the organizations `Ordering Org` and `Org1` are using separate instances. If they are using the same instances, then this information is already available to both organizations.
 
-* `09-create-channel.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/09-create-channel.yml>`_
+* `09-create-channel.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/09-create-channel.yml>`_
 
   | Organization: Org1
   | Command:
@@ -277,16 +271,16 @@ Here are the Ansible playbooks that were executed by the script above:
 
   | This playbook creates a channel called `mychannel` on the ordering service. The channel contains a single organization, `Org1`. The policies for this channel are supplied in policy files:
 
-  * `Admins`: `09-admins-policy.json <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/09-admins-policy.json>`_
-  * `Readers`: `09-readers-policy.json <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/09-readers-policy.json>`_
-  * `Writers`: `09-writers-policy.json <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/09-writers-policy.json>`_
-  * `Endorsement`: `09-endorsement-policy.json <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/09-endorsement-policy.json>`_
-  * `LifecycleEndorsement`: `09-lifecycle-endorsement-policy.json <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/09-lifecycle-endorsement-policy.json>`_
+  * `Admins`: `09-admins-policy.json <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/09-admins-policy.json.j2>`_
+  * `Readers`: `09-readers-policy.json <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/09-readers-policy.json.j2>`_
+  * `Writers`: `09-writers-policy.json <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/09-writers-policy.json.j2>`_
+  * `Endorsement`: `09-endorsement-policy.json <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/09-endorsement-policy.json.j2>`_
+  * `LifecycleEndorsement`: `09-lifecycle-endorsement-policy.json <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/09-lifecycle-endorsement-policy.json.j2>`_
 
   |
   | The Ansible module `channel_config <../modules/channel_config.html>`_ is used to create the channel.
 
-* `10-join-peer-to-channel.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/10-join-peer-to-channel.yml>`_
+* `10-join-peer-to-channel.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/10-join-peer-to-channel.yml>`_
 
   | Organization: Org1
   | Command:
@@ -297,7 +291,7 @@ Here are the Ansible playbooks that were executed by the script above:
 
   | This playbook uses the Ansible module `channel_block <../modules/channel_block.html>`_ to fetch the genesis block for the channel, before using the Ansible module `peer_channel <../modules/peer_channel.html>`_ to join the peer `Org1 Peer` to the channel.
 
-* `11-add-anchor-peer-to-channel.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/11-add-anchor-peer-to-channel.yml>`_
+* `11-add-anchor-peer-to-channel.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/11-add-anchor-peer-to-channel.yml>`_
 
   | Organization: Org1
   | Command:
@@ -310,7 +304,7 @@ Here are the Ansible playbooks that were executed by the script above:
 
 Finally, there are also two Ansible playbooks that can be used to destroy the network components for `Ordering Org` and `Org1`. They are:
 
-* `97-delete-endorsing-organization-components.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/97-delete-endorsing-organization-components.yml>`_
+* `97-delete-endorsing-organization-components.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/97-delete-endorsing-organization-components.yml>`_
 
   | Organization: Org1
   | Command:
@@ -323,7 +317,7 @@ Finally, there are also two Ansible playbooks that can be used to destroy the ne
 
   | Note: this is the same Ansible role that is used to create the components, but the ``state: absent`` variable tells this role that we do not want these components to exist.
 
-* `99-delete-ordering-organization-components.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/99-delete-ordering-organization-components.yml>`_
+* `99-delete-ordering-organization-components.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/99-delete-ordering-organization-components.yml>`_
 
   | Organization: Ordering Org
   | Command:
@@ -339,19 +333,19 @@ Finally, there are also two Ansible playbooks that can be used to destroy the ne
 Destroying the network
 ----------------------
 
-If you wish to destroy the network in order to remove all of the components created by this tutorial, then you can run additional Ansible playbooks to do this for you. You can use the `build_network.sh <https://github.com/IBM-Blockchain/ansible-collection/blob/main/tutorial/build_network.sh>`_ script again to run these Ansible playbooks.
+If you wish to destroy the network in order to remove all of the components created by this tutorial, then you can run additional Ansible playbooks to do this for you. You can use the `build_network.sh <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/tutorial/build_network.sh>`_ script again to run these Ansible playbooks.
 
-Note that if each organization has their own IBM Blockchain Platform instance, you must run a different command.
+Note that if each organization has their own instance, you must run a different command.
 
 If you have installed the collection using Ansible Galaxy, or from source, then run the script as follows:
 
-* Both organizations use the same IBM Blockchain Platform instance:
+* Both organizations use the same instance:
 
     ::
 
         ./build_network.sh destroy
 
-* Each organization has their own IBM Blockchain Platform instance:
+* Each organization has their own instance:
 
     ::
 
@@ -359,18 +353,22 @@ If you have installed the collection using Ansible Galaxy, or from source, then 
 
 If you have installed the collection by building a Docker image, then run the script as follows:
 
-* Both organizations use the same IBM Blockchain Platform instance:
-
     ::
 
-        docker run --rm -u $(id -u) -v "$PWD:/tutorial" ibmcom/ibp-ansible /tutorial/build_network.sh destroy
+        COMING SOON
 
-* Each organization has their own IBM Blockchain Platform instance:
+.. * Both organizations use the same instance:
 
-    ::
+..     ::
 
-        docker run --rm -u $(id -u) -v "$PWD:/tutorial" ibmcom/ibp-ansible /tutorial/build_network.sh -i destroy
+..         docker run --rm -u $(id -u) -v "$PWD:/tutorial" ibmcom/ibp-ansible /tutorial/build_network.sh destroy
+
+.. * Each organization has their own instance:
+
+..     ::
+
+..         docker run --rm -u $(id -u) -v "$PWD:/tutorial" ibmcom/ibp-ansible /tutorial/build_network.sh -i destroy
 
 After the script has finished, you should examine the output of the script to check that no errors have occurred whilst running the Ansible playbooks. After each Ansible playbook runs, Ansible outputs a ``PLAY RECAP`` section that details how many tasks have been executed, and how many of those tasks have failed.
 
-Finally, if you have imported any identities into the IBM Blockchain Platform console wallet that have been created by these Ansible playbooks, then these identities will still remain in the wallet even after the network has been destroyed. Ansible cannot remove these identities from the wallet. You must remove these identities yourself using the IBM Blockchain Platform console.
+Finally, if you have imported any identities into the console wallet that have been created by these Ansible playbooks, then these identities will still remain in the wallet even after the network has been destroyed. Ansible cannot remove these identities from the wallet. You must remove these identities yourself using the console UI.
