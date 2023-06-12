@@ -37,6 +37,11 @@
       msg: peer_enrollment_secret not specified or is empty
   when: not peer_enrollment_secret is defined or not peer_enrollment_secret
 
+- name: Fail if number of peers does not match the number of zones (if) specified
+  fail:
+      msg: number of zones does not match the number of peers
+  when: peer_zones is defined and (peer_zones | length != peers)
+
 - name: Create certificate authority
   hyperledger.fabric_ansible_collection.certificate_authority:
       state: "{{ state }}"
@@ -67,6 +72,7 @@
       resources: "{{ ca_resources | default(omit) }}"
       storage: "{{ ca_storage | default(omit) }}"
       version: "{{ ca_version | default(omit) }}"
+      zone: "{{ ca_zone | default(omit) }}"
       wait_timeout: "{{ wait_timeout | default(omit) }}"
 
 - name: Enroll certificate authority admin
@@ -168,6 +174,7 @@
       resources: "{{ peer_resources | default(omit) }}"
       storage: "{{ peer_storage | default(omit) }}"
       version: "{{ peer_version | default(omit) }}"
+      zone: "{{ peer_zones[0] | default(omit) }}"
       wait_timeout: "{{ wait_timeout | default(omit) }}"
   when: peers == 1
 
@@ -191,6 +198,9 @@
       resources: "{{ peer_resources | default(omit) }}"
       storage: "{{ peer_storage | default(omit) }}"
       version: "{{ peer_version | default(omit) }}"
+      zone: "{{ peer_zones[peer_idx] | default(omit) }}"
       wait_timeout: "{{ wait_timeout | default(omit) }}"
   loop: "{{ range(1, peers + 1, 1) | list }}"
+  loop_control:
+      index_var: peer_idx
   when: peers > 1
