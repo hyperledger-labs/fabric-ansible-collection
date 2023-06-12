@@ -29,7 +29,7 @@ Deploying the smart contract
 
 There are multiple Ansible playbooks used in this tutorial. Each Ansible playbook performs a part of the set of tasks required to deploy the smart contract. Each of the Ansible playbooks is run as one of the endorsing organizations "Org1" or "Org2".
 
-The contents of these playbooks are explored at the end of this tutorial. For now, a script `deploy_smart_contract.sh <https://github.com/modemn/fabric-ansible-collection/blob/deibm-doc-tutorial-joining/tutorial/deploy_smart_contract.sh>`_ has been provided which runs these Ansible playbooks in order for you.
+The contents of these playbooks are explored at the end of this tutorial. For now, a script `deploy_smart_contract.sh <https://github.com/modemn/fabric-ansible-collection/blob/main/tutorial/deploy_smart_contract.sh>`_ has been provided which runs these Ansible playbooks in order for you.
 
 If you have installed the collection using Ansible Galaxy, or from source, then run the script as follows:
 
