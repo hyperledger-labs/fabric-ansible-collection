@@ -72,13 +72,13 @@ Parameters
     | **Type**: str
 
   image_pull_secret
-    The name of the image pull secret. The image pull secret will be used to pull all IBM Hyperledger Fabric Support  images from the specified image registry.
+    The name of the image pull secret. The image pull secret will be used to pull all IBM Support for Hyperledger Fabric  images from the specified image registry.
 
     | **Type**: str
     | **Default value**: ``docker-key-secret``
 
   image_registry
-    The image registry to pull images from. The image registry must contain the IBM Hyperledger Fabric Support images.
+    The image registry to pull images from. The image registry must contain the IBM Support for Hyperledger Fabric images.
 
     The default image registry, ``icr.io``, is the standard IBM Public Registry.
 
@@ -133,15 +133,15 @@ Parameters
     | **Default value**: ``ibm-hlfsupport-webhook``
 
   product_version
-    The version of IBM Hyperledger Fabric Support to use.
+    The version of IBM Support for Hyperledger Fabric to use.
 
     | **Type**: str
     | **Default value**: ``1.0.0``
 
   webhook_version
-    The version of the IBM Hyperledger Fabric Support operator to use.
+    The version of the IBM Support for Hyperledger Fabric operator to use.
 
-    The image tag used for the IB1001 IBM Hyperledger Fabric Support  webhook is *product_version*-*webhook_version*-*arch*, for example ``1.0.0-20220308-amd64``.
+    The image tag used for the IB1001 IBM Support for Hyperledger Fabric  webhook is *product_version*-*webhook_version*-*arch*, for example ``1.0.0-20220308-amd64``.
 
     | **Type**: str
     | **Default value**: ``20220308``
