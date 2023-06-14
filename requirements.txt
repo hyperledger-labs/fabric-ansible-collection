@@ -3,7 +3,7 @@
 #
 ansible
 ansible-doc-extractor
-ansible-lint==6.17.0
+ansible-lint
 flake8
 fabric-sdk-py
 openshift
