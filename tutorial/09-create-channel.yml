@@ -22,7 +22,7 @@
             name: "{{ channel_name }}"
             target: "0"
             path: channel_genesis_block.bin
-        failed_when: False
+        failed_when: false
         register: result
 
       - name: Fail on any error other than the channel not existing

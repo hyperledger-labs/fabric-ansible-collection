@@ -67,6 +67,7 @@
       resources: "{{ ca_resources | default(omit) }}"
       storage: "{{ ca_storage | default(omit) }}"
       version: "{{ ca_version | default(omit) }}"
+      zone: "{{ ca_zone | default(omit) }}"
       wait_timeout: "{{ wait_timeout | default(omit) }}"
 
 - name: Enroll certificate authority admin
@@ -168,4 +169,5 @@
       resources: "{{ ordering_service_resources | default(omit) }}"
       storage: "{{ ordering_service_storage | default(omit) }}"
       version: "{{ ordering_service_version | default(omit) }}"
+      zones: "{{ ordering_service_zones | default(omit) }}"
       wait_timeout: "{{ wait_timeout | default(omit) }}"
