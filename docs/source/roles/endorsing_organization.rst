@@ -18,36 +18,36 @@ Synopsis
 
 This role allows you to quickly build Hyperledger Fabric components for an endorsing organization. An endorsing organization has a certificate authority and a peer.
 
-This role works with  the IBM Hyperledger Fabric Support Offering running in a Red Hat OpenShift or Kubernetes cluster.
+This role works with the  IBM Support for Hyperledger Fabric software or the Hyperledger Fabric Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.
 
 Parameters
 ----------
 
   api_endpoint (required)
-    The URL for the IBM Hyperledger Fabric Support console.
+    The URL for the Fabric operations console.
 
     | **Type**: str
 
   api_authtype (required)
 
-    ``basic`` - Authenticate to the IBM Hyperledger Fabric Support console using basic authentication. You must provide both a valid API key using *api_key* and API secret using *api_secret*.
+    ``basic`` - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using *api_key* and API secret using *api_secret*.
 
     | **Type**: str
 
   api_key (required)
-    The API key for the IBM Hyperledger Fabric Support console.
+    The API key for the Fabric operations console.
 
     | **Type**: str
 
   api_secret
-    The API secret for the IBM Hyperledger Fabric Support console.
+    The API secret for the Fabric operations console.
 
     Only required when *api_authtype* is ``basic``.
 
     | **Type**: str
 
   api_timeout
-    The timeout, in seconds, to use when interacting with theIBM Hyperledger Fabric Support console.
+    The timeout, in seconds, to use when interacting with theFabric operations console.
 
     | **Type**: int
     | **Default value**: ``60``
@@ -109,6 +109,15 @@ Parameters
     If you do not specify a version, an existing certificate authority will not be upgraded.
 
     If you specify a new version, an existing certificate authority will be automatically upgraded.
+
+    | **Type**: str
+
+  ca_zone
+    The Kubernetes zone for this certificate authority
+
+    If you do not specify a Kubernetes zone, and multiple Kubernetes zones are available, then a random Kubernetes zone will be selected for you.
+
+    See the Kubernetes documentation for more information: "https://kubernetes.io/docs/setup/best-practices/multiple-zones/"
 
     | **Type**: str
 
@@ -182,6 +191,16 @@ Parameters
 
     | **Type**: str
 
+  peer_zones
+    The Kubernetes zone for this peer.
+
+    If you do not specify a Kubernetes zone, and multiple Kubernetes zones are available, then a random Kubernetes zone will be selected for you.
+
+    See the Kubernetes documentation for more information: https://kubernetes.io/docs/setup/best-practices/multiple-zones/"
+
+    | **Type**: list
+    | **Elements**: str
+
   wallet
     The wallet directory to store identity files in.
 
@@ -227,7 +246,7 @@ Examples
       peer_enrollment_secret: org1peerpw
       wait_timeout: 3600
     roles:
-      - hyperledger.fabric-ansible-collection.endorsing_organization
+      - hyperledger.fabric_ansible_collection.endorsing_organization
 
   - name: Destroy components for an endorsing organization
     vars:
@@ -239,4 +258,4 @@ Examples
       organization_name: Org1
       wait_timeout: 3600
     roles:
-      - hyperledger.fabric-ansible-collection.endorsing_organization
+      - hyperledger.fabric_ansible_collection.endorsing_organization
