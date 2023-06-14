@@ -2,7 +2,7 @@
 .. SPDX-License-Identifier: Apache-2.0
 ..
 
-:github_url: https://github.com/IBM-Blockchain/ansible-collection/edit/main/docs/source/roles/console.rst
+:github_url: https://github.com/hyperledger-labs/fabric-ansible-collection/edit/main/docs/source/roles/console.rst
 
 
 fabric-console -- Deploy the Fabric Operations Console into Kubernetes or Red Hat OpenShift
@@ -80,46 +80,22 @@ Parameters
   image_registry
     The image registry to pull images from. The image registry must contain the Fabric Operations Console images.
 
-    The default image registry, ``cp.icr.io``, is the standard IBM Entitlement Registry.
+    The default image registry, ``icr.io``, is the standard IBM Public Registry.
 
-    You only need to specify an alternative image registry if you are behind a firewall and cannot access the standard IBM Entitlement Registry.
-
-    | **Type**: str
-    | **Default value**: ``cp.icr.io``
-
-  image_registry_username
-    The username for authenticating to the image registry.
-
-    The default image registry username, ``cp``, is the username for the standard IBM Entitlement Registry.
-
-    You only need to specify an alternative image registry username if you are using an alternative image registry.
+    You only need to specify an alternative image registry if you are behind a firewall and cannot access the standard IBM Public Registry.
 
     | **Type**: str
-    | **Default value**: ``cp``
-
-  image_registry_email (required)
-    The email address for authenticating to the image registry.
-
-    If you are using the default image registry, this is the email address you use to log in to the My IBM dashboard.
-
-    | **Type**: str
-
-  image_registry_password (required)
-    The password for authenticating to the image registry.
-
-    If you are using the default image registry, this is the entitlement key that you can obtain from the My IBM dashboard.
-
-    | **Type**: str
+    | **Default value**: ``icr.io``
 
   image_repository
     The image repository on the image registry to pull images from.
 
-    The default image repository, ``cp``, is the image repository for the standard IBM Entitlement Registry.
+    The default image repository, ``cpopen``, is the image repository for the standard IBM Public Registry.
 
     You only need to specify an alternative image repository if you are using an alternative image registry.
 
     | **Type**: str
-    | **Default value**: ``cp``
+    | **Default value**: ``cpopen``
 
   cluster_role
     The name of the cluster role.
@@ -172,13 +148,13 @@ Parameters
     The name of the operator.
 
     | **Type**: str
-    | **Default value**: ``ibp-operator``
+    | **Default value**: ``ibm-hlfsupport-operator``
 
   console
     The name of the console.
 
     | **Type**: str
-    | **Default value**: ``ibp-console``
+    | **Default value**: ``ibm-hlfsupport-console``
 
   console_domain (required)
     The DNS domain for the console.

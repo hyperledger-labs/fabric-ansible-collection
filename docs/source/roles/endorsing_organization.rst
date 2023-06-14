@@ -2,7 +2,7 @@
 .. SPDX-License-Identifier: Apache-2.0
 ..
 
-:github_url: https://github.com/IBM-Blockchain/ansible-collection/edit/main/docs/source/roles/endorsing_organization.rst
+:github_url: https://github.com/hyperledger-labs/fabric-ansible-collection/edit/main/docs/source/roles/endorsing_organization.rst
 
 
 endorsing_organization -- Build Hyperledger Fabric components for an endorsing organization
@@ -18,48 +18,39 @@ Synopsis
 
 This role allows you to quickly build Hyperledger Fabric components for an endorsing organization. An endorsing organization has a certificate authority and a peer.
 
-This role works with the IBM Blockchain Platform managed service running in IBM Cloud, or the IBM Blockchain Platform software running in a Red Hat OpenShift or Kubernetes cluster.
+This role works with  the IBM Hyperledger Fabric Support Offering running in a Red Hat OpenShift or Kubernetes cluster.
 
 Parameters
 ----------
 
   api_endpoint (required)
-    The URL for the IBM Blockchain Platform console.
+    The URL for the IBM Hyperledger Fabric Support console.
 
     | **Type**: str
 
   api_authtype (required)
-    ``ibmcloud`` - Authenticate to the IBM Blockchain Platform console using IBM Cloud authentication. You must provide a valid API key using *api_key*.
 
-    ``basic`` - Authenticate to the IBM Blockchain Platform console using basic authentication. You must provide both a valid API key using *api_key* and API secret using *api_secret*.
+    ``basic`` - Authenticate to the IBM Hyperledger Fabric Support console using basic authentication. You must provide both a valid API key using *api_key* and API secret using *api_secret*.
 
     | **Type**: str
 
   api_key (required)
-    The API key for the IBM Blockchain Platform console.
+    The API key for the IBM Hyperledger Fabric Support console.
 
     | **Type**: str
 
   api_secret
-    The API secret for the IBM Blockchain Platform console.
+    The API secret for the IBM Hyperledger Fabric Support console.
 
     Only required when *api_authtype* is ``basic``.
 
     | **Type**: str
 
   api_timeout
-    The timeout, in seconds, to use when interacting with the IBM Blockchain Platform console.
+    The timeout, in seconds, to use when interacting with theIBM Hyperledger Fabric Support console.
 
     | **Type**: int
     | **Default value**: ``60``
-
-  api_token_endpoint
-    The IBM Cloud IAM token endpoint to use when using IBM Cloud authentication.
-
-    Only required when *api_authtype* is ``ibmcloud``, and you are using IBM internal staging servers for testing.
-
-    | **Type**: str
-    | **Default value**: ``https://iam.cloud.ibm.com/identity/token``
 
   state
     ``absent`` - All components for the endorsing organization will be stopped and removed, if they exist.
@@ -222,7 +213,7 @@ Examples
   - name: Create components for an endorsing organization
     vars:
       state: present
-      api_endpoint: https://ibp-console.example.org:32000
+      api_endpoint: https://ibm-hlfsupport-console.example.org:32000
       api_authtype: basic
       api_key: xxxxxxxx
       api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -241,7 +232,7 @@ Examples
   - name: Destroy components for an endorsing organization
     vars:
       state: absent
-      api_endpoint: https://ibp-console.example.org:32000
+      api_endpoint: https://ibm-hlfsupport-console.example.org:32000
       api_authtype: basic
       api_key: xxxxxxxx
       api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
