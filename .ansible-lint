@@ -11,4 +11,8 @@ exclude_paths:
 
 skip_list:
     - risky-file-permissions
-    - 'fqcn-builtins'
+    - "fqcn-builtins"
+
+# Offline mode disables installation of requirements.yml and schema refreshing
+# 6.17.1 introduced a race condition bug with this noted workaround: https://github.com/ansible/ansible-lint/issues/3560#issuecomment-1590745951
+offline: true
