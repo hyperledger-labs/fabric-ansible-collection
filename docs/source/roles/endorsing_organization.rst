@@ -47,7 +47,7 @@ Parameters
     | **Type**: str
 
   api_timeout
-    The timeout, in seconds, to use when interacting with theFabric operations console.
+    The timeout, in seconds, to use when interacting with the Fabric operations console.
 
     | **Type**: int
     | **Default value**: ``60``
