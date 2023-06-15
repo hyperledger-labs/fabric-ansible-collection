@@ -192,7 +192,9 @@ Parameters
     | **Type**: str
 
   peer_zones
-    The Kubernetes zone for this peer.
+    The Kubernetes zone for each peer.
+    
+    If specified, you must provide a Kubernetes zone for each peer node. The length of `peer_zones` should match the `peers` parameter
 
     If you do not specify a Kubernetes zone, and multiple Kubernetes zones are available, then a random Kubernetes zone will be selected for you.
 
