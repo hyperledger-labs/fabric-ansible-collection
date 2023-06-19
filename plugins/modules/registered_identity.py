@@ -23,45 +23,37 @@ DOCUMENTATION = '''
 module: registered_identity
 short_description: Manage a registered Hyperledger Fabric identity
 description:
-    - Register, update, or revoke an Hyperledger Fabric identity by using the IBM Blockchain Platform.
-    - This module works with the IBM Blockchain Platform managed service running in IBM Cloud, or the IBM Blockchain
-      Platform software running in a Red Hat OpenShift or Kubernetes cluster.
+    - Register, update, or revoke an Hyperledger Fabric identity.
+    - This module works with the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric
+      Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.
 author: Simon Stone (@sstone1)
 options:
     api_endpoint:
         description:
-            - The URL for the IBM Blockchain Platform console.
+            - The URL for the Fabric operations console.
         type: str
         required: true
     api_authtype:
         description:
-            - C(ibmcloud) - Authenticate to the IBM Blockchain Platform console using IBM Cloud authentication.
-              You must provide a valid API key using I(api_key).
-            - C(basic) - Authenticate to the IBM Blockchain Platform console using basic authentication.
+            - C(basic) - Authenticate to the Fabric operations console using basic authentication.
               You must provide both a valid API key using I(api_key) and API secret using I(api_secret).
         type: str
         required: true
     api_key:
         description:
-            - The API key for the IBM Blockchain Platform console.
+            - The API key for the Fabric operations console.
         type: str
         required: true
     api_secret:
         description:
-            - The API secret for the IBM Blockchain Platform console.
+            - The API secret for the Fabric operations console.
             - Only required when I(api_authtype) is C(basic).
         type: str
     api_timeout:
         description:
-            - The timeout, in seconds, to use when interacting with the IBM Blockchain Platform console.
+            - The timeout, in seconds, to use when interacting with the Fabric operations console.
         type: int
         default: 60
-    api_token_endpoint:
-        description:
-            - The IBM Cloud IAM token endpoint to use when using IBM Cloud authentication.
-            - Only required when I(api_authtype) is C(ibmcloud), and you are using IBM internal staging servers for testing.
-        type: str
-        default: https://iam.cloud.ibm.com/identity/token
     state:
         description:
             - C(absent) - If an identity is registered matching the specified enrollment ID, the identity will be removed.
@@ -79,7 +71,7 @@ options:
         description:
             - The certificate authority to use to register this identity.
             - You can pass a string, which is the display name of a certificate authority registered
-              with the IBM Blockchain Platform console.
+              with the Fabric operations console.
             - You can also pass a dictionary, which must match the result format of one of the
               M(certificate_authority_info) or M(certificate_authority) modules.
         type: raw
@@ -164,9 +156,9 @@ requirements: []
 
 EXAMPLES = '''
 - name: Register a new identity
-  hyperledger.fabric-ansible-collection.registered_identity:
+  hyperledger.fabric_ansible_collection.registered_identity:
     state: present
-    api_endpoint: https://ibp-console.example.org:32000
+    api_endpoint: https://console.example.org:32000
     api_authtype: basic
     api_key: xxxxxxxx
     api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -181,9 +173,9 @@ EXAMPLES = '''
         value: "true"
 
 - name: Delete an existing identity
-  hyperledger.fabric-ansible-collection.registered_identity:
+  hyperledger.fabric_ansible_collection.registered_identity:
     state: absent
-    api_endpoint: https://ibp-console.example.org:32000
+    api_endpoint: https://console.example.org:32000
     api_authtype: basic
     api_key: xxxxxxxx
     api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -290,7 +282,7 @@ def main():
     # Ensure all exceptions are caught.
     try:
 
-        # Log in to the IBP console.
+        # Log in to the console.
         console = get_console(module)
 
         # Get the certificate authority and identity.

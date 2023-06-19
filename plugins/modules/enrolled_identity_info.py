@@ -24,9 +24,9 @@ DOCUMENTATION = '''
 module: enrolled_identity_info
 short_description: Get information about an enrolled Hyperledger Fabric identity
 description:
-    - Get information about an enrolled Hyperledger Fabric identity by using the IBM Blockchain Platform.
-    - This module works with the IBM Blockchain Platform managed service running in IBM Cloud, or the IBM Blockchain
-      Platform software running in a Red Hat OpenShift or Kubernetes cluster.
+    - Get information about an enrolled Hyperledger Fabric identity.
+    - This module works with the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric
+      Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.
 author: Simon Stone (@sstone1)
 options:
     path:
@@ -39,7 +39,7 @@ requirements: []
 
 EXAMPLES = '''
 - name: Get enrolled identity
-  hyperledger.fabric-ansible-collectionble-collection.enrolled_identity_info:
+  hyperledger.fabric_ansible_collectionble-collection.enrolled_identity_info:
     path: Org1 Admin.json
 '''
 

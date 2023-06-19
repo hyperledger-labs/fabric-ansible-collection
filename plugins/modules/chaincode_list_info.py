@@ -24,48 +24,40 @@ DOCUMENTATION = '''
 module: chaincode_list_info
 short_description: Get information about all installed and committed chaincodes on a Hyperledger Fabric channel
 description:
-    - Get inofrmation on a chaincode definition on a Hyperledger Fabric channel
+    - Get information on a chaincode definition on a Hyperledger Fabric channel
 author: Mark Edwards
 options:
     api_endpoint:
         description:
-            - The URL for the IBM Blockchain Platform console.
+            - The URL for the Fabric operations console.
         type: str
         required: true
     api_authtype:
         description:
-            - C(ibmcloud) - Authenticate to the IBM Blockchain Platform console using IBM Cloud authentication.
-              You must provide a valid API key using I(api_key).
-            - C(basic) - Authenticate to the IBM Blockchain Platform console using basic authentication.
+            - C(basic) - Authenticate to the Fabric operations console using basic authentication.
               You must provide both a valid API key using I(api_key) and API secret using I(api_secret).
         type: str
         required: true
     api_key:
         description:
-            - The API key for the IBM Blockchain Platform console.
+            - The API key for the Fabric operations console.
         type: str
         required: true
     api_secret:
         description:
-            - The API secret for the IBM Blockchain Platform console.
+            - The API secret for the Fabric operations console.
             - Only required when I(api_authtype) is C(basic).
         type: str
     api_timeout:
         description:
-            - The timeout, in seconds, to use when interacting with the IBM Blockchain Platform console.
+            - The timeout, in seconds, to use when interacting with the Fabric operations console.
         type: int
         default: 60
-    api_token_endpoint:
-        description:
-            - The IBM Cloud IAM token endpoint to use when using IBM Cloud authentication.
-            - Only required when I(api_authtype) is C(ibmcloud), and you are using IBM internal staging servers for testing.
-        type: str
-        default: https://iam.cloud.ibm.com/identity/token
     peer:
         description:
             - The peer to use to manage the committed chaincode definition.
             - You can pass a string, which is the display name of a peer registered
-              with the IBM Blockchain Platform console.
+              with the Fabric operations console.
             - You can also pass a dict, which must match the result format of one of the
               M(peer_info) or M(peer) modules.
         type: raw
@@ -111,9 +103,9 @@ options:
 
 EXAMPLES = '''
 - name: Show information on 'Org1 Peer' chaincodes
-  hyperledger.fabric-ansible-collection.committed_chaincode:
+  hyperledger.fabric_ansible_collection.committed_chaincode:
     state: present
-    api_endpoint: https://ibp-console.example.org:32000
+    api_endpoint: https://console.example.org:32000
     api_authtype: basic
     api_key: xxxxxxxx
     api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -187,7 +179,7 @@ def main():
     # Ensure all exceptions are caught.
     try:
 
-        # Log in to the IBP console.
+        # Log in to the console.
         console = get_console(module)
 
         # Get the peer, identity, and MSP ID.

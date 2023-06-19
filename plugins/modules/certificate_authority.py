@@ -27,45 +27,37 @@ DOCUMENTATION = '''
 module: certificate_authority
 short_description: Manage a Hyperledger Fabric certificate authority
 description:
-    - Create, update, or delete a Hyperledger Fabric certificate authority by using the IBM Blockchain Platform.
-    - This module works with the IBM Blockchain Platform managed service running in IBM Cloud, or the IBM Blockchain
-      Platform software running in a Red Hat OpenShift or Kubernetes cluster.
+    - Create, update, or delete a Hyperledger Fabric certificate authority.
+    - This module works with the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric
+      Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.
 author: Simon Stone (@sstone1)
 options:
     api_endpoint:
         description:
-            - The URL for the IBM Blockchain Platform console.
+            - The URL for the Fabric operations console.
         type: str
         required: true
     api_authtype:
         description:
-            - C(ibmcloud) - Authenticate to the IBM Blockchain Platform console using IBM Cloud authentication.
-              You must provide a valid API key using I(api_key).
-            - C(basic) - Authenticate to the IBM Blockchain Platform console using basic authentication.
+            - C(basic) - Authenticate to the Fabric operations console using basic authentication.
               You must provide both a valid API key using I(api_key) and API secret using I(api_secret).
         type: str
         required: true
     api_key:
         description:
-            - The API key for the IBM Blockchain Platform console.
+            - The API key for the Fabric operations console.
         type: str
         required: true
     api_secret:
         description:
-            - The API secret for the IBM Blockchain Platform console.
+            - The API secret for the Fabric operations console.
             - Only required when I(api_authtype) is C(basic).
         type: str
     api_timeout:
         description:
-            - The timeout, in seconds, to use when interacting with the IBM Blockchain Platform console.
+            - The timeout, in seconds, to use when interacting with the Fabric operations console.
         type: int
         default: 60
-    api_token_endpoint:
-        description:
-            - The IBM Cloud IAM token endpoint to use when using IBM Cloud authentication.
-            - Only required when I(api_authtype) is C(ibmcloud), and you are using IBM internal staging servers for testing.
-        type: str
-        default: https://iam.cloud.ibm.com/identity/token
     state:
         description:
             - C(absent) - A certificate authority matching the specified name will be stopped and removed.
@@ -143,12 +135,11 @@ options:
                     class:
                         description:
                             - The Kubernetes storage class for the the Kubernetes persistent volume claim for the certificate authority container.
-                            - By default, the Kubernetes storage class for the IBM Blockchain Platform console is used.
+                            - By default, the Kubernetes storage class for the Fabric operations console is used.
                         type: str
     hsm:
         description:
             - "The PKCS #11 compliant HSM configuration to use for the certificate authority."
-            - "See the IBM Blockchain Platform documentation for more information: https://cloud.ibm.com/docs/blockchain?topic=blockchain-ibp-console-adv-deployment#ibp-console-adv-deployment-cfg-hsm"
         type: dict
         suboptions:
             pkcs11endpoint:
@@ -173,7 +164,6 @@ options:
         description:
             - The number of replicas that the Kubernetes deployment should have for this certificate authority.
             - If you want to use more than one replica, you must also use PostgreSQL as the database for this certificate authority.
-            - "See the IBM Blockchain Platform documentation for more information: https://cloud.ibm.com/docs/blockchain?topic=blockchain-ibp-console-build-ha-ca"
         type: int
     version:
         description:
@@ -195,9 +185,9 @@ requirements: []
 
 EXAMPLES = '''
 - name: Create certificate authority
-  hyperledger.fabric-ansible-collection.certificate_authority:
+  hyperledger.fabric_ansible_collection.certificate_authority:
     state: present
-    api_endpoint: https://ibp-console.example.org:32000
+    api_endpoint: https://console.example.org:32000
     api_authtype: basic
     api_key: xxxxxxxx
     api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -221,9 +211,9 @@ EXAMPLES = '''
               hf.AffiliationMgr: true
 
 - name: Create certificate authority with custom resources and storage
-  hyperledger.fabric-ansible-collection.certificate_authority:
+  hyperledger.fabric_ansible_collection.certificate_authority:
     state: present
-    api_endpoint: https://ibp-console.example.org:32000
+    api_endpoint: https://console.example.org:32000
     api_authtype: basic
     api_key: xxxxxxxx
     api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -256,9 +246,9 @@ EXAMPLES = '''
         class: ibmc-file-gold
 
 - name: Create certificate authority that uses an HSM
-  hyperledger.fabric-ansible-collection.certificate_authority:
+  hyperledger.fabric_ansible_collection.certificate_authority:
     state: present
-    api_endpoint: https://ibp-console.example.org:32000
+    api_endpoint: https://console.example.org:32000
     api_authtype: basic
     api_key: xxxxxxxx
     api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -286,9 +276,9 @@ EXAMPLES = '''
       pin: 12345678
 
 - name: Destroy certificate authority
-  hyperledger.fabric-ansible-collection.certificate_authority:
+  hyperledger.fabric_ansible_collection.certificate_authority:
     state: absent
-    api_endpoint: https://ibp-console.example.org:32000
+    api_endpoint: https://console.example.org:32000
     api_authtype: basic
     api_key: xxxxxxxx
     api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -404,7 +394,7 @@ def main():
     # Ensure all exceptions are caught.
     try:
 
-        # Log in to the IBP console.
+        # Log in to the console.
         console = get_console(module)
 
         # Determine if the certificate authority exists.

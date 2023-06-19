@@ -21,9 +21,9 @@ DOCUMENTATION = '''
 module: consortium_member_info
 short_description: Get information about a consortium member for a Hyperledger Fabric ordering service
 description:
-    - Get information about a consortium member for a Hyperledger Fabric ordering service by using the IBM Blockchain Platform.
-    - This module works with the IBM Blockchain Platform managed service running in IBM Cloud, or the IBM Blockchain
-      Platform software running in a Red Hat OpenShift or Kubernetes cluster.
+    - Get information about a consortium member for a Hyperledger Fabric ordering service.
+    - This module works with the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric
+      Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.
 author: Simon Stone (@sstone1)
 options:
     path:
@@ -43,7 +43,7 @@ requirements: []
 
 EXAMPLES = '''
 - name: Get the organization from the consortium
-  hyperledger.fabric-ansible-collection.consortium_member_info:
+  hyperledger.fabric_ansible_collection.consortium_member_info:
     path: channel_config.bin
     msp_id: Org1MSP
 '''

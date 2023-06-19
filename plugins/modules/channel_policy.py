@@ -23,9 +23,9 @@ DOCUMENTATION = '''
 module: channel_policy
 short_description: Manage a policy for a Hyperledger Fabric channel
 description:
-    - Add, update, and remove policies for a Hyperledger Fabric channel by using the IBM Blockchain Platform.
-    - This module works with the IBM Blockchain Platform managed service running in IBM Cloud, or the IBM Blockchain
-      Platform software running in a Red Hat OpenShift or Kubernetes cluster.
+    - Add, update, and remove policies for a Hyperledger Fabric channel.
+    - This module works with the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric
+      Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.
 author: Simon Stone (@sstone1)
 options:
     state:
@@ -69,14 +69,14 @@ requirements: []
 
 EXAMPLES = '''
 - name: Add the policy to the channel
-  hyperledger.fabric-ansible-collection.channel_policy:
+  hyperledger.fabric_ansible_collection.channel_policy:
     state: present
     name: Admins
     policy: admins-policy.json
     path: channel_config.bin
 
 - name: Remove the policy to the channel
-  hyperledger.fabric-ansible-collectionble-collection.channel_policy:
+  hyperledger.fabric_ansible_collectionble-collection.channel_policy:
     state: absent
     name: Admins
     path: channel_config.bin
