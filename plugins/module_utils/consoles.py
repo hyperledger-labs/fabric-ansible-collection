@@ -65,7 +65,7 @@ class Console:
         except Exception as e:
             if "HTTP status code 404" in str(e):
                 return self._login_v1()
-            raise Exception(f'Failed to access IBM Blockchain Platform console: {e}')
+            raise Exception(f'Failed to access the console: {e}')
 
     def _login_v1(self):
         try:
@@ -74,7 +74,7 @@ class Console:
             self.health = self.get_health()
             self.settings = self.get_settings()
         except Exception as e:
-            raise Exception(f'Failed to access IBM Blockchain Platform console: {e}')
+            raise Exception(f'Failed to access the console: {e}')
 
     def _login_ibmcloud(self, api_key):
         data = urllib.parse.urlencode({
@@ -182,7 +182,7 @@ class Console:
                 self.module.json_log({'msg': 'got component by id', 'component': component})
                 return component
             except Exception as e:
-                # The API will return HTTP 404 Not Found if the component exists in the IBM Blockchain Platform
+                # The API will return HTTP 404 Not Found if the component exists in the
                 # console, but not in Kubernetes. Try again without requesting the deployment attributes, and
                 # add a value to the result that will trigger the calling module to delete the component.
                 self.module.json_log({'msg': 'failed to get component by id', 'error': str(e)})
@@ -574,7 +574,7 @@ class Console:
                         if statusCode >= 200 and statusCode < 300:
                             pass
                         elif statusCode == 404:
-                            # The API will return HTTP 404 Not Found if the component exists in the IBM Blockchain Platform
+                            # The API will return HTTP 404 Not Found if the component exists in the
                             # console, but not in Kubernetes. Try to delete the component again, but only from the IBM
                             # Blockchain Platform console this time.
                             self.module.json_log({'msg': 'attempting to delete ordering service (not in kubernetes)', 'cluster_id': cluster_id, 'url': url, 'attempt': attempt, 'api_timeout': self.api_timeout})

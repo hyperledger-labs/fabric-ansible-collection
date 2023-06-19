@@ -21,9 +21,9 @@ DOCUMENTATION = '''
 module: channel_acl
 short_description: Manage an ACL for a Hyperledger Fabric channel
 description:
-    - Add, update, and remove ACLs for a Hyperledger Fabric channel by using the IBM Blockchain Platform.
-    - This module works with the IBM Blockchain Platform managed service running in IBM Cloud, or the IBM Blockchain
-      Platform software running in a Red Hat OpenShift or Kubernetes cluster.
+    - Add, update, and remove ACLs for a Hyperledger Fabric channel.
+    - This module works with the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric
+      Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.
 author: Simon Stone (@sstone1)
 options:
     state:
@@ -62,14 +62,14 @@ requirements: []
 
 EXAMPLES = '''
 - name: Add the ACL to the channel
-  hyperledger.fabric-ansible-collection.channel_acl:
+  hyperledger.fabric_ansible_collection.channel_acl:
     state: present
     name: lscc/ChaincodeExists
     policy: /Channel/Application/Admins
     path: channel_config.bin
 
 - name: Remove the ACL from the channel
-  hyperledger.fabric-ansible-collection.channel_acl:
+  hyperledger.fabric_ansible_collection.channel_acl:
     state: absent
     name: lscc/ChaincodeExists
     path: channel_config.bin

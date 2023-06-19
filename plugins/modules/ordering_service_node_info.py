@@ -20,42 +20,34 @@ DOCUMENTATION = '''
 module: ordering_service_node_info
 short_description: Get information about a Hyperledger Fabric ordering service node
 description:
-    - Get information about a Hyperledger Fabric ordering service node by using the IBM Blockchain Platform.
-    - This module works with the IBM Blockchain Platform managed service running in IBM Cloud, or the IBM Blockchain
-      Platform software running in a Red Hat OpenShift or Kubernetes cluster.
+    - Get information about a Hyperledger Fabric ordering service node.
+    - This module works with the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric
+      Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.
 author: Simon Stone (@sstone1)
 options:
     api_endpoint:
         description:
-            - The URL for the IBM Blockchain Platform console.
+            - The URL for the Fabric operations console.
         type: str
     api_authtype:
         description:
-            - C(ibmcloud) - Authenticate to the IBM Blockchain Platform console using IBM Cloud authentication.
-              You must provide a valid API key using I(api_key).
-            - C(basic) - Authenticate to the IBM Blockchain Platform console using basic authentication.
+            - C(basic) - Authenticate to the Fabric operations console using basic authentication.
               You must provide both a valid API key using I(api_key) and API secret using I(api_secret).
         type: str
     api_key:
         description:
-            - The API key for the IBM Blockchain Platform console.
+            - The API key for the Fabric operations console.
         type: str
     api_secret:
         description:
-            - The API secret for the IBM Blockchain Platform console.
+            - The API secret for the Fabric operations console.
             - Only required when I(api_authtype) is C(basic).
         type: str
     api_timeout:
         description:
-            - The timeout, in seconds, to use when interacting with the IBM Blockchain Platform console.
+            - The timeout, in seconds, to use when interacting with the Fabric operations console.
         type: int
         default: 60
-    api_token_endpoint:
-        description:
-            - The IBM Cloud IAM token endpoint to use when using IBM Cloud authentication.
-            - Only required when I(api_authtype) is C(ibmcloud), and you are using IBM internal staging servers for testing.
-        type: str
-        default: https://iam.cloud.ibm.com/identity/token
     name:
         description:
             - The name of the ordering service node.
@@ -70,8 +62,8 @@ requirements: []
 
 EXAMPLES = '''
 - name: Get the ordering service node
-  hyperledger.fabric-ansible-collection.ordering_service_node_info:
-    api_endpoint: https://ibp-console.example.org:32000
+  hyperledger.fabric_ansible_collection.ordering_service_node_info:
+    api_endpoint: https://console.example.org:32000
     api_authtype: basic
     api_key: xxxxxxxx
     api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -197,7 +189,7 @@ def main():
     # Ensure all exceptions are caught.
     try:
 
-        # Log in to the IBP console.
+        # Log in to the console.
         console = get_console(module)
 
         # Determine if the ordering service node exists.

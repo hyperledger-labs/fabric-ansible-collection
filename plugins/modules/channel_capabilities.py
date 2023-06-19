@@ -21,9 +21,9 @@ DOCUMENTATION = '''
 module: channel_capabilities
 short_description: Manage the capabilities for a Hyperledger Fabric channel
 description:
-    - Specify the capability levels for a Hyperledger Fabric channel by using the IBM Blockchain Platform.
-    - This module works with the IBM Blockchain Platform managed service running in IBM Cloud, or the IBM Blockchain
-      Platform software running in a Red Hat OpenShift or Kubernetes cluster.
+    - Specify the capability levels for a Hyperledger Fabric channel.
+    - This module works with the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric
+      Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.
 author: Simon Stone (@sstone1)
 options:
     path:
@@ -63,22 +63,22 @@ requirements: []
 
 EXAMPLES = '''
 - name: Set application capability level for Hyperledger Fabric v1.4.x
-  hyperledger.fabric-ansible-collection.channel_capabilities:
+  hyperledger.fabric_ansible_collection.channel_capabilities:
     path: channel_config.bin
     application: V1_4_2
 
 - name: Set channel capability level for Hyperledger Fabric v1.4.x
-  hyperledger.fabric-ansible-collection.channel_capabilities:
+  hyperledger.fabric_ansible_collection.channel_capabilities:
     path: channel_config.bin
     channel: V1_4_3
 
 - name: Set orderer capability level for Hyperledger Fabric v1.4.x
-  hyperledger.fabric-ansible-collection.channel_capabilities:
+  hyperledger.fabric_ansible_collection.channel_capabilities:
     path: channel_config.bin
     orderer: V1_4_2
 
 - name: Set all channel capability levels for Hyperledger Fabric v2.x
-  hyperledger.fabric-ansible-collection.channel_capabilities:
+  hyperledger.fabric_ansible_collection.channel_capabilities:
     path: channel_config.bin
     application: V2_0
     channel: V2_0

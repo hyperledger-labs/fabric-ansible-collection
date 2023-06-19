@@ -19,56 +19,47 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: console_user
-short_description: Manage the list of users for an IBM Blockchain Platform console
+short_description: Manage the list of users for an Fabric operations console
 description:
-    - Add, update, and remove users for an instance of the IBM Blockchain Platform console.
-    - This module works with the IBM Blockchain Platform software running in a Red Hat OpenShift
-      or Kubernetes cluster. It does not work with the IBM Blockchain Platform managed service
-      running in IBM Cloud; to manage the list of users in this environment, you must use IAM.
+    - Add, update, and remove users for an instance of the Fabric operations console.
+    - This module works with the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric
+      Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.
 author: Simon Stone (@sstone1)
 options:
     api_endpoint:
         description:
-            - The URL for the IBM Blockchain Platform console.
+            - The URL for the Fabric operations console.
         type: str
         required: true
     api_authtype:
         description:
-            - C(ibmcloud) - Authenticate to the IBM Blockchain Platform console using IBM Cloud authentication.
-              You must provide a valid API key using I(api_key).
-            - C(basic) - Authenticate to the IBM Blockchain Platform console using basic authentication.
+            - C(basic) - Authenticate to the Fabric operations console using basic authentication.
               You must provide both a valid API key using I(api_key) and API secret using I(api_secret).
         type: str
         required: true
     api_key:
         description:
-            - The API key for the IBM Blockchain Platform console.
+            - The API key for the Fabric operations console.
         type: str
         required: true
     api_secret:
         description:
-            - The API secret for the IBM Blockchain Platform console.
+            - The API secret for the Fabric operations console.
             - Only required when I(api_authtype) is C(basic).
         type: str
     api_timeout:
         description:
-            - The timeout, in seconds, to use when interacting with the IBM Blockchain Platform console.
+            - The timeout, in seconds, to use when interacting with the Fabric operations console.
         type: int
         default: 60
-    api_token_endpoint:
-        description:
-            - The IBM Cloud IAM token endpoint to use when using IBM Cloud authentication.
-            - Only required when I(api_authtype) is C(ibmcloud), and you are using IBM internal staging servers for testing.
-        type: str
-        default: https://iam.cloud.ibm.com/identity/token
     state:
         description:
             - C(absent) - A user matching the specified email will be removed from the IBM Blockchain
               Platform console.
             - C(present) - Asserts that a user matching the specified email and configuration exists
-              in the IBM Blockchain Platform console. If no user matches the specified email, the
-              user will be added to the IBM Blockchain Platform console. If a user matches the specified
-              email but the configuration does not match, then the user in the IBM Blockchain Platform
+              in the Fabric operations console. If no user matches the specified email, the
+              user will be added to the Fabric operations console. If a user matches the specified
+              email but the configuration does not match, then the user in the Fabric operations
               console will be updated.
         type: str
         default: present
@@ -91,9 +82,9 @@ options:
 EXAMPLES = '''
 ---
 - name: Add a user with the manager role to the console
-  hyperledger.fabric-ansible-collection.console_user:
+  hyperledger.fabric_ansible_collection.console_user:
     state: present
-    api_endpoint: https://ibp-console.example.org:32000
+    api_endpoint: https://console.example.org:32000
     api_authtype: basic
     api_key: xxxxxxxx
     api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -102,9 +93,9 @@ EXAMPLES = '''
       - manager
 
 - name: Add a user with the writer role to the console
-  hyperledger.fabric-ansible-collection.console_user:
+  hyperledger.fabric_ansible_collection.console_user:
     state: present
-    api_endpoint: https://ibp-console.example.org:32000
+    api_endpoint: https://console.example.org:32000
     api_authtype: basic
     api_key: xxxxxxxx
     api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -113,9 +104,9 @@ EXAMPLES = '''
       - writer
 
 - name: Add a user with the reader role to the console
-  hyperledger.fabric-ansible-collection.console_user:
+  hyperledger.fabric_ansible_collection.console_user:
     state: present
-    api_endpoint: https://ibp-console.example.org:32000
+    api_endpoint: https://console.example.org:32000
     api_authtype: basic
     api_key: xxxxxxxx
     api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -124,9 +115,9 @@ EXAMPLES = '''
       - reader
 
 - name: Remove the user from the console
-  hyperledger.fabric-ansible-collectionble-collection.console_user:
+  hyperledger.fabric_ansible_collectionble-collection.console_user:
     state: absent
-    api_endpoint: https://ibp-console.example.org:32000
+    api_endpoint: https://console.example.org:32000
     api_authtype: basic
     api_key: xxxxxxxx
     api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -183,7 +174,7 @@ def main():
     # Ensure all exceptions are caught.
     try:
 
-        # Log in to the IBP console.
+        # Log in to the console.
         console = get_console(module)
 
         # Throw an error if this module is used against SaaS.
