@@ -29,7 +29,7 @@ The choice will depend on what context you want to use ansible in.
 
 ```shell
     ansible-galaxy collection build -f
-    ansible-galaxy collection install $(ls -1 | grep ibm-blockchain_platform) -f
+    ansible-galaxy collection install $(ls -1 | grep fabric_ansible_collection) -f
 ```
 
 - Using a Docker container.
