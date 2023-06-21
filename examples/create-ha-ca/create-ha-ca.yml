@@ -8,7 +8,7 @@
     - vars.yml
   tasks:
     - name: Get the certificate authority details
-      hyperledger.fabric-ansible-collection.certificate_authority_info:
+      hyperledger.fabric_ansible_collection.certificate_authority_info:
         api_endpoint: "{{ api_endpoint }}"
         api_authtype: "{{ api_authtype }}"
         api_key: "{{ api_key }}"
@@ -22,7 +22,7 @@
       when: certificate_authority_info.exists
 
     - name: Create certificate authority
-      hyperledger.fabric-ansible-collection.certificate_authority:
+      hyperledger.fabric_ansible_collection.certificate_authority:
         state: present
         api_endpoint: "{{ api_endpoint }}"
         api_authtype: "{{ api_authtype }}"
