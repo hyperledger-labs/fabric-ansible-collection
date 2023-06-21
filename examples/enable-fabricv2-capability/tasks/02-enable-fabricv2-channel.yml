@@ -3,78 +3,78 @@
 #
 ---
 - name: Fetch the channel configuration
-  hyperledger.fabric-ansible-collection.channel_config:
-    api_endpoint: "{{ api_endpoint }}"
-    api_authtype: "{{ api_authtype }}"
-    api_key: "{{ api_key }}"
-    api_secret: "{{ api_secret | default(omit) }}"
-    ordering_service: "{{ ordering_service_name }}"
-    identity: "{{ organization_admin_identity }}"
-    msp_id: "{{ organization_msp }}"
-    operation: fetch
-    name: "{{ channel_name }}"
-    path: original_config.bin
+  hyperledger.fabric_ansible_collection.channel_config:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      ordering_service: "{{ ordering_service_name }}"
+      identity: "{{ organization_admin_identity }}"
+      msp_id: "{{ organization_msp }}"
+      operation: fetch
+      name: "{{ channel_name }}"
+      path: original_config.bin
   register: result
 
 - name: Fail on channel not existing
   fail:
-    msg: "{{ result.msg }}"
+      msg: "{{ result.msg }}"
   when: result.msg is defined and 'NOT_FOUND' in result.msg
 
 - name: Create a copy of the channel configuration
   copy:
-    src: original_config.bin
-    dest: updated_config.bin
+      src: original_config.bin
+      dest: updated_config.bin
 
 - name: Enable Fabric v2.x capabilities
-  hyperledger.fabric-ansible-collection.channel_capabilities:
-    path: updated_config.bin
-    channel: V2_0
-    application: V2_0
+  hyperledger.fabric_ansible_collection.channel_capabilities:
+      path: updated_config.bin
+      channel: V2_0
+      application: V2_0
 
 - name: Add Endorsement Policy
-  hyperledger.fabric-ansible-collection.channel_policy:
-    name: Endorsement
-    policy: endorsement-policy.json
-    path: updated_config.bin
+  hyperledger.fabric_ansible_collection.channel_policy:
+      name: Endorsement
+      policy: endorsement-policy.json
+      path: updated_config.bin
 
 - name: Compute the channel configuration update
-  hyperledger.fabric-ansible-collection.channel_config:
-    operation: compute_update
-    name: "{{ channel_name }}"
-    original: original_config.bin
-    updated: updated_config.bin
-    path: config_update.bin
+  hyperledger.fabric_ansible_collection.channel_config:
+      operation: compute_update
+      name: "{{ channel_name }}"
+      original: original_config.bin
+      updated: updated_config.bin
+      path: config_update.bin
   register: compute_update
 
 - name: Sign the channel configuration update with Ordering Svc Admin
-  hyperledger.fabric-ansible-collection.channel_config:
-    operation: sign_update
-    identity: "{{ ordering_service_admin_identity }}"
-    msp_id: "{{ ordering_service_msp }}"
-    name: "{{ channel_name }}"
-    path: config_update.bin
+  hyperledger.fabric_ansible_collection.channel_config:
+      operation: sign_update
+      identity: "{{ ordering_service_admin_identity }}"
+      msp_id: "{{ ordering_service_msp }}"
+      name: "{{ channel_name }}"
+      path: config_update.bin
   when: compute_update.path
 
 - name: Sign the channel configuration update with Organization Admin
-  hyperledger.fabric-ansible-collection.channel_config:
-    operation: sign_update
-    identity: "{{ organization_admin_identity }}"
-    msp_id: "{{ organization_msp }}"
-    name: "{{ channel_name }}"
-    path: config_update.bin
+  hyperledger.fabric_ansible_collection.channel_config:
+      operation: sign_update
+      identity: "{{ organization_admin_identity }}"
+      msp_id: "{{ organization_msp }}"
+      name: "{{ channel_name }}"
+      path: config_update.bin
   when: compute_update.path
 
 - name: Apply the channel configuration update
-  hyperledger.fabric-ansible-collection.channel_config:
-    api_endpoint: "{{ api_endpoint }}"
-    api_authtype: "{{ api_authtype }}"
-    api_key: "{{ api_key }}"
-    api_secret: "{{ api_secret | default(omit) }}"
-    operation: apply_update
-    ordering_service: "{{ ordering_service_name }}"
-    identity: "{{ organization_admin_identity }}"
-    msp_id: "{{ organization_msp }}"
-    name: "{{ channel_name }}"
-    path: config_update.bin
+  hyperledger.fabric_ansible_collection.channel_config:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      operation: apply_update
+      ordering_service: "{{ ordering_service_name }}"
+      identity: "{{ organization_admin_identity }}"
+      msp_id: "{{ organization_msp }}"
+      name: "{{ channel_name }}"
+      path: config_update.bin
   when: compute_update.path
