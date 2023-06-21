@@ -147,7 +147,7 @@ This will build the stable `release-1.2` branch for v1.2.; use the `main` branch
 
 ::
 
-    ansible-galaxy collection install ibm-blockchain_platform-x.y.z.tar.gz
+    ansible-galaxy collection install fabric_ansible_collection-x.y.z.tar.gz
 
 Alternatively, make sure you have ``just`` installed and run the following command:
 
