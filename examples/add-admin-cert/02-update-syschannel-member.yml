@@ -5,81 +5,81 @@
 - name: Update admin certificates
   hosts: localhost
   vars_files:
-    - vars.yml
+      - vars.yml
   tasks:
-    - name: Get the ordering service details
-      hyperledger.fabric-ansible-collection.ordering_service_info:
-        api_endpoint: "{{ api_endpoint }}"
-        api_authtype: "{{ api_authtype }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret | default(omit) }}"
-        name: "{{ ordering_service_name }}"
-      register: ordering_service_info
+      - name: Get the ordering service details
+        hyperledger.fabric_ansible_collection.ordering_service_info:
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            name: "{{ ordering_service_name }}"
+        register: ordering_service_info
 
-    - name: Fail if the ordering service does not exist
-      fail:
-        msg: Ordering service {{ ordering_service_name }} does not exist
-      when: not ordering_service_info.exists
+      - name: Fail if the ordering service does not exist
+        fail:
+            msg: Ordering service {{ ordering_service_name }} does not exist
+        when: not ordering_service_info.exists
 
-    - name: Fetch the system channel configuration
-      hyperledger.fabric-ansible-collection.channel_config:
-        api_endpoint: "{{ api_endpoint }}"
-        api_authtype: "{{ api_authtype }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret | default(omit) }}"
-        ordering_service: "{{ ordering_service_name }}"
-        identity: "{{ ordering_service_admin_identity }}"
-        msp_id: "{{ ordering_service_admin_msp_id }}"
-        operation: fetch
-        name: "{{ ordering_service_info.ordering_service[0].system_channel_id }}"
-        path: original_config.bin
-      changed_when: False
+      - name: Fetch the system channel configuration
+        hyperledger.fabric_ansible_collection.channel_config:
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            ordering_service: "{{ ordering_service_name }}"
+            identity: "{{ ordering_service_admin_identity }}"
+            msp_id: "{{ ordering_service_admin_msp_id }}"
+            operation: fetch
+            name: "{{ ordering_service_info.ordering_service[0].system_channel_id }}"
+            path: original_config.bin
+        changed_when: False
 
-    - name: Create a copy of the system channel configuration
-      copy:
-        src: original_config.bin
-        dest: updated_config.bin
-      changed_when: False
+      - name: Create a copy of the system channel configuration
+        copy:
+            src: original_config.bin
+            dest: updated_config.bin
+        changed_when: False
 
-    - name: Update the organization in the set of consortium members
-      hyperledger.fabric-ansible-collection.consortium_member:
-        state: present
-        api_endpoint: "{{ api_endpoint }}"
-        api_authtype: "{{ api_authtype }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret | default(omit) }}"
-        organization: "{{ organization_name }}"
-        path: updated_config.bin
+      - name: Update the organization in the set of consortium members
+        hyperledger.fabric_ansible_collection.consortium_member:
+            state: present
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            organization: "{{ organization_name }}"
+            path: updated_config.bin
 
-    - name: Compute the system channel configuration update
-      hyperledger.fabric-ansible-collection.channel_config:
-        operation: compute_update
-        name: "{{ ordering_service_info.ordering_service[0].system_channel_id }}"
-        original: original_config.bin
-        updated: updated_config.bin
-        path: config_update.bin
-      register: compute_update
-      changed_when: False
+      - name: Compute the system channel configuration update
+        hyperledger.fabric_ansible_collection.channel_config:
+            operation: compute_update
+            name: "{{ ordering_service_info.ordering_service[0].system_channel_id }}"
+            original: original_config.bin
+            updated: updated_config.bin
+            path: config_update.bin
+        register: compute_update
+        changed_when: False
 
-    - name: Sign the system channel configuration update
-      hyperledger.fabric-ansible-collection.channel_config:
-        operation: sign_update
-        identity: "{{ organization_old_admin_identity }}"
-        msp_id: "{{ organization_msp_id }}"
-        name: "{{ ordering_service_info.ordering_service[0].system_channel_id }}"
-        path: config_update.bin
-      when: compute_update.path
+      - name: Sign the system channel configuration update
+        hyperledger.fabric_ansible_collection.channel_config:
+            operation: sign_update
+            identity: "{{ organization_old_admin_identity }}"
+            msp_id: "{{ organization_msp_id }}"
+            name: "{{ ordering_service_info.ordering_service[0].system_channel_id }}"
+            path: config_update.bin
+        when: compute_update.path
 
-    - name: Apply the system channel configuration update
-      hyperledger.fabric-ansible-collection.channel_config:
-        api_endpoint: "{{ api_endpoint }}"
-        api_authtype: "{{ api_authtype }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret | default(omit) }}"
-        operation: apply_update
-        ordering_service: "{{ ordering_service_name }}"
-        identity: "{{ ordering_service_admin_identity }}"
-        msp_id: "{{ ordering_service_admin_msp_id }}"
-        name: "{{ ordering_service_info.ordering_service[0].system_channel_id }}"
-        path: config_update.bin
-      when: compute_update.path
+      - name: Apply the system channel configuration update
+        hyperledger.fabric_ansible_collection.channel_config:
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            operation: apply_update
+            ordering_service: "{{ ordering_service_name }}"
+            identity: "{{ ordering_service_admin_identity }}"
+            msp_id: "{{ ordering_service_admin_msp_id }}"
+            name: "{{ ordering_service_info.ordering_service[0].system_channel_id }}"
+            path: config_update.bin
+        when: compute_update.path

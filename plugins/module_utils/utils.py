@@ -20,7 +20,7 @@ from .peers import Peer
 
 def get_console(module):
 
-    # Log in to the IBP console.
+    # Log in to the console.
     api_endpoint = module.params['api_endpoint']
     api_authtype = module.params['api_authtype']
     api_key = module.params['api_key']
@@ -30,7 +30,7 @@ def get_console(module):
     console = Console(module, api_endpoint, api_timeout, api_token_endpoint)
     console.login(api_authtype, api_key, api_secret)
     if console.is_v1():
-        module.warn('Console only supports v1 APIs (IBP < 2.1.3), only limited functionality will be available')
+        module.warn('Console only supports v1 APIs, only limited functionality will be available')
     return console
 
 
