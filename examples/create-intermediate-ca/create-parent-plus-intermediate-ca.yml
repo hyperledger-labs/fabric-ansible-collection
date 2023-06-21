@@ -8,7 +8,7 @@
     - vars.yml
   tasks:
     - name: Get the parent certificate authority details
-      hyperledger.fabric-ansible-collection.certificate_authority_info:
+      hyperledger.fabric_ansible_collection.certificate_authority_info:
         api_endpoint: "{{ api_endpoint }}"
         api_authtype: "{{ api_authtype }}"
         api_key: "{{ api_key }}"
@@ -22,7 +22,7 @@
       when: parent_certificate_authority_info.exists
 
     - name: Create parent certificate authority
-      hyperledger.fabric-ansible-collection.certificate_authority:
+      hyperledger.fabric_ansible_collection.certificate_authority:
         state: present
         api_endpoint: "{{ api_endpoint }}"
         api_authtype: "{{ api_authtype }}"
@@ -46,10 +46,11 @@
                     hf.GenCRL: true
                     hf.Registrar.Attributes: "*"
                     hf.AffiliationMgr: true
+        wait_timeout: "{{ wait_timeout | default(omit) }}"
       register: parent_ca_info
 
     - name: Enroll parent certificate authority admin
-      hyperledger.fabric-ansible-collection.enrolled_identity:
+      hyperledger.fabric_ansible_collection.enrolled_identity:
         state: present
         api_endpoint: "{{ api_endpoint }}"
         api_authtype: "{{ api_authtype }}"
@@ -62,7 +63,7 @@
         path: "{{ parent_ca_name }} Admin.json"
 
     - name: Register the Intermediate CA
-      hyperledger.fabric-ansible-collection.registered_identity:
+      hyperledger.fabric_ansible_collection.registered_identity:
         state: present
         api_endpoint: "{{ api_endpoint }}"
         api_authtype: "{{ api_authtype }}"
@@ -80,7 +81,7 @@
             ecert: true
 
     - name: Register the Intermediate CA tls
-      hyperledger.fabric-ansible-collection.registered_identity:
+      hyperledger.fabric_ansible_collection.registered_identity:
         state: present
         api_endpoint: "{{ api_endpoint }}"
         api_authtype: "{{ api_authtype }}"
@@ -98,7 +99,7 @@
             ecert: true
 
     - name: Get the intermediate certificate authority details
-      hyperledger.fabric-ansible-collection.certificate_authority_info:
+      hyperledger.fabric_ansible_collection.certificate_authority_info:
         api_endpoint: "{{ api_endpoint }}"
         api_authtype: "{{ api_authtype }}"
         api_key: "{{ api_key }}"
@@ -112,7 +113,7 @@
       when: int_certificate_authority_info.exists
 
     - name: Create intermediate certificate authority
-      hyperledger.fabric-ansible-collection.certificate_authority:
+      hyperledger.fabric_ansible_collection.certificate_authority:
         state: present
         api_endpoint: "{{ api_endpoint }}"
         api_authtype: "{{ api_authtype }}"
@@ -168,3 +169,4 @@
                 enabled: true
                 certfiles:
                   - "{{ parent_ca_info.certificate_authority.tls_cert }}"
+        wait_timeout: "{{ wait_timeout | default(omit) }}"
