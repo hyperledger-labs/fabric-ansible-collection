@@ -7,13 +7,13 @@ Adding an administrator certificate
 
 A organization in Hyperledger Fabric has one or more administrators that are able to perform administrative actions such as installing a smart contract onto a peer, or editing channel configuration.
 
-When NodeOU support is enabled for an organization (the default in IBM Blockchain Platform), any enrolled identity with a type of ``admin`` is automatically recognized as an administrator for that organization. If that enrolled identity expires, or is revoked, then you can just enroll a new identity and that new identity will also be automatically recognized as an administrator for that organization.
+When NodeOU support is enabled for an organization , any enrolled identity with a type of ``admin`` is automatically recognized as an administrator for that organization. If that enrolled identity expires, or is revoked, then you can just enroll a new identity and that new identity will also be automatically recognized as an administrator for that organization.
 
 However, if NodeOU support is disabled for an organization, then the definition of that organization must specify an explicit list of enrolled identities which will be recognized as administrators. If you need to enroll a new identity, then you must add that new identity to the list of administrators for the organization before it can be recognized as an administrator.
 
 The list of administrators for an organization is stored in multiple places:
 
-  * The organization's definition that is stored in the IBM Blockchain Platform console.
+  * The organization's definition that is stored in the console.
   * The organization's MSP that is stored in the ordering service system channel, as either an ordering service administrator or a member of the consortium.
   * The organization's MSP that is stored in all channels that the organization is a member of.
   * The peer or ordering service nodes file system.
@@ -47,21 +47,11 @@ Editing the variable file
 
 You need to edit the variable file ``vars.yml``. This file is used to pass information about your network into the example Ansible playbooks.
 
-The first set of values that you must set depend on whether the organization is using the IBM Blockchain Platform on IBM Cloud, or the IBM Blockchain Platform software:
+The first set of values that you must set are :
 
-* If the organization is using IBM Blockchain Platform on IBM Cloud:
-
-  1. Create service credentials for the IBM Blockchain Platform service instance, if they have not been created already.
-  2. Set ``api_endpoint`` to the value of ``api_endpoint`` specified in the service credentials.
-  3. Set ``api_authtype`` to ``ibmcloud``.
-  4. Set ``api_key`` to the value of ``api_key`` specified in the service credentials.
-  5. Note that you do not need to specify a value for ``api_secret``.
-
-* If the organization is using IBM Blockchain Platform software:
-
-  1. Determine the URL of your IBM Blockchain Platform console.
-  2. Determine the API key and secret you use to access your IBM Blockchain Platform console. You can also use a username and password instead of an API key and secret.
-  3. Set ``api_endpoint`` to the URL of your IBM Blockchain Platform console.
+  1. Determine the URL of your instance's console.
+  2. Determine the API key and secret you use to access your instance's console. You can also use a username and password instead of an API key and secret.
+  3. Set ``api_endpoint`` to the URL of your console.
   4. Set ``api_authtype`` to ``basic``.
   5. Set ``api_key`` to your API key or username.
   6. Set ``api_secret`` to your API secret or password.
@@ -83,7 +73,7 @@ The final set of values must only be set if the organization being updated is a 
 Updating the organization
 -------------------------
 
-The first step in this task is to update the organization's definition that is stored in the IBM Blockchain Platform console. It is important to keep the organization in the IBM Blockchain Platform console up to date, as this is used when performing various operational tasks, for example creating a new peer or ordering service node.
+The first step in this task is to update the organization's definition that is stored in the console. It is important to keep the organization in the console up to date, as this is used when performing various operational tasks, for example creating a new peer or ordering service node.
 
 Review the example playbook `01-update-organization.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/examples/add-admin-cert/01-update-organization.yml>`_, then run it as follows:
 
