@@ -38,21 +38,11 @@ Editing the variable file
 
 You need to edit the variable file ``vars.yml``. This file is used to pass information about your network into the example Ansible playbooks.
 
-The first set of values that you must set depend on whether the organization is using the IBM Blockchain Platform on IBM Cloud, or the IBM Blockchain Platform software:
+The first set of values that you must set are :
 
-* If the organization is using IBM Blockchain Platform on IBM Cloud:
-
-  1. Create service credentials for the IBM Blockchain Platform service instance, if they have not been created already.
-  2. Set ``api_endpoint`` to the value of ``api_endpoint`` specified in the service credentials.
-  3. Set ``api_authtype`` to ``ibmcloud``.
-  4. Set ``api_key`` to the value of ``api_key`` specified in the service credentials.
-  5. Note that you do not need to specify a value for ``api_secret``.
-
-* If the organization is using IBM Blockchain Platform software:
-
-  1. Determine the URL of your IBM Blockchain Platform console.
-  2. Determine the API key and secret you use to access your IBM Blockchain Platform console. You can also use a username and password instead of an API key and secret.
-  3. Set ``api_endpoint`` to the URL of your IBM Blockchain Platform console.
+  1. Determine the URL of your instance's console.
+  2. Determine the API key and secret you use to access your instance's console. You can also use a username and password instead of an API key and secret.
+  3. Set ``api_endpoint`` to the URL of your console.
   4. Set ``api_authtype`` to ``basic``.
   5. Set ``api_key`` to your API key or username.
   6. Set ``api_secret`` to your API secret or password.

@@ -5,7 +5,7 @@
 Creating an Intermediate Certificate Authority
 =================================================
 
-IBM Blockchain Platform allows for the optional use of Intermediate CAs which can protect a root CA and provide operational flexibility. The IBM Blockchain Platform documentation describes the business rerquirement and the manual steps in detail.
+IBM Support for Hyperledger Fabric allows for the optional use of Intermediate CAs which can protect a root CA and provide operational flexibility. The IBM Support for Hyperledger Fabric documentation describes the business rerquirement and the manual steps in detail.
 
 The scenario in this task guide is that Magneto Corp wishes to create a Root CA for the corporation, and an Intermediate CA for a UK subsidiary.
 
@@ -21,7 +21,7 @@ Before you start
 
 This task guide assumes that you have installed Ansible and the Hyperledger Fabric Ansible Collection, and are familiar with how to use these technologies.
 
-This task guide assumes that you have access to the IBM Blockchain Platform documentation and the sections regarding Intermediate CAs.
+This task guide assumes that you have access to the IBM Support for Hyperledger Fabric documentation and the sections regarding Intermediate CAs.
 
 Cloning the repository
 ----------------------
@@ -45,21 +45,11 @@ Editing the variable file
 
 You need to edit the variable file ``vars.yml``. This file is used to pass information about your network into the example Ansible playbook.
 
-The first set of values that you must set depend on whether the organization is using the IBM Blockchain Platform on IBM Cloud, or the IBM Blockchain Platform software:
+The first set of values that you must set are :
 
-* If the organization is using IBM Blockchain Platform on IBM Cloud:
-
-  1. Create service credentials for the IBM Blockchain Platform service instance, if they have not been created already.
-  2. Set ``api_endpoint`` to the value of ``api_endpoint`` specified in the service credentials.
-  3. Set ``api_authtype`` to ``ibmcloud``.
-  4. Set ``api_key`` to the value of ``api_key`` specified in the service credentials.
-  5. Note that you do not need to specify a value for ``api_secret``.
-
-* If the organization is using IBM Blockchain Platform software:
-
-  1. Determine the URL of your IBM Blockchain Platform console.
-  2. Determine the API key and secret you use to access your IBM Blockchain Platform console. You can also use a username and password instead of an API key and secret.
-  3. Set ``api_endpoint`` to the URL of your IBM Blockchain Platform console.
+  1. Determine the URL of your instance's console.
+  2. Determine the API key and secret you use to access your instance's console. You can also use a username and password instead of an API key and secret.
+  3. Set ``api_endpoint`` to the URL of your console.
   4. Set ``api_authtype`` to ``basic``.
   5. Set ``api_key`` to your API key or username.
   6. Set ``api_secret`` to your API secret or password.

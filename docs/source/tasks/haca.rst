@@ -5,9 +5,9 @@
 Creating a highly available Certificate Authority
 =================================================
 
-The default certificate authority in IBM Blockchain Platform is a single replica with an integrated SQLite database, however it is possible to configure the certificate authority to have an external PostgresSQL database and have multiple replicas of the certificate authority.
+The default certificate authority in IBM Support for Hyperledger Fabric software is a single replica with an integrated SQLite database, however it is possible to configure the certificate authority to have an external PostgresSQL database and have multiple replicas of the certificate authority.
 
-The IBM Blockchain Platform documentation describes some limitations with the creation of replicas, including the restriction that an existing certificate authority with an integrated SQLite database cannot be upgraded to use a PostgresSQL database.  Consequently, the playbook for this task checks for the existence of the named certificate authority and fails if it already exists.
+The IBM Support for Hyperledger Fabric software documentation describes some limitations with the creation of replicas, including the restriction that an existing certificate authority with an integrated SQLite database cannot be upgraded to use a PostgresSQL database.  Consequently, the playbook for this task checks for the existence of the named certificate authority and fails if it already exists.
 
 Before you start
 ----------------
@@ -38,21 +38,11 @@ Editing the variable file
 
 You need to edit the variable file ``vars.yml``. This file is used to pass information about your network into the example Ansible playbook.
 
-The first set of values that you must set depend on whether the organization is using the IBM Blockchain Platform on IBM Cloud, or the IBM Blockchain Platform software:
+The first set of values that you must set are :
 
-* If the organization is using IBM Blockchain Platform on IBM Cloud:
-
-  1. Create service credentials for the IBM Blockchain Platform service instance, if they have not been created already.
-  2. Set ``api_endpoint`` to the value of ``api_endpoint`` specified in the service credentials.
-  3. Set ``api_authtype`` to ``ibmcloud``.
-  4. Set ``api_key`` to the value of ``api_key`` specified in the service credentials.
-  5. Note that you do not need to specify a value for ``api_secret``.
-
-* If the organization is using IBM Blockchain Platform software:
-
-  1. Determine the URL of your IBM Blockchain Platform console.
-  2. Determine the API key and secret you use to access your IBM Blockchain Platform console. You can also use a username and password instead of an API key and secret.
-  3. Set ``api_endpoint`` to the URL of your IBM Blockchain Platform console.
+  1. Determine the URL of your instance's console.
+  2. Determine the API key and secret you use to access your instance's console. You can also use a username and password instead of an API key and secret.
+  3. Set ``api_endpoint`` to the URL of your console.
   4. Set ``api_authtype`` to ``basic``.
   5. Set ``api_key`` to your API key or username.
   6. Set ``api_secret`` to your API secret or password.
