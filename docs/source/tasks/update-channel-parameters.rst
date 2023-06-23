@@ -25,13 +25,13 @@ This task guide uses a set of example playbooks which are stored in a GitHub rep
 
     ::
 
-        git clone https://github.com/IBM-Blockchain/ansible-collection.git
+        git clone https://github.com/hyperledger-labs/fabric-ansible-collection.git
 
 After cloning the GitHub repository, you must change into the examples directory for this task guide:
 
     ::
 
-        cd ansible-collection/examples/create-ha-ca
+        cd fabric-ansible-collection/examples/create-ha-ca
 
 Editing the variable file
 -------------------------
@@ -65,7 +65,7 @@ The remaining values must always be set:
 Updating the channel parameters
 -------------------------------
 
-Review the example playbook `update-channel-parameters.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/examples/update-channel-parameters/update-channel-parameters.yml>`_, then run it as follows:
+Review the example playbook `update-channel-parameters.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/examples/update-channel-parameters/update-channel-parameters.yml>`_, then run it as follows:
 
   ::
 

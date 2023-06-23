@@ -34,13 +34,13 @@ This task guide uses a set of example playbooks which are stored in a GitHub rep
 
     ::
 
-        git clone https://github.com/IBM-Blockchain/ansible-collection.git
+        git clone https://github.com/hyperledger-labs/fabric-ansible-collection.git
 
 After cloning the GitHub repository, you must change into the examples directory for this task guide:
 
     ::
 
-        cd ansible-collection/examples/add-admin-cert
+        cd fabric-ansible-collection/examples/add-admin-cert
 
 Editing the variable file
 -------------------------
@@ -75,7 +75,7 @@ Updating the organization
 
 The first step in this task is to update the organization's definition that is stored in the console. It is important to keep the organization in the console up to date, as this is used when performing various operational tasks, for example creating a new peer or ordering service node.
 
-Review the example playbook `01-update-organization.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/examples/add-admin-cert/01-update-organization.yml>`_, then run it as follows:
+Review the example playbook `01-update-organization.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/examples/add-admin-cert/01-update-organization.yml>`_, then run it as follows:
 
   ::
 
@@ -96,7 +96,7 @@ Depending on the role of the organization being updated, perform the appropriate
 
 **If the organization is a member of the ordering service consortium**
 
-  Review the example playbook `02-update-syschannel-member.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/examples/add-admin-cert/02-update-syschannel-member.yml>`_, and then run it as follows:
+  Review the example playbook `02-update-syschannel-member.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/examples/add-admin-cert/02-update-syschannel-member.yml>`_, and then run it as follows:
 
   ::
 
@@ -106,7 +106,7 @@ Depending on the role of the organization being updated, perform the appropriate
 
 **If the organization is an administrator of the ordering service**
 
-  Review the example playbook `03-update-syschannel-admin.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/examples/add-admin-cert/03-update-syschannel-admin.yml>`_, and then run it as follows:
+  Review the example playbook `03-update-syschannel-admin.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/examples/add-admin-cert/03-update-syschannel-admin.yml>`_, and then run it as follows:
 
   ::
 
@@ -125,7 +125,7 @@ Depending on the role of the organization being updated, perform the appropriate
 
 **If the organization is not an administrator of the ordering service**
 
-  Review the example playbook `04-update-channels-member.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/examples/add-admin-cert/04-update-channels-member.yml>`_, then run it as follows:
+  Review the example playbook `04-update-channels-member.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/examples/add-admin-cert/04-update-channels-member.yml>`_, then run it as follows:
 
   ::
 
@@ -135,7 +135,7 @@ Depending on the role of the organization being updated, perform the appropriate
 
 **If the organization is an administrator of the ordering service**
 
-  Review the example playbook `05-update-channels-admin.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/examples/add-admin-cert/05-update-channels-admin.yml>`_, then run it as follows:
+  Review the example playbook `05-update-channels-admin.yml <https://github.com/IBM-Blockchain/fabric-ansible-collection/blob/main/examples/add-admin-cert/05-update-channels-admin.yml>`_, then run it as follows:
 
   ::
 

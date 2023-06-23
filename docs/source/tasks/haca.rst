@@ -5,9 +5,9 @@
 Creating a highly available Certificate Authority
 =================================================
 
-The default certificate authority in IBM Support for Hyperledger Fabric software is a single replica with an integrated SQLite database, however it is possible to configure the certificate authority to have an external PostgresSQL database and have multiple replicas of the certificate authority.
+The default certificate authority in test-network available in fabric-samples repository for Hyperledger Fabric software is a single replica with an integrated SQLite database for each organisation, however it is possible to configure the certificate authority to have an external PostgresSQL database and have multiple replicas of the certificate authority.
 
-The IBM Support for Hyperledger Fabric software documentation describes some limitations with the creation of replicas, including the restriction that an existing certificate authority with an integrated SQLite database cannot be upgraded to use a PostgresSQL database.  Consequently, the playbook for this task checks for the existence of the named certificate authority and fails if it already exists.
+There are some limitations with the creation of replicas such as using the PostgreSQL database with the CA, or the restriction that an existing certificate authority with an integrated SQLite database cannot be upgraded to use a PostgresSQL database.  Consequently, the playbook for this task checks for the existence of the named certificate authority and fails if it already exists.
 
 Before you start
 ----------------
@@ -25,13 +25,13 @@ This task guide uses a set of example playbooks which are stored in a GitHub rep
 
     ::
 
-        git clone https://github.com/IBM-Blockchain/ansible-collection.git
+        git clone https://github.com/hyperledger-labs/fabric-ansible-collection.git
 
 After cloning the GitHub repository, you must change into the examples directory for this task guide:
 
     ::
 
-        cd ansible-collection/examples/create-ha-ca
+        cd fabric-ansible-collection/examples/create-ha-ca
 
 Editing the variable file
 -------------------------
@@ -62,7 +62,7 @@ The remaining values must always be set:
 Creating the certificate authority
 ----------------------------------
 
-Review the example playbook `create-ha-ca.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/main/examples/haca/create-ha-ca.yml>`_, then run it as follows:
+Review the example playbook `create-ha-ca.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/examples/haca/create-ha-ca.yml>`_, then run it as follows:
 
   ::
 
