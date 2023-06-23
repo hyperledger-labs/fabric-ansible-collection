@@ -5,7 +5,7 @@
 Creating an Intermediate Certificate Authority
 =================================================
 
-IBM Support for Hyperledger Fabric allows for the optional use of Intermediate CAs which can protect a root CA and provide operational flexibility. The IBM Support for Hyperledger Fabric documentation describes the business rerquirement and the manual steps in detail.
+Hyperledger Fabric allows for the optional use of Intermediate CAs which can protect a root CA and provide operational flexibility. The  Hyperledger Fabric CA documentation describes the business rerquirement and the manual steps in detail.
 
 The scenario in this task guide is that Magneto Corp wishes to create a Root CA for the corporation, and an Intermediate CA for a UK subsidiary.
 
@@ -32,13 +32,13 @@ This task guide uses an example playbook which is stored in a GitHub repository.
 
     ::
 
-        git clone https://github.com/IBM-Blockchain/ansible-collection.git
+        git clone https://github.com/hyperledger-labs/fabric-ansible-collection.git
 
 After cloning the GitHub repository, you must change into the examples directory for this task guide:
 
     ::
 
-        cd ansible-collection/examples/create-intermediate-ca
+        cd fabric-ansible-collection/examples/create-intermediate-ca
 
 Editing the variable file
 -------------------------
@@ -73,7 +73,7 @@ The remaining values must always be set:
 Creating the Parent CA and the Intermediate CA
 ----------------------------------------------
 
-Review the example playbook `create-parent-plus-intermediate-ca.yml <https://github.com/IBM-Blockchain/ansible-collection/blob/master/examples/create-intermediate-ca/create-parent-plus-intermediate-ca.yml>`_, then run it as follows:
+Review the example playbook `create-parent-plus-intermediate-ca.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/master/examples/create-intermediate-ca/create-parent-plus-intermediate-ca.yml>`_, then run it as follows:
 
   ::
 
