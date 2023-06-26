@@ -135,7 +135,7 @@ Depending on the role of the organization being updated, perform the appropriate
 
 **If the organization is an administrator of the ordering service**
 
-  Review the example playbook `05-update-channels-admin.yml <https://github.com/IBM-Blockchain/fabric-ansible-collection/blob/main/examples/add-admin-cert/05-update-channels-admin.yml>`_, then run it as follows:
+  Review the example playbook `05-update-channels-admin.yml <https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/examples/add-admin-cert/05-update-channels-admin.yml>`_, then run it as follows:
 
   ::
 

@@ -5,7 +5,7 @@
 Creating an Intermediate Certificate Authority
 =================================================
 
-Hyperledger Fabric allows for the optional use of Intermediate CAs which can protect a root CA and provide operational flexibility. The  Hyperledger Fabric CA documentation describes the business rerquirement and the manual steps in detail.
+Hyperledger Fabric allows for the optional use of Intermediate CAs which can protect a root CA and provide operational flexibility. More information can be found in the Hyperledger Fabric documentation: https://hyperledger-fabric.readthedocs.io/en/release-2.5/identity/identity.html#root-cas-intermediate-cas-and-chains-of-trust.
 
 The scenario in this task guide is that Magneto Corp wishes to create a Root CA for the corporation, and an Intermediate CA for a UK subsidiary.
 
@@ -20,8 +20,6 @@ Before you start
 ----------------
 
 This task guide assumes that you have installed Ansible and the Hyperledger Fabric Ansible Collection, and are familiar with how to use these technologies.
-
-This task guide assumes that you have access to the IBM Support for Hyperledger Fabric documentation and the sections regarding Intermediate CAs.
 
 Cloning the repository
 ----------------------
