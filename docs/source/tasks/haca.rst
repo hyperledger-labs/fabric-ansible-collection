@@ -5,7 +5,7 @@
 Creating a highly available Certificate Authority
 =================================================
 
-The default certificate authority in test-network available in fabric-samples repository for Hyperledger Fabric software is a single replica with an integrated SQLite database for each organisation, however it is possible to configure the certificate authority to have an external PostgresSQL database and have multiple replicas of the certificate authority.
+The default certificate authority in a Hyperledger Fabric network is a single replica with an integrated SQLite database, however it is possible to configure the certificate authority to have an external PostgresSQL database and have multiple replicas of the certificate authority.
 
 There are some limitations with the creation of replicas such as using the PostgreSQL database with the CA, or the restriction that an existing certificate authority with an integrated SQLite database cannot be upgraded to use a PostgresSQL database.  Consequently, the playbook for this task checks for the existence of the named certificate authority and fails if it already exists.
 

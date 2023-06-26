@@ -5,7 +5,7 @@
 Updating channel parameters
 ===========================
 
-Hyperledger Fabric allows each channel to be configured with specific BatchSize parameters and a BatchTimeout for blocks.  This playbook example shows how an Architect or Chaincode Developer could to set these values for a particular application channel on IBM Support for Hyperledger Fabric software.
+Hyperledger Fabric allows each channel to be configured with specific BatchSize parameters and a BatchTimeout for blocks.  This playbook example shows how an Architect or Chaincode Developer could to set these values for a particular application channel on a Hyperledger Fabric network.
 
 The details and implications of setting the parameters is covered in the Hyperledger Fabric documentation set.
 
