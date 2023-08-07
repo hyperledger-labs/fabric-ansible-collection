@@ -11,8 +11,6 @@ The first avenue is to open an issue on GitHub. Support is provided a best can d
 
 The second avenue is to open an IBM support ticket, if you are using the IBM Hyperledger Fabric Support Offering. Support is provided a best can do basis by IBM and there is no guarantees for response times again.
 
-The final avenue, available to **IBM employees only**, is to request help in the `#ibp-ansible <https://ibm-blockchain.slack.com/archives/C013KULGEPR>`_ channel on the IBM internal Slack workspace.
-
 Regardless of the avenue you choose, you must gather and provide as much data as possible to help us diagnose your issue.
 
 Gathering data
@@ -72,7 +70,7 @@ When requesting support, please gather and provide as much data as possible from
 Opening an issue on GitHub
 --------------------------
 
-You can request support by opening an issue on GitHub: https://github.com/IBM-Blockchain/ansible-collection/issues/new
+You can request support by opening an issue on GitHub: https://github.com/hyperledger-labs/fabric-ansible-collection/issues/new
 
 Opening an IBM support ticket
 -----------------------------

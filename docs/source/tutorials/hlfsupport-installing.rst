@@ -73,7 +73,7 @@ Create a new Ansible playbook file called `install-hlf.yml`. Copy and paste the 
             state: present
             target: k8s
             arch: amd64
-            namespace: <operator-namespace>
+            namespace: <console-namespace>
             product_version: <hlf_product_version>
             operator_version: <hlf_image_date>
             console_domain: <console_domain>
