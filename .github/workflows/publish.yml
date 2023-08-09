@@ -32,7 +32,7 @@ jobs:
           ANSIBLE_GALAXY_API_KEY: ${{ secrets.ANSIBLE_GALAXY_API_KEY }}
         run: |
           VERSION=$(yq -r .version galaxy.yml)
-          ansible-galaxy collection publish --api-key ${ANSIBLE_GALAXY_API_KEY} ibm-blockchain_platform-${VERSION}.tar.gz
+          ansible-galaxy collection publish --api-key ${ANSIBLE_GALAXY_API_KEY} hyperledger-fabric_ansible_collection-${VERSION}.tar.gz
       - name: Set GitHub user name and email
         env:
           DOCS_GITHUB_NAME: ${{ secrets.DOCS_GITHUB_NAME }}
@@ -121,7 +121,7 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            ghcr.io/ibm-blockchain/fabric-ansible
+            ghcr.io/hyperledger-labs/fabric-ansible
           tags: |
             type=schedule
             type=ref,event=branch

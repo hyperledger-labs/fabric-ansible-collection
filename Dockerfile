@@ -5,10 +5,10 @@
 # In the first stage, install the common dependencies, and then set up the standard user.
 FROM registry.access.redhat.com/ubi8/ubi-minimal AS base
 RUN microdnf install python39 shadow-utils git \
-    && groupadd -g 7051 ibp-user \
-    && useradd -u 7051 -g ibp-user -G root -s /bin/bash ibp-user \
-    && chgrp -R root /home/ibp-user /etc/passwd \
-    && chmod -R g=u /home/ibp-user /etc/passwd \
+    && groupadd -g 7051 hlf-user \
+    && useradd -u 7051 -g hlf-user -G root -s /bin/bash hlf-user \
+    && chgrp -R root /home/hlf-user /etc/passwd \
+    && chmod -R g=u /home/hlf-user /etc/passwd \
     && microdnf remove shadow-utils \
     && microdnf clean all
 
@@ -17,21 +17,21 @@ RUN microdnf install python39 shadow-utils git \
 FROM base AS builder
 RUN microdnf install gcc gzip python39-devel tar \
     && microdnf clean all
-USER ibp-user
-ENV PATH=/home/ibp-user/.local/bin:$PATH
+USER hlf-user
+ENV PATH=/home/hlf-user/.local/bin:$PATH
 RUN pip3.9 install --user -U 'ansible' fabric-sdk-py python-pkcs11 'openshift' semantic_version jmespath \
-    && chgrp -R root /home/ibp-user/.local \
-    && chmod -R g=u /home/ibp-user/.local
+    && chgrp -R root /home/hlf-user/.local \
+    && chmod -R g=u /home/hlf-user/.local
 ADD . /tmp/collection
 RUN cd /tmp/collection \
     && ansible-galaxy collection build --output-path /tmp \
     && ansible-galaxy collection install /tmp/hyperledger-fabric_ansible_collection-*.tar.gz \
     && ansible-galaxy collection install kubernetes.core \
-    && chgrp -R root /home/ibp-user/.ansible \
-    && chmod -R g=u /home/ibp-user/.ansible
+    && chgrp -R root /home/hlf-user/.ansible \
+    && chmod -R g=u /home/hlf-user/.ansible
 RUN curl -sSL "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"  -o /tmp/kubectl \
     && chmod +x /tmp/kubectl \
-    && mv /tmp/kubectl /home/ibp-user/.local/bin
+    && mv /tmp/kubectl /home/hlf-user/.local/bin
 
 # In the third stage, build the Hyperledger Fabric binaries with HSM enabled (this is not the default).
 FROM base AS fabric
@@ -58,13 +58,13 @@ RUN cd /go/src/github.com/hyperledger/fabric \
 # In the final stage, copy all the installed Python modules across from the second stage and the Hyperledger
 # Fabric binaries from the third stage.
 FROM base
-COPY --from=builder /home/ibp-user/.local /home/ibp-user/.local
-COPY --from=builder /home/ibp-user/.ansible /home/ibp-user/.ansible
+COPY --from=builder /home/hlf-user/.local /home/hlf-user/.local
+COPY --from=builder /home/hlf-user/.ansible /home/hlf-user/.ansible
 COPY --from=fabric /go/src/github.com/hyperledger/fabric/build/bin /opt/fabric/bin
 COPY --from=fabric /go/src/github.com/hyperledger/fabric/sampleconfig /opt/fabric/config
 COPY docker/docker-entrypoint.sh /
-RUN mkdir /home/ibp-user/.kube
+RUN mkdir /home/hlf-user/.kube
 ENV FABRIC_CFG_PATH=/opt/fabric/config
-ENV PATH=/opt/fabric/bin:/home/ibp-user/.local/bin:$PATH
+ENV PATH=/opt/fabric/bin:/home/hlf-user/.local/bin:$PATH
 USER 7051
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
