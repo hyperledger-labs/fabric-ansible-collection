@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Use Python 3.9
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.9
       - name: Install Python dependencies
@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Use Python 3.9
         uses: actions/setup-python@v3
         with:
@@ -75,9 +75,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Use Python 3.9
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.9
       - name: Install Python dependencies
@@ -89,7 +89,7 @@ jobs:
           docker tag hyperledger-labs/fabric-ansible-collection:${VERSION} hyperledger-labs/fabric-ansible-collection:latest
           docker save hyperledger-labs/fabric-ansible-collection:${VERSION} hyperledger-labs/fabric-ansible-collection:latest | gzip -c > image.tar.gz
       - name: Publish Docker image
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Docker image
           path: image.tar.gz
