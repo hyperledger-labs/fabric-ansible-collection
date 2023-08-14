@@ -1,3 +1,5 @@
+Contributing.md
+
 # ansible-collection
 
 ## Required skills
@@ -18,7 +20,7 @@ The skills required depend on the area of the code you are looking to contribute
 
 Follow these steps to set up a development environment for this Ansible collection.
 
-> Note: that the repo is migrating touse Poetry for dependency management, and the just task runner for developmnet purposes
+> Note: that the repo is migrating to use Poetry for dependency management, and the just task runner for developmnet purposes
 
 1. Install Python v3.x. The Python version manager [pyenv](https://github.com/pyenv/pyenv) works great on Linux and macOS and avoids a lot of difficulties seen when trying to use the system Python, or Python installed using the package manager for your operating system.
 
@@ -29,23 +31,23 @@ The linting uses [shellcheck](https://github.com/koalaman/shellcheck#installing)
 
 2. Clone the GitHub repository. To avoid difficulties later on, it is recommended that you clone the GitHub repository directly into the Ansible collections directory, so you need to delete any installed version first:
 
-   `rm -rf ~/.ansible/collections/ansible_collections/ibm/blockchain_platform`
+   `rm -rf ~/.ansible/collections/ansible_collections/hyperledger-labs/blockchain_platform`
 
    Then clone the GitHub repository:
 
-   `git clone git@github.com:IBM-Blockchain/ansible-collection.git ~/.ansible/collections/ansible_collections/ibm/blockchain_platform`
+   `git clone git@github.com:hyperledger-labs/fabric-ansible-collection.git ~/.ansible/collections/ansible_collections/hyperledger-labs/blockchain_platform`
 
    You can then find the cloned GitHub repository at:
 
-   `~/.ansible/collections/ansible_collections/ibm/blockchain_platform`
+   `~/.ansible/collections/ansible_collections/hyperledger-labs/blockchain_platform`
 
    To make it easier to find, you may want to symlink it somewhere else:
 
-   `ln -s ~/.ansible/collections/ansible_collections/ibm/blockchain_platform ~/git/ansible-collection`
+   `ln -s ~/.ansible/collections/ansible_collections/hyperledger-labs/blockchain_platform ~/git/ansible-collection`
 
 3. Open a terminal in the cloned GitHub repository, or change into the directory:
 
-   `cd ~/.ansible/collections/ansible_collections/ibm/blockchain_platform`
+   `cd ~/.ansible/collections/ansible_collections/hyperledger-labs/blockchain_platform`
 
 4. Install all Python dependencies:
 
@@ -61,9 +63,9 @@ The linting uses [shellcheck](https://github.com/koalaman/shellcheck#installing)
 
    `tar xf hyperledger-fabric-darwin-amd64-2.3.1.tar.gz -C /usr/local`
 
-6. In order to test any code changes you make to this collection, other than documentation only changes, you will need an IBM Blockchain Platform instance to test against.
+<!-- 6. In order to test any code changes you make to this collection, other than documentation only changes, you will need a Hyperledger Fabric Blockchain instance to test against.
 
-   Depending on the change, you may need an instance of IBM Blockchain Platform running on IBM Cloud (SaaS), or the IBM Blockchain Platform software running in a Red Hat OpenShift or Kubernetes cluster, or both.
+   Depending on the change, you may need an instance of IBM Support for Hyperledger Fabric software or the Hyperledger Fabric Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster, or both. -->
 
 ## What's in the repository?
 
@@ -106,7 +108,8 @@ There are a few integration tests under `tests/integration/targets`. Integration
 
 ### Tutorial
 
-The playbooks and configuration used in the build, join, and deploy tutorials is stored under `tutorial`. The legacy Hyperledger Fabric v1.x tutorial is stored under `tutorial/v1.x`, but this is never referenced from the documentation.
+The playbooks and configuration used in the build, join, and deploy tutorials is stored under `tutorial`.
+<!-- The legacy Hyperledger Fabric v1.x tutorial is stored under `tutorial/v1.x`, but this is never referenced from the documentation. -->
 
 ### Documentation
 
@@ -144,7 +147,7 @@ ansible-galaxy collection build
 Other users can then install this package by running:
 
 ```
-ansible-galaxy collection install ibm-blockchain_platform-1.0.0.tar.gz
+ansible-galaxy collection install fabric_ansible_collection-2.0.0.tar.gz
 ```
 
 The package can also be imported into Ansible Galaxy manually using your web browser.
@@ -172,9 +175,9 @@ The built documentation will be available from the `docs/build` directory, open 
 
 ### Integration tests
 
-In order to run the integration tests, you must edit the file `tests/integration/integration_config.yml` and provide values for your IBM Blockchain Platform instance.
+In order to run the integration tests, you must edit the file `tests/integration/integration_config.yml` and provide values for your hyperledger fabric instance.
 
-The `test_run_id` and `short_test_run_id` parameters provide namespacing for the tests that allow multiple instances of the tests to run concurrently on the same IBM Blockchain Platform instance. This is mostly useful in the automated CI/CD pipeline, but should not be needed if you are running against an individually owned IBM Blockchain Platform instance.
+The `test_run_id` and `short_test_run_id` parameters provide namespacing for the tests that allow multiple instances of the tests to run concurrently on the same hyperledger fabric instance. This is mostly useful in the automated CI/CD pipeline, but should not be needed if you are running against an individually owned hyperledger fabric instance.
 
 You can then run the integration tests by running the following command:
 
@@ -194,7 +197,7 @@ There is a main workflow defined in `.github/workflows/main.yml`. This is respon
 
 There is also a "purge" workflow defined in `.github/workflows/purge.yml`. This is scheduled to run over night, every night, and simply purges all components from the IBM Blockchain Platform instances used by the main workflow. This is unfortunately required as sometimes the cleanup processes in the test do not occur or do not work, and the leftover components can take up valuable CPU, memory and storage on the associated Red Hat OpenShift cluster.
 
-There are a large number of Action secrets defined here: https://github.com/IBM-Blockchain/ansible-collection/settings/secrets/actions
+There are a large number of Action secrets defined here: https://github.com/hyperledger-labs/fabric-ansible-collection/settings/secrets/actions
 
 These include:
 - Ansible Galaxy API keys
@@ -205,15 +208,15 @@ These include:
 
 ## Publishing/releasing
 
-There are three parts to the publishing process:
+There are following parts to the publishing process:
 
-- Publishing the collection to Ansible Galaxy (https://galaxy.ansible.com/ibm/blockchain_platform)
-- Publishing the documentation to GitHub Pages using the `gh-pages` branch (https://ibm-blockchain.github.io/ansible-collection/)
-- Publishing the Docker image to Docker Hub (https://hub.docker.com/r/ibmcom/ibp-ansible)
+- Publishing the collection to Ansible Galaxy (https://galaxy.ansible.com/hyperledger_labs)
+- Publishing the documentation to GitHub Pages using the `gh-pages` branch (https://github.com/hyperledger-labs/fabric-ansible-collection/)
+<!-- - Publishing the Docker image to Docker Hub (<Link to be updated soon>) -->
 
 All of this is automated using GitHub Actions.
 
-To publish a new release, use GitHub by going to the [Releases](https://github.com/IBM-Blockchain/ansible-collection/releases) page.
+To publish a new release, use GitHub by going to the [Releases](https://github.com/hyperledger-labs/fabric-ansible-collection/releases) page.
 
 For the tag version and release title, use the version number in `galaxy.yml` prefixed with `v`, for example `v1.2.3`.
 
@@ -221,4 +224,4 @@ When you publish the release, the GitHub Actions workflow will be triggered and 
 
 The workflow will automatically bump the version number in `galaxy.yml` after the publishing has completed.
 
-Currently, `sstone1`, `lesleyannjordan`, and `mbwhite` have access to the `ibm` publisher on Ansible Galaxy.
+<!-- Currently, `sstone1`, `lesleyannjordan`, and `mbwhite` have access to the `ibm` publisher on Ansible Galaxy. -->
