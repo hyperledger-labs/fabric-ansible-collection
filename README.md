@@ -33,21 +33,21 @@ The choice will depend on what context you want to use ansible in.
 ```
 
 - Using a Docker container.
-  For v1.2, a Docker image, ``ibmcom/ibp-ansible``, has been published to Docker Hub.
+  <!-- For v1.2, a Docker image, ``ibmcom/ibp-ansible``, has been published to Docker Hub. -->
 
-  You can run a playbook using this Docker image, by volume mounting the playbook into the Docker container and running the ``ansible-playbook`` command:
+  <!-- You can run a playbook using this Docker image, by volume mounting the playbook into the Docker container and running the ``ansible-playbook`` command: -->
 
-  ```shell
+  <!-- ```shell
   docker run --rm -u $(id -u) -v /path/to/playbooks:/playbooks ibmcom/ibp-ansible ansible-playbook /playbooks/playbook.yml
-  ```
+  ``` -->
 
-    Note that the UID flag ``-u $(id -u)`` ensures that Ansible can write connection profile and identity files to the volume mount.
+    <!-- Note that the UID flag ``-u $(id -u)`` ensures that Ansible can write connection profile and identity files to the volume mount. -->
 
-    For v2.0, the docker image is in the `ghcr.io` [registry](https://github.com/IBM-Blockchain/ansible-collection/pkgs/container/ofs-ansibe). It can be run in the same way
+  For v2.0, the docker image is in the `ghcr.io` [registry](https://github.com/hyperledger-labs/fabric-ansible-collection/pkgs/container/fabric-ansible). It can be run in the same way
 
   ```shell
-  docker pull ghcr.io/ibm-blockchain/ofs-ansibe:sha-826e86e
-  docker run --rm -u $(id -u) -v /path/to/playbooks:/playbooks ghcr.io/ibm-blockchain/ofs-ansibe:sha-826e86e ansible-playbook /playbooks/playbook.yml
+  docker pull ghcr.io/hyperledger-labs/fabric-ansible:sha-c9330b9
+  docker run --rm -u $(id -u) -v /path/to/playbooks:/playbooks ghcr.io/hyperledger-labs/fabric-ansible:sha-c9330b9 ansible-playbook /playbooks/playbook.yml
   ```
 
 - If you are using github actions for CI/CD there is a [github action](https://github.com/hyperledgendary/fabric-cloud-infrastructure/tree/main/fabric-ansible-action) that uses the same docker image as the basis.
