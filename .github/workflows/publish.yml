@@ -57,6 +57,8 @@ jobs:
   publish_documentation:
     name: Publish documentation
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Checkout
@@ -77,7 +79,7 @@ jobs:
         with:
           branch: gh-pages
           folder: docs/build
-          token: ${{ secrets.DOCS_GITHUB_ACCESS_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           git-config-name: ${{ secrets.DOCS_GITHUB_NAME }}
           git-config-email: ${{ secrets.DOCS_GITHUB_EMAIL }}
 
