@@ -2,12 +2,12 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 ---
-api_endpoint: https://ibp-console.example.org:32000
+api_endpoint: https://ibm-hlfsupport-project-ibm-hlfsupport-console-console.sre-shubham-ocp-dal-b3c-4-68e10f583f026529fe7a89da40169ef4-0000.us-south.containers.appdomain.cloud:443
 api_authtype: basic
-api_key: xxxxxxxx
-api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+api_key: shubham.shukla3@ibm.com
+api_secret: Shubham@1234
 api_timeout: 60
-k8s_namespace: ibp
+k8s_namespace: ibm-hlfsupport-project
 test_run_id: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 short_test_run_id: xxxxxxxx
 wait_timeout: 600
