@@ -37,7 +37,7 @@
     state: present
     namespace: "{{ namespace }}"
     resource_definition: "{{ lookup('template', 'image_pull_secret.yml.j2') }}"
-    
+
 - name: Create deployment
   kubernetes.core.k8s:
     state: present
