@@ -40,6 +40,12 @@
     namespace: "{{ project }}"
     resource_definition: "{{ lookup('template', 'openshift/cluster_role_binding.yml.j2') }}"
 
+- name: Create image secret
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ project }}"
+    resource_definition: "{{ lookup('template', 'image_pull_secret.yml.j2') }}"
+
 - name: Determine if operator exists
   kubernetes.core.k8s_info:
     namespace: "{{ project }}"
