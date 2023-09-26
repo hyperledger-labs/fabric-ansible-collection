@@ -2,14 +2,14 @@
 .. SPDX-License-Identifier: Apache-2.0
 ..
 
-IBM Blockchain collection for Ansible
-==============================================
+Hyperledger Fabric Ansible Collection
+=====================================
 
 This Ansible collection, enables you to automate the building of Hyperledger Fabric networks.
 
-It supports creating these networks within
-- the IBM Hyperledger Fabric Support Offering
-- Fabric Open Source Stack (Hyperledger Labs `Fabric Operations <https://github.com/hyperledger-labs/fabric-operator>`_  and `Fabric Operations Console <https://github.com/hyperledger-labs/fabric-operations-console>`_)
+It supports creating these networks within:
+- The IBM Hyperledger Fabric Support Offering
+- The Hyperledger Fabric Open Source Stack (Hyperledger Labs `Fabric Operator <https://github.com/hyperledger-labs/fabric-operator>`_  and `Fabric Operations Console <https://github.com/hyperledger-labs/fabric-operations-console>`_)
 
 Roles are provided to install the operations console and operator; additional roles and modules can then create the Fabric Network.
 
@@ -20,6 +20,9 @@ Apache-2.0
 
 Author Information
 ==================
+
+..
+   TODO: Confirm if this is still the case?
 
 This Ansible collection is maintained by the IBM Blockchain development team.
 
@@ -41,7 +44,6 @@ This Ansible collection is maintained by the IBM Blockchain development team.
 
    tutorials/oss-installing
    tutorials/hlfsupport-installing
-   tutorials/installing
    tutorials/building
    tutorials/joining
    tutorials/deploying

@@ -16,9 +16,9 @@ consortium_member_info -- Get information about a consortium member for a Hyperl
 Synopsis
 --------
 
-Get information about a consortium member for a Hyperledger Fabric ordering service by using the IBM Blockchain Platform.
+Get information about a consortium member for a Hyperledger Fabric ordering service.
 
-This module works with the IBM Blockchain Platform managed service running in IBM Cloud, or the IBM Blockchain Platform software running in a Red Hat OpenShift or Kubernetes cluster.
+This module works with the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.
 
 
 
@@ -31,7 +31,7 @@ Parameters
   path (required)
     Path to the current system channel configuration file.
 
-    This file can be fetched by using the :ref:`channel_config <channel_config_module>` module.
+    This file can be fetched by using the \ :strong:`ERROR while parsing`\ : While parsing "M(channel\_config)" at index 39: Module name "channel\_config" is not a FQCN\  module.
 
     | **Type**: str
 
@@ -54,7 +54,7 @@ Examples
 
     
     - name: Get the organization from the consortium
-      ibm.blockchain_platform.consortium_member_info:
+      hyperledger.fabric_ansible_collection.consortium_member_info:
         path: channel_config.bin
         msp_id: Org1MSP
 

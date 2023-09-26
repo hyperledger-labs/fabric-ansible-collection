@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>console_user – Manage the list of users for an IBM Blockchain Platform console &mdash; Ansible Collection  documentation</title>
+  <title>console_user – Manage the list of users for an Fabric operations console &mdash; Ansible Collection  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
@@ -12,12 +12,11 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -30,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> Ansible Collection
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Ansible Collection
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -47,9 +50,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/oss-installing.html">Installing Open Source Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/oss-installing.html">Installing the Hyperledger Fabric Open Source Stack</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/hlfsupport-installing.html">Installing IBM Support for Hyperledger Fabric</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/installing.html">Installing the IBM Blockchain Platform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/building.html">Building a network</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/joining.html">Joining a network</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/deploying.html">Deploying a smart contract</a></li>
@@ -83,7 +85,7 @@
 <li class="toctree-l3"><a class="reference internal" href="channel_policy.html">channel_policy – Manage a policy for a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="committed_chaincode.html">committed_chaincode – Manage an committed chaincode on a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="connection_profile.html">connection_profile – Manage a connection profile for a Hyperledger Fabric network</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">console_user – Manage the list of users for an IBM Blockchain Platform console</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">console_user – Manage the list of users for an Fabric operations console</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
@@ -136,9 +138,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../modules.html">Modules</a></li>
-      <li class="breadcrumb-item active">console_user – Manage the list of users for an IBM Blockchain Platform console</li>
+      <li class="breadcrumb-item active">console_user – Manage the list of users for an Fabric operations console</li>
       <li class="wy-breadcrumbs-aside">
               <!-- User defined GitHub URL -->
               <a href="https://github.com/IBM-Blockchain/ansible-collection/edit/main/plugins/modules/console_user.py" class="fa fa-github"> Edit on GitHub</a>
@@ -149,62 +151,54 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="console-user-manage-the-list-of-users-for-an-ibm-blockchain-platform-console">
-<h1>console_user – Manage the list of users for an IBM Blockchain Platform console<a class="headerlink" href="#console-user-manage-the-list-of-users-for-an-ibm-blockchain-platform-console" title="Permalink to this heading"></a></h1>
-<div class="contents local topic" id="contents">
+  <section id="console-user-manage-the-list-of-users-for-an-fabric-operations-console">
+<h1>console_user – Manage the list of users for an Fabric operations console<a class="headerlink" href="#console-user-manage-the-list-of-users-for-an-fabric-operations-console" title="Link to this heading"></a></h1>
+<nav class="contents local" id="contents">
 <ul class="simple">
 <li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
 <li><p><a class="reference internal" href="#parameters" id="id2">Parameters</a></p></li>
 <li><p><a class="reference internal" href="#examples" id="id3">Examples</a></p></li>
 <li><p><a class="reference internal" href="#return-values" id="id4">Return Values</a></p></li>
 </ul>
-</div>
+</nav>
 <section id="synopsis">
-<h2><a class="toc-backref" href="#id1">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this heading"></a></h2>
-<p>Add, update, and remove users for an instance of the IBM Blockchain Platform console.</p>
-<p>This module works with the IBM Blockchain Platform software running in a Red Hat OpenShift or Kubernetes cluster. It does not work with the IBM Blockchain Platform managed service running in IBM Cloud; to manage the list of users in this environment, you must use IAM.</p>
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
+<p>Add, update, and remove users for an instance of the Fabric operations console.</p>
+<p>This module works with the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.</p>
 </section>
 <section id="parameters">
-<h2><a class="toc-backref" href="#id2">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Parameters</a><a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
 <blockquote>
 <div><dl>
-<dt>api_endpoint (required)</dt><dd><p>The URL for the IBM Blockchain Platform console.</p>
+<dt>api_endpoint (required)</dt><dd><p>The URL for the Fabric operations console.</p>
 <div class="line-block">
 <div class="line"><strong>Type</strong>: str</div>
 </div>
 </dd>
-<dt>api_authtype (required)</dt><dd><p><code class="docutils literal notranslate"><span class="pre">ibmcloud</span></code> - Authenticate to the IBM Blockchain Platform console using IBM Cloud authentication. You must provide a valid API key using <em>api_key</em>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">basic</span></code> - Authenticate to the IBM Blockchain Platform console using basic authentication. You must provide both a valid API key using <em>api_key</em> and API secret using <em>api_secret</em>.</p>
+<dt>api_authtype (required)</dt><dd><p><code class="docutils literal notranslate"><span class="pre">basic</span></code> - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using <em>api_key</em> and API secret using <em>api_secret</em>.</p>
 <div class="line-block">
 <div class="line"><strong>Type</strong>: str</div>
 </div>
 </dd>
-<dt>api_key (required)</dt><dd><p>The API key for the IBM Blockchain Platform console.</p>
+<dt>api_key (required)</dt><dd><p>The API key for the Fabric operations console.</p>
 <div class="line-block">
 <div class="line"><strong>Type</strong>: str</div>
 </div>
 </dd>
-<dt>api_secret</dt><dd><p>The API secret for the IBM Blockchain Platform console.</p>
+<dt>api_secret</dt><dd><p>The API secret for the Fabric operations console.</p>
 <p>Only required when <em>api_authtype</em> is <code class="docutils literal notranslate"><span class="pre">basic</span></code>.</p>
 <div class="line-block">
 <div class="line"><strong>Type</strong>: str</div>
 </div>
 </dd>
-<dt>api_timeout</dt><dd><p>The timeout, in seconds, to use when interacting with the IBM Blockchain Platform console.</p>
+<dt>api_timeout</dt><dd><p>The timeout, in seconds, to use when interacting with the Fabric operations console.</p>
 <div class="line-block">
 <div class="line"><strong>Type</strong>: int</div>
 <div class="line"><strong>Default value</strong>: <code class="docutils literal notranslate"><span class="pre">60</span></code></div>
 </div>
 </dd>
-<dt>api_token_endpoint</dt><dd><p>The IBM Cloud IAM token endpoint to use when using IBM Cloud authentication.</p>
-<p>Only required when <em>api_authtype</em> is <code class="docutils literal notranslate"><span class="pre">ibmcloud</span></code>, and you are using IBM internal staging servers for testing.</p>
-<div class="line-block">
-<div class="line"><strong>Type</strong>: str</div>
-<div class="line"><strong>Default value</strong>: <code class="docutils literal notranslate"><span class="pre">https://iam.cloud.ibm.com/identity/token</span></code></div>
-</div>
-</dd>
 <dt>state</dt><dd><p><code class="docutils literal notranslate"><span class="pre">absent</span></code> - A user matching the specified email will be removed from the IBM Blockchain Platform console.</p>
-<p><code class="docutils literal notranslate"><span class="pre">present</span></code> - Asserts that a user matching the specified email and configuration exists in the IBM Blockchain Platform console. If no user matches the specified email, the user will be added to the IBM Blockchain Platform console. If a user matches the specified email but the configuration does not match, then the user in the IBM Blockchain Platform console will be updated.</p>
+<p><code class="docutils literal notranslate"><span class="pre">present</span></code> - Asserts that a user matching the specified email and configuration exists in the Fabric operations console. If no user matches the specified email, the user will be added to the Fabric operations console. If a user matches the specified email but the configuration does not match, then the user in the Fabric operations console will be updated.</p>
 <div class="line-block">
 <div class="line"><strong>Type</strong>: str</div>
 <div class="line"><strong>Default value</strong>: <code class="docutils literal notranslate"><span class="pre">present</span></code></div>
@@ -226,12 +220,12 @@
 </div></blockquote>
 </section>
 <section id="examples">
-<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add a user with the manager role to the console</span>
-<span class="w">  </span><span class="nt">ibm.blockchain_platform.console_user</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">hyperledger.fabric_ansible_collection.console_user</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
-<span class="w">    </span><span class="nt">api_endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://ibp-console.example.org:32000</span>
+<span class="w">    </span><span class="nt">api_endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://console.example.org:32000</span>
 <span class="w">    </span><span class="nt">api_authtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
 <span class="w">    </span><span class="nt">api_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxx</span>
 <span class="w">    </span><span class="nt">api_secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
@@ -240,9 +234,9 @@
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">manager</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add a user with the writer role to the console</span>
-<span class="w">  </span><span class="nt">ibm.blockchain_platform.console_user</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">hyperledger.fabric_ansible_collection.console_user</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
-<span class="w">    </span><span class="nt">api_endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://ibp-console.example.org:32000</span>
+<span class="w">    </span><span class="nt">api_endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://console.example.org:32000</span>
 <span class="w">    </span><span class="nt">api_authtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
 <span class="w">    </span><span class="nt">api_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxx</span>
 <span class="w">    </span><span class="nt">api_secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
@@ -251,9 +245,9 @@
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">writer</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add a user with the reader role to the console</span>
-<span class="w">  </span><span class="nt">ibm.blockchain_platform.console_user</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">hyperledger.fabric_ansible_collection.console_user</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
-<span class="w">    </span><span class="nt">api_endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://ibp-console.example.org:32000</span>
+<span class="w">    </span><span class="nt">api_endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://console.example.org:32000</span>
 <span class="w">    </span><span class="nt">api_authtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
 <span class="w">    </span><span class="nt">api_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxx</span>
 <span class="w">    </span><span class="nt">api_secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
@@ -262,9 +256,9 @@
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">reader</span>
 
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove the user from the console</span>
-<span class="w">  </span><span class="nt">ibm.blockchain_platform.console_user</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">hyperledger.fabric_ansible_collectionble-collection.console_user</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
-<span class="w">    </span><span class="nt">api_endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://ibp-console.example.org:32000</span>
+<span class="w">    </span><span class="nt">api_endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://console.example.org:32000</span>
 <span class="w">    </span><span class="nt">api_authtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
 <span class="w">    </span><span class="nt">api_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxx</span>
 <span class="w">    </span><span class="nt">api_secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
@@ -273,7 +267,7 @@
 </div>
 </section>
 <section id="return-values">
-<h2><a class="toc-backref" href="#id4">Return Values</a><a class="headerlink" href="#return-values" title="Permalink to this heading"></a></h2>
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Link to this heading"></a></h2>
 <blockquote>
 <div><dl>
 <dt>console_user</dt><dd><p>The user.</p>

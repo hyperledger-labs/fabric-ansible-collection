@@ -16,9 +16,9 @@ installed_chaincode -- Manage a chaincode installed on a Hyperledger Fabric peer
 Synopsis
 --------
 
-Install a chaincode on a Hyperledger Fabric peer by using the IBM Blockchain Platform.
+Install a chaincode on a Hyperledger Fabric peer.
 
-This module works with the IBM Blockchain Platform managed service running in IBM Cloud, or the IBM Blockchain Platform software running in a Red Hat OpenShift or Kubernetes cluster.
+This module works with the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.
 
 
 
@@ -29,47 +29,37 @@ Parameters
 ----------
 
   api_endpoint (required)
-    The URL for the IBM Blockchain Platform console.
+    The URL for the Fabric operations console.
 
     | **Type**: str
 
   api_authtype (required)
-    ``ibmcloud`` - Authenticate to the IBM Blockchain Platform console using IBM Cloud authentication. You must provide a valid API key using *api_key*.
-
-    ``basic`` - Authenticate to the IBM Blockchain Platform console using basic authentication. You must provide both a valid API key using *api_key* and API secret using *api_secret*.
+    \ :literal:`basic`\  - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using \ :emphasis:`api\_key`\  and API secret using \ :emphasis:`api\_secret`\ .
 
     | **Type**: str
 
   api_key (required)
-    The API key for the IBM Blockchain Platform console.
+    The API key for the Fabric operations console.
 
     | **Type**: str
 
   api_secret
-    The API secret for the IBM Blockchain Platform console.
+    The API secret for the Fabric operations console.
 
-    Only required when *api_authtype* is ``basic``.
+    Only required when \ :emphasis:`api\_authtype`\  is \ :literal:`basic`\ .
 
     | **Type**: str
 
   api_timeout
-    The timeout, in seconds, to use when interacting with the IBM Blockchain Platform console.
+    The timeout, in seconds, to use when interacting with the Fabric operations console.
 
     | **Type**: int
     | **Default value**: ``60``
 
-  api_token_endpoint
-    The IBM Cloud IAM token endpoint to use when using IBM Cloud authentication.
-
-    Only required when *api_authtype* is ``ibmcloud``, and you are using IBM internal staging servers for testing.
-
-    | **Type**: str
-    | **Default value**: ``https://iam.cloud.ibm.com/identity/token``
-
   state
-    ``absent`` - If a chaincode matching the specified name and version is installed, then an error will be thrown, as it is not possible to uninstall chaincode.
+    \ :literal:`absent`\  - If a chaincode matching the specified name and version is installed, then an error will be thrown, as it is not possible to uninstall chaincode.
 
-    ``present`` - Asserts that a chaincode matching the specified name and version is installed. If it is not installed, then the chaincode is installed using the chaincode package at the specified path. If it is installed, then the chaincode is checked to make sure that the installed chaincode matches the chaincode in the chaincode package at the specified path. If the installed chaincode does not match, then an error will be thrown, as it is not possible to update installed chaincode.
+    \ :literal:`present`\  - Asserts that a chaincode matching the specified name and version is installed. If it is not installed, then the chaincode is installed using the chaincode package at the specified path. If it is installed, then the chaincode is checked to make sure that the installed chaincode matches the chaincode in the chaincode package at the specified path. If the installed chaincode does not match, then an error will be thrown, as it is not possible to update installed chaincode.
 
     | **Type**: str
     | **Default value**: ``present``
@@ -77,9 +67,9 @@ Parameters
   peer (required)
     The peer to use to manage the installed chaincode.
 
-    You can pass a string, which is the display name of a peer registered with the IBM Blockchain Platform console.
+    You can pass a string, which is the display name of a peer registered with the Fabric operations console.
 
-    You can also pass a dict, which must match the result format of one of the :ref:`peer_info <peer_info_module>` or :ref:`peer <peer_module>` modules.
+    You can also pass a dict, which must match the result format of one of the \ :strong:`ERROR while parsing`\ : While parsing "M(peer\_info)" at index 76: Module name "peer\_info" is not a FQCN\  or \ :strong:`ERROR while parsing`\ : While parsing "M(peer)" at index 92: Module name "peer" is not a FQCN\  modules.
 
     | **Type**: raw
 
@@ -88,7 +78,7 @@ Parameters
 
     You can pass a string, which is the path to the JSON file where the enrolled identity is stored.
 
-    You can also pass a dict, which must match the result format of one of the :ref:`enrolled_identity_info <enrolled_identity_info_module>` or :ref:`enrolled_identity <enrolled_identity_module>` modules.
+    You can also pass a dict, which must match the result format of one of the \ :strong:`ERROR while parsing`\ : While parsing "M(enrolled\_identity\_info)" at index 76: Module name "enrolled\_identity\_info" is not a FQCN\  or \ :strong:`ERROR while parsing`\ : While parsing "M(enrolled\_identity)" at index 105: Module name "enrolled\_identity" is not a FQCN\  modules.
 
     | **Type**: raw
 
@@ -100,7 +90,7 @@ Parameters
   hsm
     The PKCS #11 compliant HSM configuration to use for digital signatures.
 
-    Only required if the identity specified in *identity* was enrolled using an HSM.
+    Only required if the identity specified in \ :emphasis:`identity`\  was enrolled using an HSM.
 
     | **Type**: dict
 
@@ -123,32 +113,32 @@ Parameters
   name
     The name of the chaincode.
 
-    Only required when *state* is ``absent`` and when using the chaincode lifecycle in Hyperledger Fabric v1.4.
+    Only required when \ :emphasis:`state`\  is \ :literal:`absent`\  and when using the chaincode lifecycle in Hyperledger Fabric v1.4.
 
     | **Type**: str
 
   version
     The version of the chaincode.
 
-    Only required when *state* is ``absent`` and when using the chaincode lifecycle in Hyperledger Fabric v1.4.
+    Only required when \ :emphasis:`state`\  is \ :literal:`absent`\  and when using the chaincode lifecycle in Hyperledger Fabric v1.4.
 
     | **Type**: str
 
   package_id
     The package ID of the chaincode.
 
-    Only required when *state* is ``absent`` and when using the chaincode lifecycle in Hyperledger Fabric v2.x.
+    Only required when \ :emphasis:`state`\  is \ :literal:`absent`\  and when using the chaincode lifecycle in Hyperledger Fabric v2.x.
 
     | **Type**: str
 
   path
     The path to the chaincode package.
 
-    When using the chaincode lifecycle in Hyperledger Fabric v1.4, the chaincode package must be a CDS file created using the ``peer chaincode package`` command, the IBM Blockchain Platform extension for Visual Studio Code, or a Hyperledger Fabric SDK.
+    When using the chaincode lifecycle in Hyperledger Fabric v1.4, the chaincode package must be a CDS file created using the \ :literal:`peer chaincode package`\  command or a Hyperledger Fabric SDK.
 
-    When using the chaincode lifecycle in Hyperledger Fabric v2.x, the chaincode package must be a tar file created using the ``peer lifecycle chaincode package`` command, the IBM Blockchain Platform extension for Visual Studio Code, or a Hyperledger Fabric SDK.
+    When using the chaincode lifecycle in Hyperledger Fabric v2.x, the chaincode package must be a tar file created using the \ :literal:`peer lifecycle chaincode package`\  command or a Hyperledger Fabric SDK.
 
-    Only required when *state* is ``present``.
+    Only required when \ :emphasis:`state`\  is \ :literal:`present`\ .
 
     | **Type**: str
 
@@ -166,9 +156,9 @@ Examples
 
     
     - name: Install the chaincode on the peer using Hyperledger Fabric v1.4 lifecycle
-      ibm.blockchain_platform.installed_chaincode:
+      hyperledger.fabric_ansible_collection.installed_chaincode:
         state: present
-        api_endpoint: https://ibp-console.example.org:32000
+        api_endpoint: https://console.example.org:32000
         api_authtype: basic
         api_key: xxxxxxxx
         api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -178,9 +168,9 @@ Examples
         path: fabcar@1.0.0.cds
 
     - name: Install the chaincode on the peer using Hyperledger Fabric v2.x lifecycle
-      ibm.blockchain_platform.installed_chaincode:
+      hyperledger.fabric_ansible_collection.installed_chaincode:
         state: present
-        api_endpoint: https://ibp-console.example.org:32000
+        api_endpoint: https://console.example.org:32000
         api_authtype: basic
         api_key: xxxxxxxx
         api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -190,9 +180,9 @@ Examples
         path: fabcar@1.0.0.tgz
 
     - name: Ensure the chaincode is not installed on the peer using Hyperledger Fabric v1.4 lifecycle
-      ibm.blockchain_platform.installed_chaincode:
+      hyperledger.fabric_ansible_collection.installed_chaincode:
         state: absent
-        api_endpoint: https://ibp-console.example.org:32000
+        api_endpoint: https://console.example.org:32000
         api_authtype: basic
         api_key: xxxxxxxx
         api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -203,9 +193,9 @@ Examples
         version: 1.0.0
 
     - name: Ensure the chaincode is not installed on the peer using Hyperledger Fabric v2.x lifecycle
-      ibm.blockchain_platform.installed_chaincode:
+      hyperledger.fabric_ansible_collection.installed_chaincode:
         state: absent
-        api_endpoint: https://ibp-console.example.org:32000
+        api_endpoint: https://console.example.org:32000
         api_authtype: basic
         api_key: xxxxxxxx
         api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -222,7 +212,7 @@ Return Values
   installed_chaincode
     The installed chaincode.
 
-    | **Returned**: when *state* is ``present``
+    | **Returned**: when \ :emphasis:`state`\  is \ :literal:`present`\ 
     | **Type**: dict
 
     name

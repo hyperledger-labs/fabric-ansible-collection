@@ -2,7 +2,7 @@
 .. SPDX-License-Identifier: Apache-2.0
 ..
 
-:github_url: https://github.com/IBM-Blockchain/ansible-collection/edit/main/docs/source/roles/endorsing_organization.rst
+:github_url: https://github.com/hyperledger-labs/fabric-ansible-collection/edit/main/docs/source/roles/endorsing_organization.rst
 
 
 endorsing_organization -- Build Hyperledger Fabric components for an endorsing organization
@@ -18,48 +18,39 @@ Synopsis
 
 This role allows you to quickly build Hyperledger Fabric components for an endorsing organization. An endorsing organization has a certificate authority and a peer.
 
-This role works with the IBM Blockchain Platform managed service running in IBM Cloud, or the IBM Blockchain Platform software running in a Red Hat OpenShift or Kubernetes cluster.
+This role works with the  IBM Support for Hyperledger Fabric software or the Hyperledger Fabric Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.
 
 Parameters
 ----------
 
   api_endpoint (required)
-    The URL for the IBM Blockchain Platform console.
+    The URL for the Fabric operations console.
 
     | **Type**: str
 
   api_authtype (required)
-    ``ibmcloud`` - Authenticate to the IBM Blockchain Platform console using IBM Cloud authentication. You must provide a valid API key using *api_key*.
 
-    ``basic`` - Authenticate to the IBM Blockchain Platform console using basic authentication. You must provide both a valid API key using *api_key* and API secret using *api_secret*.
+    ``basic`` - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using *api_key* and API secret using *api_secret*.
 
     | **Type**: str
 
   api_key (required)
-    The API key for the IBM Blockchain Platform console.
+    The API key for the Fabric operations console.
 
     | **Type**: str
 
   api_secret
-    The API secret for the IBM Blockchain Platform console.
+    The API secret for the Fabric operations console.
 
     Only required when *api_authtype* is ``basic``.
 
     | **Type**: str
 
   api_timeout
-    The timeout, in seconds, to use when interacting with the IBM Blockchain Platform console.
+    The timeout, in seconds, to use when interacting with the Fabric operations console.
 
     | **Type**: int
     | **Default value**: ``60``
-
-  api_token_endpoint
-    The IBM Cloud IAM token endpoint to use when using IBM Cloud authentication.
-
-    Only required when *api_authtype* is ``ibmcloud``, and you are using IBM internal staging servers for testing.
-
-    | **Type**: str
-    | **Default value**: ``https://iam.cloud.ibm.com/identity/token``
 
   state
     ``absent`` - All components for the endorsing organization will be stopped and removed, if they exist.
@@ -118,6 +109,15 @@ Parameters
     If you do not specify a version, an existing certificate authority will not be upgraded.
 
     If you specify a new version, an existing certificate authority will be automatically upgraded.
+
+    | **Type**: str
+
+  ca_zone
+    The Kubernetes zone for this certificate authority
+
+    If you do not specify a Kubernetes zone, and multiple Kubernetes zones are available, then a random Kubernetes zone will be selected for you.
+
+    See the Kubernetes documentation for more information: "https://kubernetes.io/docs/setup/best-practices/multiple-zones/"
 
     | **Type**: str
 
@@ -191,6 +191,18 @@ Parameters
 
     | **Type**: str
 
+  peer_zones
+    The Kubernetes zone for each peer.
+    
+    If specified, you must provide a Kubernetes zone for each peer node. The length of `peer_zones` should match the `peers` parameter
+
+    If you do not specify a Kubernetes zone, and multiple Kubernetes zones are available, then a random Kubernetes zone will be selected for you.
+
+    See the Kubernetes documentation for more information: https://kubernetes.io/docs/setup/best-practices/multiple-zones/"
+
+    | **Type**: list
+    | **Elements**: str
+
   wallet
     The wallet directory to store identity files in.
 
@@ -222,7 +234,7 @@ Examples
   - name: Create components for an endorsing organization
     vars:
       state: present
-      api_endpoint: https://ibp-console.example.org:32000
+      api_endpoint: https://ibm-hlfsupport-console.example.org:32000
       api_authtype: basic
       api_key: xxxxxxxx
       api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -236,16 +248,16 @@ Examples
       peer_enrollment_secret: org1peerpw
       wait_timeout: 3600
     roles:
-      - ibm.blockchain_platform.endorsing_organization
+      - hyperledger.fabric_ansible_collection.endorsing_organization
 
   - name: Destroy components for an endorsing organization
     vars:
       state: absent
-      api_endpoint: https://ibp-console.example.org:32000
+      api_endpoint: https://ibm-hlfsupport-console.example.org:32000
       api_authtype: basic
       api_key: xxxxxxxx
       api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
       organization_name: Org1
       wait_timeout: 3600
     roles:
-      - ibm.blockchain_platform.endorsing_organization
+      - hyperledger.fabric_ansible_collection.endorsing_organization

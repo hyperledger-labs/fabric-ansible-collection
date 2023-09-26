@@ -16,9 +16,9 @@ channel_parameters -- Manage the parameters for a Hyperledger Fabric channel
 Synopsis
 --------
 
-Specify the parameters for a Hyperledger Fabric channel by using the IBM Blockchain Platform.
+Specify the parameters for a Hyperledger Fabric channel.
 
-This module works with the IBM Blockchain Platform managed service running in IBM Cloud, or the IBM Blockchain Platform software running in a Red Hat OpenShift or Kubernetes cluster.
+This module works with the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.
 
 
 
@@ -31,7 +31,7 @@ Parameters
   path (required)
     Path to current the channel configuration file.
 
-    This file can be fetched by using the :ref:`channel_config <channel_config_module>` module.
+    This file can be fetched by using the \ :strong:`ERROR while parsing`\ : While parsing "M(channel\_config)" at index 39: Module name "channel\_config" is not a FQCN\  module.
 
     This file will be updated in place. You will need to keep a copy of the original file for computing the configuration update.
 
@@ -61,7 +61,7 @@ Parameters
   batch_timeout
     The maximum time to wait before cutting a new block for the channel.
 
-    Example values include *500ms*, *5m*, or *24h*.
+    Example values include \ :emphasis:`500ms`\ , \ :emphasis:`5m`\ , or \ :emphasis:`24h`\ .
 
     | **Type**: str
 
@@ -79,7 +79,7 @@ Examples
 
     
     - name: Set batch size channel parameters
-      ibm.blockchain_platform.channel_parameters:
+      hyperledger.fabric_ansible_collection.channel_parameters:
         path: channel_config.bin
         batch_size:
           max_message_count: 10000
@@ -87,7 +87,7 @@ Examples
           preferred_max_bytes: 5242880
 
     - name: Set batch timeout channel parameter
-      ibm.blockchain_platform.channel_parameters:
+      hyperledger.fabric_ansible_collection.channel_parameters:
         path: channel_config.bin
         batch_timeout: 500ms
 
