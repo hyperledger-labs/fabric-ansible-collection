@@ -76,7 +76,7 @@ jobs:
           popd
 
       - name: Publish documentation to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4.3.0
+        uses: JamesIves/github-pages-deploy-action@v4.4.3
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: docs/build # The folder the action should deploy.
