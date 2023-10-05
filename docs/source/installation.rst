@@ -14,7 +14,7 @@ In order to use this Ansible collection, you must have the following pre-requisi
 ..
     TODO: Test the latest python version
 
-Python v3.8
+Python v3.9
 -----------
 
 Python can be installed from a variety of sources, including the package manager for your operating system (apt, yum, etc).
@@ -26,8 +26,8 @@ If you install Python from the package manager for your operating system, you mu
 ..
     TODO: Test the latest Ansible version
 
-Ansible v2.9+
--------------
+Ansible v2.14+
+--------------
 
 Ansible can be installed from a variety of sources, including the package manager for your operating system (apt, yum, etc). You can also install it using ``pip``, the package manager for Python:
 
@@ -107,20 +107,18 @@ You can also use this Ansible collection to install either of these options. To 
 2. `Installing the IBM Hyperledger Fabric Support Offering <./tutorials/hlfsupport-installing.html>`_
 
 
-..
-    TODO: Create a new Ansible Galaxy location to push the playbooks to and link the new URL
 
-[COMING SOON] Installing using Ansible Galaxy
----------------------------------------------
+Installing using Ansible Galaxy
+-------------------------------
 
-Ansible Galaxy is the package manager for Ansible. The collection is published to Ansible Galaxy here: https://galaxy.ansible.com/COMING/SOON
+Ansible Galaxy is the package manager for Ansible. The collection is published to Ansible Galaxy here: https://galaxy.ansible.com/ui/repo/published/hyperledger/fabric_ansible_collection/
 
 
 You can use the ``ansible-galaxy`` command to install a collection from Ansible Galaxy, the package manager for Ansible:
 
 ::
 
-    ansible-galaxy collection install COMING_SOON
+    ansible-galaxy collection install hyperledger.fabric_ansible_collection
 
 Installing from source
 ----------------------
@@ -155,18 +153,18 @@ Alternatively, make sure you have ``just`` installed and run the following comma
 
     just local
 
-[COMING SOON] Using a Docker image
-----------------------------------
+Using a Docker image
+--------------------
 
 If you do not want to, or cannot, install all of the required software for this collection on your system, you may wish to build a Docker image that contains all of the software required to run Ansible playbooks which use this collection.
 
-A Docker image, ``ghcr.io/COMING/SOON``, has been published to Docker Hub.
+A Docker image, ``ghcr.io/hyperledger-labs/fabric-ansible:latest``, has been published to Docker Hub.
 
 You can run a playbook using this Docker image, by volume mounting the playbook into the Docker container and running the ``ansible-playbook`` command:
 
 ::
 
-    docker run --rm -u $(id -u) -v /path/to/playbooks:/playbooks ghcr.io/ibm-blockchain/ofs-ansibe:sha-826e86e ansible-playbook /playbooks/playbook.yml
+    docker run --rm -u $(id -u) -v /path/to/playbooks:/playbooks docker pull ghcr.io/hyperledger-labs/fabric-ansible:latest /playbooks/playbook.yml
 
 Note that the UID flag ``-u $(id -u)`` ensures that Ansible can write connection profile and identity files to the volume mount.
 

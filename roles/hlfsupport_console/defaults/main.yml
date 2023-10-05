@@ -13,6 +13,9 @@ image_registry: icr.io
 image_repository: cpopen
 image_folder: ibm-hlfsupport
 image_registry_url: "{{ image_registry }}/{{ image_repository }}/{{ image_folder }}"
+# image_registry_username: cp
+# image_registry_email: user@example.org
+# image_registry_password: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 cluster_role: "{{ project | default(namespace) | default('') }}"
 cluster_role_binding: "{{ project | default(namespace) | default('') }}"
