@@ -50,7 +50,6 @@
     namespace: "{{ namespace }}"
     resource_definition: "{{ lookup('template', 'image_pull_secret.yml.j2') }}"
   when: image_registry_username is defined and image_registry_email is defined and image_registry_password is defined
-  
 
 - name: Determine if operator exists
   kubernetes.core.k8s_info:
