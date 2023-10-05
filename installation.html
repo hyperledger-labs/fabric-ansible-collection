@@ -47,17 +47,17 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#python-v3-8">Python v3.8</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#ansible-v2-9">Ansible v2.9+</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-v3-9">Python v3.9</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ansible-v2-14">Ansible v2.14+</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hyperledger-fabric-v2-4-7-binaries">Hyperledger Fabric v2.4.7+ binaries</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hyperledger-fabric-sdk-for-python-v0-8-1">Hyperledger Fabric SDK for Python v0.8.1+</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pkcs-11-cryptoki-for-python-v0-6-0">PKCS #11/Cryptoki for Python v0.6.0+</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#openshift-client-for-python-v0-10-3">OpenShift client for Python v0.10.3+</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#semantic-versioning-for-python-v2-8-5">Semantic Versioning for Python v2.8.5+</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hyperledger-fabric-oss-vx-y-z-or-ibm-hlf-support-v1-0-0">Hyperledger Fabric OSS vX.Y.Z or IBM HLF Support v1.0.0</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#coming-soon-installing-using-ansible-galaxy">[COMING SOON] Installing using Ansible Galaxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-using-ansible-galaxy">Installing using Ansible Galaxy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installing-from-source">Installing from source</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#coming-soon-using-a-docker-image">[COMING SOON] Using a Docker image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-a-docker-image">Using a Docker image</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="migrating-v12-v2.html">Migrating from v1.2 to version 2</a></li>
@@ -118,8 +118,8 @@
 <h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
 <p>In order to use this Ansible collection, you must have the following pre-requisite software installed and available.</p>
 </section>
-<section id="python-v3-8">
-<h2>Python v3.8<a class="headerlink" href="#python-v3-8" title="Link to this heading"></a></h2>
+<section id="python-v3-9">
+<h2>Python v3.9<a class="headerlink" href="#python-v3-9" title="Link to this heading"></a></h2>
 <p>Python can be installed from a variety of sources, including the package manager for your operating system (apt, yum, etc).
 If you install Python from the package manager for your operating system, you must also install the development libraries (usually a package named <code class="docutils literal notranslate"><span class="pre">python3-devel</span></code>), as these are required when installing modules through <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
 <ul class="simple">
@@ -127,8 +127,8 @@ If you install Python from the package manager for your operating system, you mu
 <li><p>The unofficial Python version manager: <a class="reference external" href="https://github.com/pyenv/pyenv">https://github.com/pyenv/pyenv</a></p></li>
 </ul>
 </section>
-<section id="ansible-v2-9">
-<h2>Ansible v2.9+<a class="headerlink" href="#ansible-v2-9" title="Link to this heading"></a></h2>
+<section id="ansible-v2-14">
+<h2>Ansible v2.14+<a class="headerlink" href="#ansible-v2-14" title="Link to this heading"></a></h2>
 <p>Ansible can be installed from a variety of sources, including the package manager for your operating system (apt, yum, etc). You can also install it using <code class="docutils literal notranslate"><span class="pre">pip</span></code>, the package manager for Python:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="s1">&#39;ansible&#39;</span>
 </pre></div>
@@ -184,11 +184,11 @@ If you install Python from the package manager for your operating system, you mu
 <li><p><a class="reference external" href="./tutorials/hlfsupport-installing.html">Installing the IBM Hyperledger Fabric Support Offering</a></p></li>
 </ol>
 </section>
-<section id="coming-soon-installing-using-ansible-galaxy">
-<h2>[COMING SOON] Installing using Ansible Galaxy<a class="headerlink" href="#coming-soon-installing-using-ansible-galaxy" title="Link to this heading"></a></h2>
-<p>Ansible Galaxy is the package manager for Ansible. The collection is published to Ansible Galaxy here: <a class="reference external" href="https://galaxy.ansible.com/COMING/SOON">https://galaxy.ansible.com/COMING/SOON</a></p>
+<section id="installing-using-ansible-galaxy">
+<h2>Installing using Ansible Galaxy<a class="headerlink" href="#installing-using-ansible-galaxy" title="Link to this heading"></a></h2>
+<p>Ansible Galaxy is the package manager for Ansible. The collection is published to Ansible Galaxy here: <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/hyperledger/fabric_ansible_collection/">https://galaxy.ansible.com/ui/repo/published/hyperledger/fabric_ansible_collection/</a></p>
 <p>You can use the <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span></code> command to install a collection from Ansible Galaxy, the package manager for Ansible:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ansible</span><span class="o">-</span><span class="n">galaxy</span> <span class="n">collection</span> <span class="n">install</span> <span class="n">COMING_SOON</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ansible</span><span class="o">-</span><span class="n">galaxy</span> <span class="n">collection</span> <span class="n">install</span> <span class="n">hyperledger</span><span class="o">.</span><span class="n">fabric_ansible_collection</span>
 </pre></div>
 </div>
 </section>
@@ -221,12 +221,12 @@ This will build the stable <cite>release-1.2</cite> branch for v1.2.; use the <c
 </pre></div>
 </div>
 </section>
-<section id="coming-soon-using-a-docker-image">
-<h2>[COMING SOON] Using a Docker image<a class="headerlink" href="#coming-soon-using-a-docker-image" title="Link to this heading"></a></h2>
+<section id="using-a-docker-image">
+<h2>Using a Docker image<a class="headerlink" href="#using-a-docker-image" title="Link to this heading"></a></h2>
 <p>If you do not want to, or cannot, install all of the required software for this collection on your system, you may wish to build a Docker image that contains all of the software required to run Ansible playbooks which use this collection.</p>
-<p>A Docker image, <code class="docutils literal notranslate"><span class="pre">ghcr.io/COMING/SOON</span></code>, has been published to Docker Hub.</p>
+<p>A Docker image, <code class="docutils literal notranslate"><span class="pre">ghcr.io/hyperledger-labs/fabric-ansible:latest</span></code>, has been published to Docker Hub.</p>
 <p>You can run a playbook using this Docker image, by volume mounting the playbook into the Docker container and running the <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code> command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run --rm -u $(id -u) -v /path/to/playbooks:/playbooks ghcr.io/ibm-blockchain/ofs-ansibe:sha-826e86e ansible-playbook /playbooks/playbook.yml
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run --rm -u $(id -u) -v /path/to/playbooks:/playbooks docker pull ghcr.io/hyperledger-labs/fabric-ansible:latest /playbooks/playbook.yml
 </pre></div>
 </div>
 <p>Note that the UID flag <code class="docutils literal notranslate"><span class="pre">-u</span> <span class="pre">$(id</span> <span class="pre">-u)</span></code> ensures that Ansible can write connection profile and identity files to the volume mount.</p>
