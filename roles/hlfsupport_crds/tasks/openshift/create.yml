@@ -43,6 +43,7 @@
     state: present
     namespace: "{{ project }}"
     resource_definition: "{{ lookup('template', 'image_pull_secret.yml.j2') }}"
+  when: image_registry_username is defined and image_registry_email is defined and image_registry_password is defined
 
 - name: Create deployment
   kubernetes.core.k8s:
