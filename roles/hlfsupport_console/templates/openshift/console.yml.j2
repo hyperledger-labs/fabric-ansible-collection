@@ -29,17 +29,17 @@ spec:
   clusterdata:
     zones:
   {%+ for zone in zones %}
-    - "{{ zone }}"
+      - "{{ zone }}"
   {% endfor %}
   {% endif %}
-  {%+ if console_tls_secret is defined %}
+{%+ if console_tls_secret is defined %}
   tlsSecretName: "{{ console_tls_secret }}"
-  {% endif %}
-  {%+ if console_images is defined %}
+{% endif %}
+{%+ if console_images is defined %}
   images:
     {{ console_images | to_nice_yaml(indent=2, width=1024) | indent(4, false) }}
-  {% endif %}
-  {%+ if console_versions is defined %}
+{% endif %}
+{%+ if console_versions is defined %}
   versions:
     {{ console_versions | to_nice_yaml(indent=2, width=1024) | indent(4, false) }}
-  {% endif %}
+{% endif %}

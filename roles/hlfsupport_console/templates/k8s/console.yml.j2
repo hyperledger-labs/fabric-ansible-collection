@@ -23,8 +23,6 @@ spec:
     console:
       class: "{{ console_storage_class }}"
       size: "{{ console_storage_size }}"
-  imagePullSecrets:
-  - "{{ image_pull_secret }}"
   usetags: true
   version: 1.0.0
   {%+ if zones is defined %}
