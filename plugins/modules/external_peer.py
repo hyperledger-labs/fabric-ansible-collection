@@ -222,7 +222,13 @@ def main():
             tls_ca_root_cert=dict(type='str'),
             tls_cert=dict(type='str'),
             location=dict(type='str'),
-            type=dict(type='str')
+            type=dict(type='str'),
+            cluster_type=dict(type='str', default=None),
+            console_type=dict(type='str', default=None),
+            display_name=dict(type='str', default=None),
+            id=dict(type='str', default=None),
+            msp=dict(type='dict', default=None),
+            scheme_version=dict(type='str', default=None)
         ))
     )
     required_if = [
@@ -291,7 +297,7 @@ def main():
             operations_url=peer_definition['operations_url'],
             grpcwp_url=peer_definition['grpcwp_url'],
             msp_id=peer_definition['msp_id'],
-            tls_ca_root_cert=peer_definition['tls_ca_root_cert'] or peer_definition['pem'],
+            msp=peer_definition['msp']
         )
 
         # Handle appropriately based on state.

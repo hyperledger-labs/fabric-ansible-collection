@@ -24,7 +24,7 @@ from .msp_utils import convert_identity_to_msp_path
 
 class OrderingServiceNode:
 
-    def __init__(self, name, api_url, operations_url, grpcwp_url, msp_id, pem, tls_ca_root_cert, tls_cert, location, system_channel_id, cluster_id, cluster_name, client_tls_cert, server_tls_cert, consenter_proposal_fin):
+    def __init__(self, name, api_url, operations_url, grpcwp_url, msp_id, pem, tls_ca_root_cert, tls_cert, location, system_channel_id, cluster_id, cluster_name, client_tls_cert, server_tls_cert, consenter_proposal_fin, id, display_name, osnadmin_url, msp):
         self.name = name
         self.api_url = api_url
         self.operations_url = operations_url
@@ -40,6 +40,10 @@ class OrderingServiceNode:
         self.client_tls_cert = client_tls_cert
         self.server_tls_cert = server_tls_cert
         self.consenter_proposal_fin = consenter_proposal_fin
+        self.id = id
+        self.display_name = display_name
+        self.osnadmin_url = osnadmin_url
+        self.msp = msp
 
     def clone(self):
         return OrderingServiceNode(
@@ -57,7 +61,11 @@ class OrderingServiceNode:
             cluster_name=self.cluster_name,
             client_tls_cert=self.client_tls_cert,
             server_tls_cert=self.server_tls_cert,
-            consenter_proposal_fin=self.consenter_proposal_fin
+            consenter_proposal_fin=self.consenter_proposal_fin,
+            id=self.id,
+            display_name=self.display_name,
+            osnadmin_url=self.osnadmin_url,
+            msp=self.msp
         )
 
     def equals(self, other):
@@ -76,7 +84,11 @@ class OrderingServiceNode:
             self.cluster_name == other.cluster_name and
             self.client_tls_cert == other.client_tls_cert and
             self.server_tls_cert == other.server_tls_cert and
-            self.consenter_proposal_fin == other.consenter_proposal_fin
+            self.consenter_proposal_fin == other.consenter_proposal_fin and
+            self.id == other.id and
+            self.display_name == other.display_name and
+            self.osnadmin_url == other.osnadmin_url and
+            self.msp == other.msp
         )
 
     def to_json(self):
@@ -96,7 +108,11 @@ class OrderingServiceNode:
             cluster_name=self.cluster_name,
             client_tls_cert=self.client_tls_cert,
             server_tls_cert=self.server_tls_cert,
-            consenter_proposal_fin=self.consenter_proposal_fin
+            id=self.id,
+            display_name=self.display_name,
+            osnadmin_url=self.osnadmin_url,
+            consenter_proposal_fin=self.consenter_proposal_fin,
+            msp=self.msp
         )
 
     @staticmethod
@@ -116,7 +132,11 @@ class OrderingServiceNode:
             cluster_name=data['cluster_name'],
             client_tls_cert=data['client_tls_cert'],
             server_tls_cert=data['server_tls_cert'],
-            consenter_proposal_fin=data['consenter_proposal_fin']
+            consenter_proposal_fin=data['consenter_proposal_fin'],
+            id=data['id'],
+            display_name=data['display_name'],
+            osnadmin_url=data['osnadmin_url'],
+            msp=data['msp']
         )
 
     def wait_for(self, timeout):
@@ -259,7 +279,10 @@ class OrderingService:
     def to_json(self):
         nodes = list()
         for node in self.nodes:
-            nodes.append(node.to_json())
+            # remove nulls
+            node_dict = node.to_json()
+            node_nonulls = {k: v for k, v in node_dict.items() if v is not None}
+            nodes.append(node_nonulls)
         return nodes
 
     @staticmethod

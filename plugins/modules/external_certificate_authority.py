@@ -220,7 +220,13 @@ def main():
             location=dict(type='str'),
             pem=dict(type='str'),
             tls_cert=dict(type='str'),
-            type=dict(type='str')
+            type=dict(type='str'),
+            cluster_type=dict(type='str', default=None),
+            console_type=dict(type='str', default=None),
+            display_name=dict(type='str', default=None),
+            id=dict(type='str', default=None),
+            msp=dict(type='dict', default=None),
+            scheme_version=dict(type='str', default=None)
         ))
     )
     required_if = [
@@ -287,9 +293,8 @@ def main():
             display_name=name,
             api_url=certificate_authority_definition['api_url'],
             operations_url=certificate_authority_definition['operations_url'],
-            ca_name=certificate_authority_definition['ca_name'],
-            tlsca_name=certificate_authority_definition['tlsca_name'],
             tls_cert=certificate_authority_definition['tls_cert'] or certificate_authority_definition['pem'],
+            msp=certificate_authority_definition['msp']
         )
 
         # Handle appropriately based on state.
