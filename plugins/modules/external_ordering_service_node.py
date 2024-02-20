@@ -273,7 +273,15 @@ def main():
             cluster_id=dict(type='str'),
             cluster_name=dict(type='str'),
             type=dict(type='str'),
-            consenter_proposal_fin=dict(type='bool')
+            consenter_proposal_fin=dict(type='bool'),
+            cluster_type=dict(type='str', default=None),
+            console_type=dict(type='str', default=None),
+            display_name=dict(type='str', default=None),
+            id=dict(type='str', default=None),
+            msp=dict(type='dict', default=None),
+            scheme_version=dict(type='str', default=None),
+            imported=dict(type='bool', default=None),
+            osnadmin_url=dict(type='str', default=None)
         ))
     )
     required_if = [
@@ -342,12 +350,13 @@ def main():
             operations_url=ordering_service_node_definition['operations_url'],
             grpcwp_url=ordering_service_node_definition['grpcwp_url'],
             msp_id=ordering_service_node_definition['msp_id'],
-            tls_ca_root_cert=ordering_service_node_definition['tls_ca_root_cert'] or ordering_service_node_definition['pem'],
             system_channel_id=ordering_service_node_definition['system_channel_id'],
             client_tls_cert=ordering_service_node_definition['client_tls_cert'],
             server_tls_cert=ordering_service_node_definition['server_tls_cert'],
             cluster_id=ordering_service_node_definition['cluster_id'],
-            cluster_name=ordering_service_node_definition['cluster_name']
+            cluster_name=ordering_service_node_definition['cluster_name'],
+            msp=ordering_service_node_definition['msp'],
+            osnadmin_url=ordering_service_node_definition['osnadmin_url']
         )
 
         # HACK: delete null properties.
@@ -355,6 +364,8 @@ def main():
             del expected_ordering_service_node['client_tls_cert']
         if expected_ordering_service_node['server_tls_cert'] is None:
             del expected_ordering_service_node['server_tls_cert']
+        if expected_ordering_service_node['osnadmin_url'] is None:
+            del expected_ordering_service_node['osnadmin_url']
 
         # Handle appropriately based on state.
         changed = False

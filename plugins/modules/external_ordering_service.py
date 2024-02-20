@@ -275,7 +275,15 @@ def main():
             cluster_id=dict(type='str'),
             cluster_name=dict(type='str'),
             type=dict(type='str'),
-            consenter_proposal_fin=dict(type='bool')
+            consenter_proposal_fin=dict(type='bool'),
+            cluster_type=dict(type='str', default=None),
+            console_type=dict(type='str', default=None),
+            display_name=dict(type='str', default=None),
+            id=dict(type='str', default=None),
+            msp=dict(type='dict', default=None),
+            scheme_version=dict(type='str', default=None),
+            imported=dict(type='bool', default=None),
+            osnadmin_url=dict(type='str', default=None)
         ))
     )
     required_if = [
@@ -365,12 +373,13 @@ def main():
                 operations_url=ordering_service_node['operations_url'],
                 grpcwp_url=ordering_service_node['grpcwp_url'],
                 msp_id=ordering_service_node['msp_id'],
-                tls_ca_root_cert=ordering_service_node['tls_ca_root_cert'] or ordering_service_node['pem'],
                 system_channel_id=ordering_service_node['system_channel_id'],
                 client_tls_cert=ordering_service_node['client_tls_cert'],
                 server_tls_cert=ordering_service_node['server_tls_cert'],
                 cluster_id=ordering_service_node['cluster_id'],
-                cluster_name=ordering_service_node['cluster_name']
+                cluster_name=ordering_service_node['cluster_name'],
+                msp=ordering_service_node['msp'],
+                osnadmin_url=ordering_service_node['osnadmin_url']
             )
 
             # HACK: delete null properties.
@@ -378,6 +387,8 @@ def main():
                 del expected_ordering_service_node['client_tls_cert']
             if expected_ordering_service_node['server_tls_cert'] is None:
                 del expected_ordering_service_node['server_tls_cert']
+            if expected_ordering_service_node['osnadmin_url'] is None:
+                del expected_ordering_service_node['osnadmin_url']
 
             # Determine if it exists.
             ordering_service_node = console.get_component_by_display_name('fabric-orderer', ordering_service_node['name'])

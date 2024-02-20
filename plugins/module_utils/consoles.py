@@ -51,26 +51,15 @@ class Console:
             raise Exception(f'invalid authentication type "{api_authtype}" specified, valid values are "ibmcloud" and "basic"')
         try:
             self.logged_in = True
-            return self._login_v2()
+            return self._login_v3()
         except Exception:
             self.logged_in = False
             raise
 
-    def _login_v2(self):
+    def _login_v3(self):
         try:
             self.v1 = False
-            self.api_base_url = urllib.parse.urljoin(self.api_endpoint, '/ak/api/v2/')
-            self.health = self.get_health()
-            self.settings = self.get_settings()
-        except Exception as e:
-            if "HTTP status code 404" in str(e):
-                return self._login_v1()
-            raise Exception(f'Failed to access the console: {e}')
-
-    def _login_v1(self):
-        try:
-            self.v1 = True
-            self.api_base_url = urllib.parse.urljoin(self.api_endpoint, '/ak/api/v1/')
+            self.api_base_url = urllib.parse.urljoin(self.api_endpoint, '/ak/api/v3/')
             self.health = self.get_health()
             self.settings = self.get_settings()
         except Exception as e:
@@ -146,7 +135,7 @@ class Console:
                     continue
                 return self.handle_error('Failed to get console settings', e)
 
-    def get_all_components(self, deployment_attrs='omitted'):
+    def get_all_components(self, deployment_attrs='included'):
         self._ensure_loggedin()
         url = urllib.parse.urljoin(self.api_base_url, f'./components?deployment_attrs={deployment_attrs}&cache=skip')
         headers = {
@@ -167,7 +156,7 @@ class Console:
                     continue
                 return self.handle_error('Failed to get all components', e)
 
-    def get_component_by_id(self, id, deployment_attrs='omitted'):
+    def get_component_by_id(self, id, deployment_attrs='included'):
         self._ensure_loggedin()
         url = urllib.parse.urljoin(self.api_base_url, f'./components/{id}?deployment_attrs={deployment_attrs}&cache=skip')
         headers = {
@@ -204,14 +193,14 @@ class Console:
                     continue
                 return self.handle_error('Failed to get component by ID', e)
 
-    def get_component_by_display_name(self, component_type, display_name, deployment_attrs='omitted'):
+    def get_component_by_display_name(self, component_type, display_name, deployment_attrs='included'):
         components = self.get_all_components()
         for component in components:
             if component.get('display_name', None) == display_name and component.get('type', None) == component_type:
                 return self.get_component_by_id(component['id'], deployment_attrs)
         return None
 
-    def get_components_by_cluster_name(self, component_type, cluster_name, deployment_attrs='omitted'):
+    def get_components_by_cluster_name(self, component_type, cluster_name, deployment_attrs='included'):
         components = self.get_all_components()
         results = list()
         for component in components:
@@ -306,11 +295,12 @@ class Console:
             'operations_url': ca['operations_url'],
             'ca_url': ca['api_url'],
             'type': 'fabric-ca',
-            'ca_name': ca['ca_name'],
-            'tlsca_name': ca['tlsca_name'],
-            'pem': ca.get('tls_ca_root_cert', ca.get('tls_cert', None)),
-            'tls_cert': ca.get('tls_ca_root_cert', ca.get('tls_cert', None)),
-            'location': ca['location']
+            'ca_name': ca.get('msp').get('ca').get('name'),
+            'tlsca_name': ca.get('msp').get('tlsca').get('name'),
+            'pem': ca.get('msp').get('component').get('tls_cert'),
+            'tls_cert': ca.get('msp').get('component').get('tls_cert'),
+            'location': 'kubernetes' if ca['location'] == 'ibm_saas' else ca['location'],
+            'msp': ca['msp']
         }
 
     def create_ext_ca(self, data):
@@ -463,10 +453,11 @@ class Console:
             'grpcwp_url': peer['grpcwp_url'],
             'type': 'fabric-peer',
             'msp_id': peer['msp_id'],
-            'pem': peer.get('tls_ca_root_cert', peer.get('pem', None)),
-            'tls_ca_root_cert': peer.get('tls_ca_root_cert', peer.get('pem', None)),
-            'tls_cert': peer.get('tls_cert', None),
-            'location': peer['location']
+            'pem': peer.get('msp').get('tlsca').get('root_certs')[0],
+            'tls_ca_root_cert': peer.get('msp').get('tlsca').get('root_certs')[0],
+            'tls_cert': peer.get('msp').get('component').get('tls_cert'),
+            'location': 'kubernetes' if peer['location'] == 'ibm_saas' else peer['location'],
+            'msp': peer['msp']
         }
 
     def create_ext_peer(self, data):
@@ -717,16 +708,20 @@ class Console:
             'grpcwp_url': ordering_service_node['grpcwp_url'],
             'type': 'fabric-orderer',
             'msp_id': ordering_service_node['msp_id'],
-            'pem': ordering_service_node.get('tls_ca_root_cert', ordering_service_node.get('pem', None)),
-            'tls_ca_root_cert': ordering_service_node.get('tls_ca_root_cert', ordering_service_node.get('pem', None)),
-            'tls_cert': ordering_service_node.get('tls_cert', None),
-            'location': ordering_service_node['location'],
+            'pem': ordering_service_node.get('msp').get('component').get('tls_cert'),
+            'tls_ca_root_cert': ordering_service_node.get('msp').get('tlsca').get('root_certs')[0],
+            'tls_cert': ordering_service_node.get('msp').get('tlsca').get('root_certs')[0],
+            'location': 'kubernetes' if ordering_service_node['location'] == 'ibm_saas' else ordering_service_node['location'],
             'system_channel_id': ordering_service_node['system_channel_id'],
             'cluster_id': ordering_service_node['cluster_id'],
             'cluster_name': ordering_service_node['cluster_name'],
-            'client_tls_cert': ordering_service_node.get('client_tls_cert', None),
-            'server_tls_cert': ordering_service_node.get('server_tls_cert', None),
-            'consenter_proposal_fin': ordering_service_node.get('consenter_proposal_fin', True)
+            'client_tls_cert': ordering_service_node.get('msp').get('component').get('tls_cert'),
+            'server_tls_cert': ordering_service_node.get('msp').get('component').get('tls_cert'),
+            'consenter_proposal_fin': ordering_service_node.get('consenter_proposal_fin', True),
+            'id': ordering_service_node['id'],
+            'display_name': ordering_service_node['display_name'],
+            'osnadmin_url': ordering_service_node.get('osnadmin_url', None),
+            'msp': ordering_service_node['msp']
         }
 
     def create_ext_ordering_service_node(self, data):

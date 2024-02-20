@@ -186,103 +186,103 @@ requirements: []
 EXAMPLES = '''
 - name: Create certificate authority
   hyperledger.fabric_ansible_collection.certificate_authority:
-    state: present
-    api_endpoint: https://console.example.org:32000
-    api_authtype: basic
-    api_key: xxxxxxxx
-    api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-    name: Org1 CA
-    config_override:
-      ca:
-        registry:
-          maxenrollments: -1
-          identities:
-          - name: admin
-            pass: adminpw
-            type: client
-            maxenrollments: -1
-            attrs:
-              hf.Registrar.Roles: "*"
-              hf.Registrar.DelegateRoles: "*"
-              hf.Revoker: true
-              hf.IntermediateCA: true
-              hf.GenCRL: true
-              hf.Registrar.Attributes: "*"
-              hf.AffiliationMgr: true
+      state: present
+      api_endpoint: https://console.example.org:32000
+      api_authtype: basic
+      api_key: xxxxxxxx
+      api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      name: Org1 CA
+      config_override:
+          ca:
+              registry:
+                  maxenrollments: -1
+              identities:
+                  - name: admin
+                    pass: adminpw
+                    type: client
+                    maxenrollments: -1
+                    attrs:
+                        hf.Registrar.Roles: "*"
+                        hf.Registrar.DelegateRoles: "*"
+                        hf.Revoker: true
+                        hf.IntermediateCA: true
+                        hf.GenCRL: true
+                        hf.Registrar.Attributes: "*"
+                        hf.AffiliationMgr: true
 
 - name: Create certificate authority with custom resources and storage
   hyperledger.fabric_ansible_collection.certificate_authority:
-    state: present
-    api_endpoint: https://console.example.org:32000
-    api_authtype: basic
-    api_key: xxxxxxxx
-    api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-    name: Org1 CA
-    config_override:
-      ca:
-        registry:
-          maxenrollments: -1
-          identities:
-          - name: admin
-            pass: adminpw
-            type: client
-            maxenrollments: -1
-            attrs:
-              hf.Registrar.Roles: "*"
-              hf.Registrar.DelegateRoles: "*"
-              hf.Revoker: true
-              hf.IntermediateCA: true
-              hf.GenCRL: true
-              hf.Registrar.Attributes: "*"
-              hf.AffiliationMgr: true
-    resources:
-      ca:
-        requests:
-          cpu: 200m
-          memory: 400M
-    storage:
-      ca:
-        size: 40Gi
-        class: ibmc-file-gold
+      state: present
+      api_endpoint: https://console.example.org:32000
+      api_authtype: basic
+      api_key: xxxxxxxx
+      api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      name: Org1 CA
+      config_override:
+          ca:
+              registry:
+                  maxenrollments: -1
+                  identities:
+                      - name: admin
+                        pass: adminpw
+                        type: client
+                        maxenrollments: -1
+                        attrs:
+                            hf.Registrar.Roles: "*"
+                            hf.Registrar.DelegateRoles: "*"
+                            hf.Revoker: true
+                            hf.IntermediateCA: true
+                            hf.GenCRL: true
+                            hf.Registrar.Attributes: "*"
+                            hf.AffiliationMgr: true
+          resources:
+              ca:
+                  requests:
+                      cpu: 200m
+                      memory: 400M
+          storage:
+              ca:
+                  size: 40Gi
+                  class: ibmc-file-gold
 
 - name: Create certificate authority that uses an HSM
   hyperledger.fabric_ansible_collection.certificate_authority:
-    state: present
-    api_endpoint: https://console.example.org:32000
-    api_authtype: basic
-    api_key: xxxxxxxx
-    api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-    name: Org1 CA
-    config_override:
-      ca:
-        registry:
-          maxenrollments: -1
-          identities:
-          - name: admin
-            pass: adminpw
-            type: client
-            maxenrollments: -1
-            attrs:
-              hf.Registrar.Roles: "*"
-              hf.Registrar.DelegateRoles: "*"
-              hf.Revoker: true
-              hf.IntermediateCA: true
-              hf.GenCRL: true
-              hf.Registrar.Attributes: "*"
-              hf.AffiliationMgr: true
-    hsm:
-      pkcs11endpoint: tcp://pkcs11-proxy.example.org:2345
-      label: Org1 CA label
-      pin: 12345678
+      state: present
+      api_endpoint: https://console.example.org:32000
+      api_authtype: basic
+      api_key: xxxxxxxx
+      api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      name: Org1 CA
+      config_override:
+          ca:
+              registry:
+              maxenrollments: -1
+              identities:
+                  - name: admin
+                    pass: adminpw
+                    type: client
+                    maxenrollments: -1
+                    attrs:
+                        hf.Registrar.Roles: "*"
+                        hf.Registrar.DelegateRoles: "*"
+                        hf.Revoker: true
+                        hf.IntermediateCA: true
+                        hf.GenCRL: true
+                        hf.Registrar.Attributes: "*"
+                        hf.AffiliationMgr: true
+      hsm:
+          pkcs11endpoint: tcp://pkcs11-proxy.example.org:2345
+          label: Org1 CA label
+          pin: 12345678
 
 - name: Destroy certificate authority
   hyperledger.fabric_ansible_collection.certificate_authority:
-    state: absent
-    api_endpoint: https://console.example.org:32000
-    api_authtype: basic
-    api_key: xxxxxxxx
-    api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-    name: Org1 CA
+      state: absent
+      api_endpoint: https://console.example.org:32000
+      api_authtype: basic
+      api_key: xxxxxxxx
+      api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      name: Org1 CA
 '''
 
 RETURN = '''

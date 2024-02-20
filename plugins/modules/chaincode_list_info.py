@@ -113,8 +113,6 @@ EXAMPLES = '''
     identity: Org1 Admin.json
     msp_id: Org1MSP
     channel: mychannel
-
-
 '''
 
 RETURN = '''

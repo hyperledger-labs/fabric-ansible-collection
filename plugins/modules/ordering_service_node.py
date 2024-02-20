@@ -419,65 +419,58 @@ ordering_service_node:
 '''
 
 
-def get_config(console, module):
+def get_crypto(console, module):
 
-    # See if the user provided their own configuration.
-    config = module.params['config']
-    if config is not None:
-        return config
+    # Get the crypto configuration.
+    return {"enrollment": get_crypto_enrollment_config(console, module)}
 
-    # Otherwise, provide an enrollment configuration.
+
+def get_crypto_enrollment_config(console, module):
+
+    # Get the crypto configuration.
     return {
-        'enrollment': get_enrollment_config(console, module)
+        "component": get_crypto_enrollment_component_config(console, module),
+        "ca": get_crypto_enrollment_ca_config(console, module),
+        "tlsca": get_crypto_enrollment_tlsca_config(console, module),
     }
 
 
-def get_enrollment_config(console, module):
-
-    # Get the enrollment configuration.
-    return {
-        'component': get_enrollment_component_config(console, module),
-        'tls': get_enrollment_tls_config(console, module),
-    }
+def get_crypto_enrollment_component_config(console, module):
+    admins = module.params["admins"]
+    return {"admincerts": admins}
 
 
-def get_enrollment_component_config(console, module):
+def get_crypto_enrollment_ca_config(console, module):
 
-    # Get the enrollment configuration for the ordering service nodes MSP.
+    # Get the enrollment configuration for the ordering services MSP.
     certificate_authority = get_certificate_authority_by_module(console, module)
     certificate_authority_url = urllib.parse.urlsplit(certificate_authority.api_url)
-    enrollment_id = module.params['enrollment_id']
-    enrollment_secret = module.params['enrollment_secret']
-    admins = module.params['admins']
+    enrollment_id = module.params["enrollment_id"]
+    enrollment_secret = module.params["enrollment_secret"]
     return {
-        'cahost': certificate_authority_url.hostname,
-        'caport': str(certificate_authority_url.port),
-        'caname': certificate_authority.ca_name,
-        'catls': {
-            'cacert': certificate_authority.pem
-        },
-        'enrollid': enrollment_id,
-        'enrollsecret': enrollment_secret,
-        'admincerts': admins
+        "host": certificate_authority_url.hostname,
+        "port": str(certificate_authority_url.port),
+        "name": certificate_authority.ca_name,
+        "tls_cert": certificate_authority.pem,
+        "enroll_id": enrollment_id,
+        "enroll_secret": enrollment_secret,
     }
 
 
-def get_enrollment_tls_config(console, module):
+def get_crypto_enrollment_tlsca_config(console, module):
 
-    # Get the enrollment configuration for the ordering service nodes TLS.
+    # Get the enrollment configuration for the ordering services TLS.
     certificate_authority = get_certificate_authority_by_module(console, module)
     certificate_authority_url = urllib.parse.urlsplit(certificate_authority.api_url)
-    enrollment_id = module.params['enrollment_id']
-    enrollment_secret = module.params['enrollment_secret']
+    enrollment_id = module.params["enrollment_id"]
+    enrollment_secret = module.params["enrollment_secret"]
     return {
-        'cahost': certificate_authority_url.hostname,
-        'caport': str(certificate_authority_url.port),
-        'caname': certificate_authority.tlsca_name,
-        'catls': {
-            'cacert': certificate_authority.pem
-        },
-        'enrollid': enrollment_id,
-        'enrollsecret': enrollment_secret
+        "host": certificate_authority_url.hostname,
+        "port": str(certificate_authority_url.port),
+        "name": certificate_authority.tlsca_name,
+        "tls_cert": certificate_authority.pem,
+        "enroll_id": enrollment_id,
+        "enroll_secret": enrollment_secret,
     }
 
 
@@ -502,7 +495,7 @@ def main():
         enrollment_id=dict(type='str'),
         enrollment_secret=dict(type='str', no_log=True),
         admins=dict(type='list', elements='str', aliases=['admin_certificates']),
-        config=dict(type='dict'),
+        crypto=dict(type='dict'),
         config_override=dict(type='dict', default=dict()),
         resources=dict(type='dict', default=dict(), options=dict(
             orderer=dict(type='dict', default=dict(), options=dict(
@@ -542,7 +535,7 @@ def main():
     actual_params = _load_params()
     if actual_params.get('state', 'present') == 'present':
         required_one_of = [
-            ['certificate_authority', 'config']
+            ['certificate_authority', 'crypto']
         ]
     else:
         required_one_of = []
@@ -552,7 +545,7 @@ def main():
         ['certificate_authority', 'admins']
     ]
     mutually_exclusive = [
-        ['certificate_authority', 'config']
+        ['certificate_authority', 'crypto']
     ]
     module = BlockchainModule(
         argument_spec=argument_spec,
@@ -688,8 +681,8 @@ def main():
                 expected_ordering_service_node['zone'] = [zone]
 
             # Get the config.
-            expected_ordering_service_node['config'] = [
-                get_config(console, module)
+            expected_ordering_service_node['crypto'] = [
+                get_crypto(console, module)
             ]
 
             # Create the ordering service.
@@ -762,10 +755,10 @@ def main():
             # and it does not support this feature.
             expected_admins = module.params['admins']
             if not expected_admins:
-                config = module.params['config']
-                if config:
+                crypto = module.params['crypto']
+                if crypto:
                     for config_type in ['enrollment', 'msp']:
-                        expected_admins = config.get(config_type, dict()).get('component', dict()).get('admincerts', None)
+                        expected_admins = crypto.get(config_type, dict()).get('component', dict()).get('admincerts', None)
                         if expected_admins:
                             break
             if expected_admins:

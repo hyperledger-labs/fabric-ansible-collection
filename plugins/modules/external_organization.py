@@ -440,7 +440,11 @@ def main():
                 organizational_unit_identifier=dict(type='str')
             )),
             host_url=dict(type='str', default=None),
-            type=dict(type='str')
+            type=dict(type='str'),
+            display_name=dict(type='str', default=None),
+            id=dict(type='str', default=None),
+            imported=dict(type='bool', default=None),
+            scheme_version=dict(type='str', default=None)
         ))
     )
     required_if = [
@@ -496,7 +500,8 @@ def main():
             tls_intermediate_certs=organization_definition['tls_intermediate_certs'],
             fabric_node_ous=organization_definition['fabric_node_ous'],
             organizational_unit_identifiers=organization_definition['organizational_unit_identifiers'],
-            host_url=organization_definition['host_url']
+            host_url=organization_definition['host_url'],
+            id=organization_definition['id'],
         )
 
         # Handle appropriately based on state.

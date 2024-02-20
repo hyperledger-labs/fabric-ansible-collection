@@ -41,7 +41,7 @@ class CertificateAuthorityException(Exception):
 
 class CertificateAuthority:
 
-    def __init__(self, name, api_url, operations_url, ca_url, ca_name, tlsca_name, pem, location):
+    def __init__(self, name, api_url, operations_url, ca_url, ca_name, tlsca_name, pem, location, msp):
         self.name = name
         self.api_url = api_url
         self.operations_url = operations_url
@@ -50,6 +50,7 @@ class CertificateAuthority:
         self.tlsca_name = tlsca_name
         self.pem = pem
         self.location = location
+        self.msp = msp
 
     def clone(self):
         return CertificateAuthority(
@@ -60,7 +61,8 @@ class CertificateAuthority:
             ca_name=self.ca_name,
             tlsca_name=self.tlsca_name,
             pem=self.pem,
-            location=self.location
+            location=self.location,
+            msp=self.msp
         )
 
     def equals(self, other):
@@ -72,7 +74,8 @@ class CertificateAuthority:
             self.ca_name == other.ca_name and
             self.tlsca_name == other.tlsca_name and
             self.pem == other.pem and
-            self.location == other.location
+            self.location == other.location and
+            self.msp == other.msp
         )
 
     def to_json(self):
@@ -86,7 +89,8 @@ class CertificateAuthority:
             tlsca_name=self.tlsca_name,
             pem=self.pem,
             tls_cert=self.pem,
-            location=self.location
+            location=self.location,
+            msp=self.msp
         )
 
     @staticmethod
@@ -99,7 +103,8 @@ class CertificateAuthority:
             ca_name=data['ca_name'],
             tlsca_name=data['tlsca_name'],
             pem=data['pem'],
-            location=data['location']
+            location=data['location'],
+            msp=data['msp']
         )
 
     def wait_for(self, timeout):
