@@ -1,22 +1,25 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Installation &mdash; Ansible Collection  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
     <link rel="shortcut icon" href="_static/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -113,13 +116,13 @@
            <div itemprop="articleBody">
              
   <section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
 <section id="requirements">
-<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h2>
 <p>In order to use this Ansible collection, you must have the following pre-requisite software installed and available.</p>
 </section>
 <section id="python-v3-9">
-<h2>Python v3.9<a class="headerlink" href="#python-v3-9" title="Link to this heading"></a></h2>
+<h2>Python v3.9<a class="headerlink" href="#python-v3-9" title="Permalink to this heading"></a></h2>
 <p>Python can be installed from a variety of sources, including the package manager for your operating system (apt, yum, etc).
 If you install Python from the package manager for your operating system, you must also install the development libraries (usually a package named <code class="docutils literal notranslate"><span class="pre">python3-devel</span></code>), as these are required when installing modules through <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
 <ul class="simple">
@@ -128,14 +131,14 @@ If you install Python from the package manager for your operating system, you mu
 </ul>
 </section>
 <section id="ansible-v2-14">
-<h2>Ansible v2.14+<a class="headerlink" href="#ansible-v2-14" title="Link to this heading"></a></h2>
+<h2>Ansible v2.14+<a class="headerlink" href="#ansible-v2-14" title="Permalink to this heading"></a></h2>
 <p>Ansible can be installed from a variety of sources, including the package manager for your operating system (apt, yum, etc). You can also install it using <code class="docutils literal notranslate"><span class="pre">pip</span></code>, the package manager for Python:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="s1">&#39;ansible&#39;</span>
 </pre></div>
 </div>
 </section>
 <section id="hyperledger-fabric-v2-4-7-binaries">
-<h2>Hyperledger Fabric v2.4.7+ binaries<a class="headerlink" href="#hyperledger-fabric-v2-4-7-binaries" title="Link to this heading"></a></h2>
+<h2>Hyperledger Fabric v2.4.7+ binaries<a class="headerlink" href="#hyperledger-fabric-v2-4-7-binaries" title="Permalink to this heading"></a></h2>
 <p>This Ansible collection requires use of the binaries from Hyperledger Fabric v2.4.7 or later to interact with the peers and ordering services in your Hyperledger Fabric networks. These binaries include <code class="docutils literal notranslate"><span class="pre">configtxlator</span></code> and <code class="docutils literal notranslate"><span class="pre">peer</span></code>.</p>
 <p>You can install these binaries by following the Hyperledger Fabric documentation: <a class="reference external" href="https://hyperledger-fabric.readthedocs.io/en/release-2.5/install.html">https://hyperledger-fabric.readthedocs.io/en/release-2.5/install.html</a></p>
 <p>These binaries must be on the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> of the system that will be used to run your Ansible Playbooks. You can check that the binaries are installed correctly by running:</p>
@@ -144,7 +147,7 @@ If you install Python from the package manager for your operating system, you mu
 </div>
 </section>
 <section id="hyperledger-fabric-sdk-for-python-v0-8-1">
-<h2>Hyperledger Fabric SDK for Python v0.8.1+<a class="headerlink" href="#hyperledger-fabric-sdk-for-python-v0-8-1" title="Link to this heading"></a></h2>
+<h2>Hyperledger Fabric SDK for Python v0.8.1+<a class="headerlink" href="#hyperledger-fabric-sdk-for-python-v0-8-1" title="Permalink to this heading"></a></h2>
 <p>This Ansible collection uses the Hyperledger Fabric SDK for Python to interact with the certificate authorities in your Hyperledger Fabric networks.</p>
 <p>You can install this SDK using <code class="docutils literal notranslate"><span class="pre">pip</span></code>, the package manager for Python:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="n">fabric</span><span class="o">-</span><span class="n">sdk</span><span class="o">-</span><span class="n">py</span>
@@ -152,7 +155,7 @@ If you install Python from the package manager for your operating system, you mu
 </div>
 </section>
 <section id="pkcs-11-cryptoki-for-python-v0-6-0">
-<h2>PKCS #11/Cryptoki for Python v0.6.0+<a class="headerlink" href="#pkcs-11-cryptoki-for-python-v0-6-0" title="Link to this heading"></a></h2>
+<h2>PKCS #11/Cryptoki for Python v0.6.0+<a class="headerlink" href="#pkcs-11-cryptoki-for-python-v0-6-0" title="Permalink to this heading"></a></h2>
 <p>Optional: only required if you wish to store enrolled identities in a PKCS #11 compliant HSM.</p>
 <p>You can install this SDK using <code class="docutils literal notranslate"><span class="pre">pip</span></code>, the package manager for Python:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="n">python</span><span class="o">-</span><span class="n">pkcs11</span>
@@ -160,7 +163,7 @@ If you install Python from the package manager for your operating system, you mu
 </div>
 </section>
 <section id="openshift-client-for-python-v0-10-3">
-<h2>OpenShift client for Python v0.10.3+<a class="headerlink" href="#openshift-client-for-python-v0-10-3" title="Link to this heading"></a></h2>
+<h2>OpenShift client for Python v0.10.3+<a class="headerlink" href="#openshift-client-for-python-v0-10-3" title="Permalink to this heading"></a></h2>
 <p>This Ansible collection uses the OpenShift client for Python to interact with your Red Hat OpenShift or Kubernetes cluster when installing the IBM Blockchain Platform software.</p>
 <p>You can install this SDK using <code class="docutils literal notranslate"><span class="pre">pip</span></code>, the package manager for Python:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="s1">&#39;openshift&#39;</span>
@@ -168,7 +171,7 @@ If you install Python from the package manager for your operating system, you mu
 </div>
 </section>
 <section id="semantic-versioning-for-python-v2-8-5">
-<h2>Semantic Versioning for Python v2.8.5+<a class="headerlink" href="#semantic-versioning-for-python-v2-8-5" title="Link to this heading"></a></h2>
+<h2>Semantic Versioning for Python v2.8.5+<a class="headerlink" href="#semantic-versioning-for-python-v2-8-5" title="Permalink to this heading"></a></h2>
 <p>This Ansible collection uses Semantic Versioning for Python to handle version ranges when determining which version of Hyperledger Fabric to use.</p>
 <p>You can install this SDK using using <code class="docutils literal notranslate"><span class="pre">pip</span></code>, the package manager for Python:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="n">semantic_version</span>
@@ -176,7 +179,7 @@ If you install Python from the package manager for your operating system, you mu
 </div>
 </section>
 <section id="hyperledger-fabric-oss-vx-y-z-or-ibm-hlf-support-v1-0-0">
-<h2>Hyperledger Fabric OSS vX.Y.Z or IBM HLF Support v1.0.0<a class="headerlink" href="#hyperledger-fabric-oss-vx-y-z-or-ibm-hlf-support-v1-0-0" title="Link to this heading"></a></h2>
+<h2>Hyperledger Fabric OSS vX.Y.Z or IBM HLF Support v1.0.0<a class="headerlink" href="#hyperledger-fabric-oss-vx-y-z-or-ibm-hlf-support-v1-0-0" title="Permalink to this heading"></a></h2>
 <p>This Ansible collection is mainly to be used to manage network components and therefore requires the Hyperledger Fabric Open Source Stack or the IBM Hyperledger Fabric Support Offering to be installed.</p>
 <p>You can also use this Ansible collection to install either of these options. To see how to do this, follow either of the following tutorials:</p>
 <ol class="arabic simple">
@@ -185,7 +188,7 @@ If you install Python from the package manager for your operating system, you mu
 </ol>
 </section>
 <section id="installing-using-ansible-galaxy">
-<h2>Installing using Ansible Galaxy<a class="headerlink" href="#installing-using-ansible-galaxy" title="Link to this heading"></a></h2>
+<h2>Installing using Ansible Galaxy<a class="headerlink" href="#installing-using-ansible-galaxy" title="Permalink to this heading"></a></h2>
 <p>Ansible Galaxy is the package manager for Ansible. The collection is published to Ansible Galaxy here: <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/hyperledger/fabric_ansible_collection/">https://galaxy.ansible.com/ui/repo/published/hyperledger/fabric_ansible_collection/</a></p>
 <p>You can use the <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span></code> command to install a collection from Ansible Galaxy, the package manager for Ansible:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ansible</span><span class="o">-</span><span class="n">galaxy</span> <span class="n">collection</span> <span class="n">install</span> <span class="n">hyperledger</span><span class="o">.</span><span class="n">fabric_ansible_collection</span>
@@ -193,7 +196,7 @@ If you install Python from the package manager for your operating system, you mu
 </div>
 </section>
 <section id="installing-from-source">
-<h2>Installing from source<a class="headerlink" href="#installing-from-source" title="Link to this heading"></a></h2>
+<h2>Installing from source<a class="headerlink" href="#installing-from-source" title="Permalink to this heading"></a></h2>
 <p>You may wish to install the collection from source if you cannot access Ansible Galaxy due to firewall or proxy issues, or if you need to install a version of the collection that has not yet been published.</p>
 <p>You can use the <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span></code> command to install a collection built from source. To build your own collection, follow these steps:
 This will build the stable <cite>release-1.2</cite> branch for v1.2.; use the <cite>main</cite> branch for the <cite>2.0.0-beta</cite> level</p>
@@ -222,7 +225,7 @@ This will build the stable <cite>release-1.2</cite> branch for v1.2.; use the <c
 </div>
 </section>
 <section id="using-a-docker-image">
-<h2>Using a Docker image<a class="headerlink" href="#using-a-docker-image" title="Link to this heading"></a></h2>
+<h2>Using a Docker image<a class="headerlink" href="#using-a-docker-image" title="Permalink to this heading"></a></h2>
 <p>If you do not want to, or cannot, install all of the required software for this collection on your system, you may wish to build a Docker image that contains all of the software required to run Ansible playbooks which use this collection.</p>
 <p>A Docker image, <code class="docutils literal notranslate"><span class="pre">ghcr.io/hyperledger-labs/fabric-ansible:latest</span></code>, has been published to Docker Hub.</p>
 <p>You can run a playbook using this Docker image, by volume mounting the playbook into the Docker container and running the <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code> command:</p>
