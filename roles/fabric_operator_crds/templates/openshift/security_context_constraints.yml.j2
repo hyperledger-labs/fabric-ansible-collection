@@ -11,8 +11,8 @@ allowHostIPC: true
 allowHostNetwork: true
 allowHostPID: true
 allowHostPorts: true
-allowPrivilegeEscalation: true
-allowPrivilegedContainer: true
+allowPrivilegeEscalation: false
+allowPrivilegedContainer: false
 allowedCapabilities:
 - NET_BIND_SERVICE
 - CHOWN
@@ -31,6 +31,8 @@ readOnlyRootFilesystem: false
 requiredDropCapabilities: null
 runAsUser:
   type: RunAsAny
+seccompProfiles:
+- runtime/default
 seLinuxContext:
   type: RunAsAny
 supplementalGroups:
