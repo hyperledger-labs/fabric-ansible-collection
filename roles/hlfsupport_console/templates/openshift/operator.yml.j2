@@ -66,6 +66,9 @@ spec:
             readOnlyRootFilesystem: false
             runAsNonRoot: true
             runAsUser: 7051
+            runAsGroup: 7051
+            seccompProfile:
+              type: RuntimeDefault
             capabilities:
               drop:
               - ALL
