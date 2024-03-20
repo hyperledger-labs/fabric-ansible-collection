@@ -156,6 +156,27 @@ class Console:
                     continue
                 return self.handle_error('Failed to get all components', e)
 
+    def get_all_components_by_type(self, type, deployment_attrs='included'):
+        self._ensure_loggedin()
+        url = urllib.parse.urljoin(self.api_base_url, f'./components/types/{type}?deployment_attrs={deployment_attrs}&cache=skip')
+        headers = {
+            'Accepts': 'application/json',
+            'Authorization': self.authorization
+        }
+        for attempt in range(1, self.retries + 1):
+            try:
+                self.module.json_log({'msg': 'attempting to get all components by type', 'type': type, 'url': url, 'attempt': attempt, 'api_timeout': self.api_timeout})
+                response = open_url(url, None, headers, 'GET', validate_certs=False, timeout=self.api_timeout, follow_redirects='all')
+                parsed_response = json.load(response)
+                components = parsed_response.get('components', list())
+                self.module.json_log({'msg': 'got all components by type', 'type': type, 'components': components})
+                return components
+            except Exception as e:
+                self.module.json_log({'msg': 'failed to get all components by type', 'error': str(e)})
+                if self.should_retry_error(e, attempt):
+                    continue
+                return self.handle_error('Failed to get all components by type', e)
+
     def get_component_by_id(self, id, deployment_attrs='included'):
         self._ensure_loggedin()
         url = urllib.parse.urljoin(self.api_base_url, f'./components/{id}?deployment_attrs={deployment_attrs}&cache=skip')
@@ -205,6 +226,14 @@ class Console:
         results = list()
         for component in components:
             if component.get('cluster_name', None) == cluster_name and component.get('type', None) == component_type:
+                results.append(self.get_component_by_id(component['id'], deployment_attrs))
+        return results
+
+    def get_components_by_msp_id(self, component_type, msp_id, deployment_attrs='included'):
+        components = self.get_all_components()
+        results = list()
+        for component in components:
+            if component.get('msp_id', None) == msp_id and component.get('type', None) == component_type:
                 results.append(self.get_component_by_id(component['id'], deployment_attrs))
         return results
 
@@ -287,6 +316,29 @@ class Console:
                 if self.should_retry_error(e, attempt):
                     continue
                 return self.handle_error('Failed to delete certificate authority', e)
+
+    def action_ca(self, id, data):
+        self._ensure_loggedin()
+        url = urllib.parse.urljoin(self.api_base_url, f'./kubernetes/components/fabric-ca/{id}/actions')
+
+        headers = {
+            'Accepts': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': self.authorization
+        }
+        data = json.dumps(data)
+        for attempt in range(1, self.retries + 1):
+            try:
+                self.module.json_log({'msg': 'attempting to submit action to certificate authority', 'data': data, 'url': url, 'attempt': attempt, 'api_timeout': self.api_timeout})
+                response = open_url(url, data, headers, 'POST', validate_certs=False, timeout=self.api_timeout, follow_redirects='all')
+                result = json.load(response)
+                self.module.json_log({'msg': 'submitted action to certificate authority', 'result': result})
+                return result
+            except Exception as e:
+                self.module.json_log({'msg': 'failed to submit action to certificate authority', 'error': str(e)})
+                if self.should_retry_error(e, attempt):
+                    continue
+                return self.handle_error('Failed to submit action to certificate authority', e)
 
     def extract_ca_info(self, ca):
         return {
@@ -387,25 +439,25 @@ class Console:
                     continue
                 return self.handle_error('Failed to create peer', e)
 
-    def update_peer(self, id, data):
+    def update_peer(self, id, data, ignore_warnings):
 
         # Go through the changes.
         response = None
         for change in data:
-            permitted_change = change in ['version', 'resources', 'zone', 'config_override']
+            permitted_change = change in ['version', 'resources', 'zone', 'config_override', 'crypto']
             if not permitted_change:
                 continue
             request = {
                 change: data[change]
             }
-            response = self._update_peer(id, request)
+            response = self._update_peer(id, request, ignore_warnings)
             if change == 'version':
                 time.sleep(60)
             else:
                 time.sleep(10)
         return response
 
-    def _update_peer(self, id, data):
+    def _update_peer(self, id, data, ignore_warnings):
         self._ensure_loggedin()
         url = urllib.parse.urljoin(self.api_base_url, f'./kubernetes/components/fabric-peer/{id}')
         headers = {
@@ -413,6 +465,10 @@ class Console:
             'Content-Type': 'application/json',
             'Authorization': self.authorization
         }
+        # add the ignore warnings flag if this is a version change
+        if "version" in data:
+            data['ignore_warnings'] = ignore_warnings
+
         serialized_data = json.dumps(data)
         for attempt in range(1, self.retries + 1):
             try:
@@ -426,6 +482,29 @@ class Console:
                 if self.should_retry_error(e, attempt):
                     continue
                 return self.handle_error('Failed to update peer', e)
+
+    def action_peer(self, id, data):
+        self._ensure_loggedin()
+        url = urllib.parse.urljoin(self.api_base_url, f'./kubernetes/components/fabric-peer/{id}/actions')
+
+        headers = {
+            'Accepts': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': self.authorization
+        }
+        data = json.dumps(data)
+        for attempt in range(1, self.retries + 1):
+            try:
+                self.module.json_log({'msg': 'attempting to submit action to peer', 'data': data, 'url': url, 'attempt': attempt, 'api_timeout': self.api_timeout})
+                response = open_url(url, data, headers, 'POST', validate_certs=False, timeout=self.api_timeout, follow_redirects='all')
+                result = json.load(response)
+                self.module.json_log({'msg': 'submitted action to peer', 'result': result})
+                return result
+            except Exception as e:
+                self.module.json_log({'msg': 'failed to submit action to peer', 'error': str(e)})
+                if self.should_retry_error(e, attempt):
+                    continue
+                return self.handle_error('Failed to submit action to peer', e)
 
     def delete_peer(self, id):
         self._ensure_loggedin()
@@ -647,7 +726,7 @@ class Console:
         # Go through the changes.
         response = None
         for change in data:
-            permitted_change = change in ['version', 'resources', 'zone', 'config_override']
+            permitted_change = change in ['version', 'resources', 'zone', 'config_override', 'crypto']
             if not permitted_change:
                 continue
             request = {
@@ -699,6 +778,29 @@ class Console:
                 if self.should_retry_error(e, attempt):
                     continue
                 return self.handle_error('Failed to delete ordering service node', e)
+
+    def action_ordering_service_node(self, id, data):
+        self._ensure_loggedin()
+        url = urllib.parse.urljoin(self.api_base_url, f'./kubernetes/components/fabric-orderer/{id}/actions')
+
+        headers = {
+            'Accepts': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': self.authorization
+        }
+        data = json.dumps(data)
+        for attempt in range(1, self.retries + 1):
+            try:
+                self.module.json_log({'msg': 'attempting to submit action to ordering service node', 'data': data, 'url': url, 'attempt': attempt, 'api_timeout': self.api_timeout})
+                response = open_url(url, data, headers, 'POST', validate_certs=False, timeout=self.api_timeout, follow_redirects='all')
+                result = json.load(response)
+                self.module.json_log({'msg': 'submitted action to ordering service node', 'result': result})
+                return result
+            except Exception as e:
+                self.module.json_log({'msg': 'failed to submit action to ordering service node', 'error': str(e)})
+                if self.should_retry_error(e, attempt):
+                    continue
+                return self.handle_error('Failed to submit action to ordering service node', e)
 
     def extract_ordering_service_node_info(self, ordering_service_node):
         return {

@@ -149,6 +149,83 @@ options:
             - The configuration overrides for the ordering service node.
             - "See the Hyperledger Fabric documentation for available options: https://github.com/hyperledger/fabric/blob/release-1.4/sampleconfig/core.yaml"
         type: dict
+    crypto:
+        description:
+            - Component crypto configuration for connecting to a certificate authority
+        type: dict
+        suboptions:
+            enrollment:
+                description:
+                    - Enrollment information for connecting to a certificate authority
+                type: dict
+                suboptions:
+                    component:
+                        description:
+                            - Admin certificates for connecting to a certificate authority
+                        type: dict
+                        suboptions:
+                            admins:
+                                description:
+                                    - An array that contains base 64 encoded PEM identity certificates for administrators. Also known as signing certificates of an organization administrator.
+                                type: dict
+                    ca:
+                        description:
+                            - Configuration for connecting to the certificate authority
+                        type: dict
+                        suboptions:
+                            host:
+                                description:
+                                    - The CA's hostname. Do not include protocol or port. Must be a hostname from a known CA.
+                                type: str
+                            port:
+                                description:
+                                    - The CA's port.
+                                type: str
+                            name:
+                                description:
+                                    - The CA's "CAName" attribute. This name is used to distinguish this CA from the TLS CA.
+                                type: str
+                            tls_cert:
+                                description:
+                                    - The TLS certificate as base 64 encoded PEM. Certificate is used to secure/validate a TLS connection with this component.
+                                type: str
+                            enroll_id:
+                                description:
+                                    - The username of the enroll id.
+                                type: str
+                            enroll_secret:
+                                description:
+                                    - The password of the enroll id.
+                                type: str
+                    tlsca:
+                        description:
+                            - Configuration for connecting to the TLS certificate authority
+                        type: dict
+                        suboptions:
+                            host:
+                                description:
+                                    - The CA's hostname. Do not include protocol or port. Must be a hostname from a known CA.
+                                type: str
+                            port:
+                                description:
+                                    - The CA's port.
+                                type: str
+                            name:
+                                description:
+                                    - The CA's "CAName" attribute. This name is used to distinguish this CA from the TLS CA.
+                                type: str
+                            tls_cert:
+                                description:
+                                    - The TLS certificate as base 64 encoded PEM. Certificate is used to secure/validate a TLS connection with this component.
+                                type: str
+                            enroll_id:
+                                description:
+                                    - The username of the enroll id.
+                                type: str
+                            enroll_secret:
+                                description:
+                                    - The password of the enroll id.
+                                type: str
     resources:
         description:
             - The Kubernetes resource configuration for the ordering service node.
@@ -497,20 +574,7 @@ def main():
         admins=dict(type='list', elements='str', aliases=['admin_certificates']),
         crypto=dict(type='dict'),
         config_override=dict(type='dict', default=dict()),
-        resources=dict(type='dict', default=dict(), options=dict(
-            orderer=dict(type='dict', default=dict(), options=dict(
-                requests=dict(type='dict', default=dict(), options=dict(
-                    cpu=dict(type='str', default='250m'),
-                    memory=dict(type='str', default='500M')
-                ))
-            )),
-            proxy=dict(type='dict', default=dict(), options=dict(
-                requests=dict(type='dict', default=dict(), options=dict(
-                    cpu=dict(type='str', default='100m'),
-                    memory=dict(type='str', default='200M')
-                ))
-            ))
-        )),
+        resources=dict(type='dict'),
         storage=dict(type='dict', default=dict(), options=dict(
             orderer=dict(type='dict', default=dict(), options={
                 'size': dict(type='str', default='100Gi'),
@@ -528,7 +592,7 @@ def main():
     )
     required_if = [
         ('api_authtype', 'basic', ['api_secret']),
-        ('state', 'present', ['msp_id', 'ordering_service'])
+        ('state', 'present', ['name'])
     ]
     # Ansible doesn't allow us to say "require one of X and Y only if condition A is true",
     # so we need to handle this ourselves by seeing what was passed in.
@@ -550,10 +614,7 @@ def main():
     module = BlockchainModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=required_if,
-        required_one_of=required_one_of,
-        required_together=required_together,
-        mutually_exclusive=mutually_exclusive)
+        required_if=required_if)
 
     # Ensure all exceptions are caught.
     try:
@@ -572,6 +633,22 @@ def main():
             'ordering_service_node_exists': ordering_service_node_exists,
             'ordering_service_node_corrupt': ordering_service_node_corrupt
         })
+
+        # define a default set of resources
+        default_resources = dict(type='dict', default=dict(), options=dict(
+            orderer=dict(type='dict', default=dict(), options=dict(
+                requests=dict(type='dict', default=dict(), options=dict(
+                    cpu=dict(type='str', default='250m'),
+                    memory=dict(type='str', default='500M')
+                ))
+            )),
+            proxy=dict(type='dict', default=dict(), options=dict(
+                requests=dict(type='dict', default=dict(), options=dict(
+                    cpu=dict(type='str', default='100m'),
+                    memory=dict(type='str', default='200M')
+                ))
+            ))
+        ))
 
         # If this is a free cluster, we cannot accept resource/storage configuration,
         # as these are ignored for free clusters. We must also delete the defaults,
@@ -597,63 +674,6 @@ def main():
             # The ordering service node should not exist and doesn't.
             return module.exit_json(changed=False)
 
-        # Get the ordering service that this ordering service node should belong to.
-        ordering_service = get_ordering_service_by_module(console, module)
-        cluster_id = ordering_service.nodes[0].cluster_id
-        cluster_name = ordering_service.nodes[0].cluster_name
-
-        # HACK: strip out the storage class if it is not specified. Can't pass null as the API barfs.
-        storage = module.params['storage']
-        for storage_type in storage:
-            if 'class' not in storage[storage_type]:
-                continue
-            storage_class = storage[storage_type]['class']
-            if storage_class is None:
-                del storage[storage_type]['class']
-
-        # Extract the expected ordering service node configuration.
-        expected_ordering_service_node = dict(
-            display_name=name,
-            cluster_id=cluster_id,
-            cluster_name=cluster_name,
-            msp_id=module.params['msp_id'],
-            orderer_type=module.params['orderer_type'],
-            system_channel_id=module.params['system_channel_id'],
-            config_override=module.params['config_override'],
-            resources=module.params['resources'],
-            storage=storage
-        )
-
-        # Add the HSM configuration if it is specified.
-        hsm = module.params['hsm']
-        if hsm is not None:
-            pkcs11endpoint = hsm['pkcs11endpoint']
-            if pkcs11endpoint:
-                expected_ordering_service_node['hsm'] = dict(pkcs11endpoint=pkcs11endpoint)
-            hsm_config_override = dict(
-                General=dict(
-                    BCCSP=dict(
-                        Default='PKCS11',
-                        PKCS11=dict(
-                            Label=hsm['label'],
-                            Pin=hsm['pin']
-                        )
-                    )
-                )
-            )
-            merge_dicts(expected_ordering_service_node['config_override'], hsm_config_override)
-
-        # Add the zone if it is specified.
-        zone = module.params['zone']
-        if zone is not None:
-            expected_ordering_service_node['zone'] = zone
-
-        # Add the version if it is specified.
-        version = module.params['version']
-        if version is not None:
-            resolved_version = console.resolve_ordering_service_node_version(version)
-            expected_ordering_service_node['version'] = resolved_version
-
         # If the ordering service node is corrupt, delete it first. This may happen if somebody imported an external
         # ordering service node with the same name, or if somebody deleted the Kubernetes resources directly.
         changed = False
@@ -667,11 +687,84 @@ def main():
         changed = False
         if state == 'present' and not ordering_service_node_exists:
 
+            # Get the ordering service that this ordering service node should belong to.
+            ordering_service = get_ordering_service_by_module(console, module)
+            cluster_id = ordering_service.nodes[0].cluster_id
+            cluster_name = ordering_service.nodes[0].cluster_name
+
+            required_if = [
+                ('api_authtype', 'basic', ['api_secret']),
+                ('state', 'present', ['msp_id', 'ordering_service'])
+            ]
+
+            module = BlockchainModule(
+                argument_spec=argument_spec,
+                supports_check_mode=True,
+                required_if=required_if,
+                required_one_of=required_one_of,
+                required_together=required_together,
+                mutually_exclusive=mutually_exclusive)
+
+            # HACK: strip out the storage class if it is not specified. Can't pass null as the API barfs.
+            storage = module.params['storage']
+            for storage_type in storage:
+                if 'class' not in storage[storage_type]:
+                    continue
+                storage_class = storage[storage_type]['class']
+                if storage_class is None:
+                    del storage[storage_type]['class']
+
+            resources = copy_dict(default_resources)
+            merge_dicts(resources, module.params['resources'])
+
+            # Extract the expected ordering service node configuration.
+            expected_ordering_service_node = dict(
+                display_name=name,
+                cluster_id=cluster_id,
+                cluster_name=cluster_name,
+                msp_id=module.params['msp_id'],
+                orderer_type=module.params['orderer_type'],
+                system_channel_id=module.params['system_channel_id'],
+                config_override=module.params['config_override'],
+                resources=resources,
+                storage=storage
+            )
+
             # Delete the resources and storage configuration for a new ordering
             # service being deployed to a free cluster.
             if console.is_free_cluster():
                 del expected_ordering_service_node['resources']
                 del expected_ordering_service_node['storage']
+
+            # Add the HSM configuration if it is specified.
+            hsm = module.params['hsm']
+            if hsm is not None:
+                pkcs11endpoint = hsm['pkcs11endpoint']
+                if pkcs11endpoint:
+                    expected_ordering_service_node['hsm'] = dict(pkcs11endpoint=pkcs11endpoint)
+                hsm_config_override = dict(
+                    General=dict(
+                        BCCSP=dict(
+                            Default='PKCS11',
+                            PKCS11=dict(
+                                Label=hsm['label'],
+                                Pin=hsm['pin']
+                            )
+                        )
+                    )
+                )
+                merge_dicts(expected_ordering_service_node['config_override'], hsm_config_override)
+
+            # Add the zone if it is specified.
+            zone = module.params['zone']
+            if zone is not None:
+                expected_ordering_service_node['zone'] = zone
+
+            # Add the version if it is specified.
+            version = module.params['version']
+            if version is not None:
+                resolved_version = console.resolve_ordering_service_node_version(version)
+                expected_ordering_service_node['version'] = resolved_version
 
             # There is no "create an ordering service node" API, so we need to create/append to
             # an existing ordering service. This means we have to convert various parameters to
@@ -704,28 +797,47 @@ def main():
             # HACK: never send the init resources back, as they are rejected.
             ordering_service_node['resources'].pop('init', None)
 
+            # Extract the expected ordering service node configuration.
+            expected_ordering_service_node = dict(
+                config_override=module.params['config_override'],
+                resources=module.params['resources'],
+                crypto=module.params['crypto'],
+                version=module.params['version']
+            )
+
+            if expected_ordering_service_node['config_override'] is None:
+                del expected_ordering_service_node['config_override']
+
+            if expected_ordering_service_node['resources'] is None:
+                del expected_ordering_service_node['resources']
+
+            if expected_ordering_service_node['crypto'] is None:
+                del expected_ordering_service_node['crypto']
+
+            if expected_ordering_service_node['version'] is None:
+                del expected_ordering_service_node['version']
+
+            # Add the version if it is specified.
+            version = module.params['version']
+            if version is not None:
+                resolved_version = console.resolve_peer_version(version)
+                expected_ordering_service_node['version'] = resolved_version
+
             # Update the ordering service node configuration.
             new_ordering_service_node = copy_dict(ordering_service_node)
             merge_dicts(new_ordering_service_node, expected_ordering_service_node)
 
             # Check to see if any banned changes have been made.
             # HACK: zone is documented as a permitted change, but it has no effect.
-            permitted_changes = ['resources', 'config_override', 'version']
+            permitted_changes = ['resources', 'config_override', 'version', 'crypto']
             diff = diff_dicts(ordering_service_node, new_ordering_service_node)
             for change in diff:
                 if change not in permitted_changes:
                     raise Exception(f'{change} cannot be changed from {ordering_service_node[change]} to {new_ordering_service_node[change]} for existing ordering service node')
 
-            # HACK: the BCCSP section of the config overrides cannot be specified,
-            # even if it has not changed, so never send it in as part of an update.
-            ordering_service_node['config_override'].get('General', dict()).pop('BCCSP', None)
-            new_ordering_service_node['config_override'].get('General', dict()).pop('BCCSP', None)
-
-            # HACK: if the version has not changed, do not send it in. The current
-            # version may not be supported by the current version of IBP.
-            if ordering_service_node['version'] == new_ordering_service_node['version']:
-                del ordering_service_node['version']
-                del new_ordering_service_node['version']
+            # If a change was supplied to resources, apply the change to the entire resources
+            if module.params['resources'] is not None:
+                diff['resources'] = new_ordering_service_node['resources']
 
             # If the ordering service node has changed, apply the changes.
             ordering_service_node_changed = not equal_dicts(ordering_service_node, new_ordering_service_node)
@@ -735,7 +847,8 @@ def main():
                 module.json_log({
                     'msg': 'differences detected, updating ordering service node',
                     'ordering_service_node': ordering_service_node,
-                    'new_ordering_service_node': new_ordering_service_node
+                    'new_ordering_service_node': new_ordering_service_node,
+                    'diff': diff
                 })
 
                 # Remove anything that hasn't changed from the updates.
@@ -745,7 +858,7 @@ def main():
                         del new_ordering_service_node[thing]
 
                 # Apply the updates.
-                ordering_service_node = console.update_ordering_service_node(ordering_service_node['id'], new_ordering_service_node)
+                ordering_service_node = console.update_ordering_service_node(ordering_service_node['id'], diff)
                 changed = True
 
             # Now need to compare the list of admin certs. The admin certs may be passed in via
