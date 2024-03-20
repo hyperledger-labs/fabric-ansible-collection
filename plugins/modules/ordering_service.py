@@ -12,9 +12,7 @@ import urllib
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import _load_params
 
-from ..module_utils.cert_utils import normalize_whitespace
-from ..module_utils.dict_utils import (copy_dict, diff_dicts, equal_dicts,
-                                       merge_dicts)
+from ..module_utils.dict_utils import (merge_dicts)
 from ..module_utils.module import BlockchainModule
 from ..module_utils.ordering_services import OrderingService
 from ..module_utils.utils import (get_certificate_authority_by_module,
@@ -727,146 +725,9 @@ def main():
 
         elif state == 'present' and ordering_service_exists:
 
-            # Check to see if the number of ordering service nodes has changed.
-            nodes = module.params['nodes']
-            if nodes != len(ordering_service):
-                raise Exception(f'Number of nodes cannot be changed from {len(ordering_service)} to {nodes} for existing ordering service')
-            config_override_list = module.params['config_override']
-            if config_override_list is not None:
-                if len(config_override_list) != nodes:
-                    raise Exception(f'Number of nodes is {nodes}, but only {len(config_override_list)} config override objects provided')
-
-            # Go through each ordering service node.
-            i = 0
-            while i < len(ordering_service):
-
-                # Get the ordering service node.
-                ordering_service_node = ordering_service[i]
-
-                # HACK: never send the limits back, as they are rejected.
-                for thing in ['orderer', 'proxy']:
-                    if thing in ordering_service_node['resources']:
-                        if 'limits' in ordering_service_node['resources'][thing]:
-                            del ordering_service_node['resources'][thing]['limits']
-
-                # HACK: never send the init resources back, as they are rejected.
-                ordering_service_node['resources'].pop('init', None)
-
-                # Get the config overrides.
-                if config_override_list is not None:
-                    config_override = config_override[i]
-                else:
-                    config_override = dict()
-
-                # HACK: strip out the storage class if it is not specified. Can't pass null as the API barfs.
-                storage = module.params['storage']
-                for storage_type in storage:
-                    if 'class' not in storage[storage_type]:
-                        continue
-                    storage_class = storage[storage_type]['class']
-                    if storage_class is None:
-                        del storage[storage_type]['class']
-
-                # Extract the expected ordering service node configuration.
-                expected_ordering_service_node = dict(
-                    msp_id=module.params['msp_id'],
-                    orderer_type=module.params['orderer_type'],
-                    system_channel_id=module.params['system_channel_id'],
-                    config_override=config_override,
-                    resources=module.params['resources'],
-                    storage=storage
-                )
-
-                # Add the HSM configuration if it is specified.
-                if hsm is not None:
-                    if pkcs11endpoint:
-                        expected_ordering_service_node['hsm'] = dict(pkcs11endpoint=pkcs11endpoint)
-                    merge_dicts(config_override, hsm_config_override)
-
-                # Add the zone if it is specified.
-                zones = module.params['zones']
-                if zones is not None:
-                    if len(zones) != nodes:
-                        raise Exception(f'Number of nodes is {nodes}, but only {len(zones)} zones provided')
-                    expected_ordering_service_node['zone'] = zones[i]
-
-                # Add the version if it is specified.
-                version = module.params['version']
-                if version is not None:
-                    resolved_version = console.resolve_ordering_service_node_version(version)
-                    expected_ordering_service_node['version'] = resolved_version
-
-                # Update the ordering service node configuration.
-                new_ordering_service_node = copy_dict(ordering_service_node)
-                merge_dicts(new_ordering_service_node, expected_ordering_service_node)
-
-                # Check to see if any banned changes have been made.
-                # HACK: zone is documented as a permitted change, but it has no effect.
-                permitted_changes = ['resources', 'config_override', 'version']
-                diff = diff_dicts(ordering_service_node, new_ordering_service_node)
-                for change in diff:
-                    if change not in permitted_changes:
-                        raise Exception(f'{change} cannot be changed from {ordering_service_node[change]} to {new_ordering_service_node[change]} for existing ordering service node')
-
-                # HACK: the BCCSP section of the config overrides cannot be specified,
-                # even if it has not changed, so never send it in as part of an update.
-                ordering_service_node['config_override'].get('General', dict()).pop('BCCSP', None)
-                new_ordering_service_node['config_override'].get('General', dict()).pop('BCCSP', None)
-
-                # HACK: if the version has not changed, do not send it in. The current
-                # version may not be supported by the current version of IBP.
-                if ordering_service_node['version'] == new_ordering_service_node['version']:
-                    del ordering_service_node['version']
-                    del new_ordering_service_node['version']
-
-                # If the ordering service node has changed, apply the changes.
-                ordering_service_node_changed = not equal_dicts(ordering_service_node, new_ordering_service_node)
-                if ordering_service_node_changed:
-
-                    # Log the differences.
-                    module.json_log({
-                        'msg': 'differences detected, updating ordering service node',
-                        'ordering_service_node': ordering_service_node,
-                        'new_ordering_service_node': new_ordering_service_node
-                    })
-
-                    # Remove anything that hasn't changed from the updates.
-                    things = list(new_ordering_service_node.keys())
-                    for thing in things:
-                        if thing not in diff:
-                            del new_ordering_service_node[thing]
-
-                    # Apply the updates.
-                    ordering_service[i] = console.update_ordering_service_node(ordering_service_node['id'], new_ordering_service_node)
-                    changed = True
-
-                # Now need to compare the list of admin certs. The admin certs may be passed in via
-                # three different parameters (admins, config.enrollment.component.admincerts, and
-                # config.msp.component.admincerts) so we need to find them.
-                # HACK: if the admin certs did not get returned, we're running on IBP v2.1.3
-                # and it does not support this feature.
-                expected_admins = module.params['admins']
-                if not expected_admins:
-                    crypto = module.params['crypto']
-                    if crypto:
-                        node_config = crypto[i]
-                        for config_type in ['enrollment', 'msp']:
-                            expected_admins = node_config.get(config_type, dict()).get('component', dict()).get('admincerts', None)
-                            if expected_admins:
-                                break
-                if expected_admins:
-                    expected_admins_set = set(map(normalize_whitespace, expected_admins))
-                    actual_admins = ordering_service_node.get('admin_certs', None)
-                    if actual_admins is not None:
-                        actual_admins_set = set(map(normalize_whitespace, actual_admins))
-                        append_admin_certs = list(expected_admins_set.difference(actual_admins_set))
-                        remove_admin_certs = list(actual_admins_set.difference(expected_admins_set))
-                        if append_admin_certs or remove_admin_certs:
-                            console.edit_admin_certs(ordering_service_node['id'], append_admin_certs, remove_admin_certs)
-                            changed = True
-
-                # Move to the next ordering service node.
-                i = i + 1
+            module.json_log({
+                'msg': 'Ordering service already exists.  Changes to the ordering nodes will need to be completed by updating the ordering service nodes individually'
+            })
 
         # Wait for the ordering service to start.
         ordering_service = OrderingService.from_json(console.extract_ordering_service_info(ordering_service))
