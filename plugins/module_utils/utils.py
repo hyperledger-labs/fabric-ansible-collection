@@ -16,6 +16,7 @@ from .enrolled_identities import EnrolledIdentity
 from .ordering_services import OrderingService, OrderingServiceNode
 from .organizations import Organization
 from .peers import Peer
+from .cert_utils import split_ca_chain
 
 
 def get_console(module):
@@ -64,6 +65,26 @@ def get_certificate_authority_by_module(console, module, parameter_name='certifi
 
     # Return the certificate authority.
     return CertificateAuthority.from_json(data)
+
+
+def get_all_certificate_authorities(console):
+
+    # Go over each peer.
+    certificate_authorities = list()
+
+    components = console.get_all_components_by_type('fabric-ca')
+    if len(components) == 0:
+        return None
+
+    for component in components:
+
+        data = console.extract_ca_info(component)
+
+        # Add the peer.
+        certificate_authorities.append(CertificateAuthority.from_json(data))
+
+    # Return the list of peers.
+    return certificate_authorities
 
 
 def get_organization_by_name(console, name, fail_on_missing=True):
@@ -182,6 +203,46 @@ def get_peers_by_module(console, module, parameter_name='peers'):
     return peers
 
 
+def get_all_peers(console):
+
+    # Go over each peer.
+    peers = list()
+
+    components = console.get_all_components_by_type('fabric-peer')
+    if len(components) == 0:
+        return None
+
+    for component in components:
+
+        data = console.extract_peer_info(component)
+
+        # Add the peer.
+        peers.append(Peer.from_json(data))
+
+    # Return the list of peers.
+    return peers
+
+
+def get_all_orderering_service_nodes(console):
+
+    # Go over each peer.
+    ordering_service_nodes = list()
+
+    components = console.get_all_components_by_type('fabric-orderer')
+    if len(components) == 0:
+        return None
+
+    for component in components:
+
+        data = console.extract_ordering_service_node_info(component)
+
+        # Add the ordering service node.
+        ordering_service_nodes.append(OrderingServiceNode.from_json(data))
+
+    # Return the list of ordering service nodes.
+    return ordering_service_nodes
+
+
 def get_ordering_service_by_name(console, name, fail_on_missing=True):
 
     # Look up the ordering service by name.
@@ -270,6 +331,42 @@ def get_ordering_service_nodes_by_module(console, module, parameter_name='orderi
 
     # Return the list of ordering service nodes.
     return ordering_service_nodes
+
+
+def get_certs_from_certificate_authority(console, module):
+
+    # Get the certificate authority.
+    if module.params['certificate_authority'] is None:
+        return None
+    certificate_authority = get_certificate_authority_by_module(console, module)
+
+    # Get the certificate authority information.
+    with certificate_authority.connect(module, None) as connection:
+        ca_chain = connection.get_ca_chain()
+        tlsca_chain = connection.get_tlsca_chain()
+
+    # Split the certificate authority chains into root certificates and intermediate certificates.
+    (root_certs, intermediate_certs) = split_ca_chain(ca_chain)
+    (tls_root_certs, tls_intermediate_certs) = split_ca_chain(tlsca_chain)
+
+    # Build the return information.
+    result = {
+        'root_certs': root_certs,
+        'intermediate_certs': intermediate_certs,
+        'tls_root_certs': tls_root_certs,
+        'tls_intermediate_certs': tls_intermediate_certs
+    }
+
+    # Generate a revocation list if a registrar has been provided.
+    if module.params['registrar']:
+        registrar = get_identity_by_module(module, 'registrar')
+        hsm = module.params['hsm']
+        with certificate_authority.connect(module, hsm) as connection:
+            revocation_list = connection.generate_crl(registrar)
+            result['revocation_list'] = [revocation_list]
+
+    # Return the information retrieved from the certificate authority.
+    return result
 
 
 def get_identity_by_module(module, parameter_name='identity'):

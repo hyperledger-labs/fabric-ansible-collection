@@ -7,8 +7,6 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-import copy
-
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import _load_params
 
@@ -355,18 +353,8 @@ def main():
         api_timeout=dict(type='int', default=60),
         api_token_endpoint=dict(type='str', default='https://iam.cloud.ibm.com/identity/token'),
         name=dict(type='str', required=True),
-        config_override=dict(type='dict', default=dict(), options=dict(
-            ca=dict(type='dict'),
-            tlsca=dict(type='dict'),
-        )),
-        resources=dict(type='dict', default=dict(), options=dict(
-            ca=dict(type='dict', default=dict(), options=dict(
-                requests=dict(type='dict', default=dict(), options=dict(
-                    cpu=dict(type='str', default='100m'),
-                    memory=dict(type='str', default='200M')
-                ))
-            ))
-        )),
+        config_override=dict(type='dict'),
+        resources=dict(type='dict'),
         storage=dict(type='dict', default=dict(), options=dict(
             ca=dict(type='dict', default=dict(), options={
                 'size': dict(type='str', default='20Gi'),
@@ -409,6 +397,11 @@ def main():
             'certificate_authority_corrupt': certificate_authority_corrupt
         })
 
+        # define a default set of resources
+        default_resources = dict(
+            ca=dict(requests=dict(cpu='100m', memory='200M'))
+        )
+
         # If this is a free cluster, we cannot accept resource/storage configuration,
         # as these are ignored for free clusters. We must also delete the defaults,
         # otherwise they cause a mismatch with the values that actually get set.
@@ -438,11 +431,25 @@ def main():
 
         # If config overrides are provided for the CA, but not the TLSCA, copy
         # the CA ones into place. This is what the REST API does.
-        config_override = module.params['config_override']
-        ca = config_override['ca']
-        tlsca = config_override['tlsca']
-        if ca is not None and tlsca is None:
-            tlsca = config_override['tlsca'] = ca
+        # config_override = module.params['config_override']
+        # define a default config_override
+        default_config_override = dict(
+            ca=dict(), tlsca=dict()
+        )
+
+        config_override = copy_dict(default_config_override)
+        if module.params['config_override'] is not None:
+            merge_dicts(config_override, module.params['config_override'])
+
+            ca = config_override['ca']
+            tlsca = config_override['tlsca']
+            if ca is not None and tlsca == {}:
+                tlsca = config_override['tlsca'] = ca
+
+        # Create a copy of the default resources
+        resources = copy_dict(default_resources)
+        if module.params['resources'] is not None:
+            merge_dicts(resources, module.params['resources'])
 
         # HACK: strip out the storage class if it is not specified. Can't pass null as the API barfs.
         storage = module.params['storage']
@@ -457,7 +464,7 @@ def main():
         expected_certificate_authority = dict(
             display_name=name,
             config_override=config_override,
-            resources=module.params['resources'],
+            resources=resources,
             storage=storage
         )
 
@@ -533,25 +540,47 @@ def main():
                     if 'limits' in certificate_authority['resources'][thing]:
                         del certificate_authority['resources'][thing]['limits']
 
+            # Extract the expected peer configuration.
+            expected_certificate_authority = dict(
+                config_override=module.params['config_override'],
+                resources=module.params['resources'],
+                version=module.params['version'],
+                replicas=module.params['replicas']
+            )
+
+            if expected_certificate_authority['config_override'] is None:
+                del expected_certificate_authority['config_override']
+
+            if expected_certificate_authority['resources'] is None:
+                del expected_certificate_authority['resources']
+
+            if expected_certificate_authority['version'] is None:
+                del expected_certificate_authority['version']
+
+            if expected_certificate_authority['replicas'] is None:
+                del expected_certificate_authority['replicas']
+
+            # Add the version if it is specified.
+            version = module.params['version']
+            if version is not None:
+                resolved_version = console.resolve_ca_version(version)
+                expected_certificate_authority['version'] = resolved_version
+
             # Update the certificate authority configuration.
             new_certificate_authority = copy_dict(certificate_authority)
             merge_dicts(new_certificate_authority, expected_certificate_authority)
 
-            # You can't change the registry after creation, but the remote names and secrets are redacted.
-            # In order to diff properly, we need to redact the incoming secrets. We need to restore the
-            # unredacted versions before sending them to the API though!
-            expected_ca_identities = new_certificate_authority.get('config_override', dict()).get('ca', dict()).get('registry', dict()).get('identities', list())
-            expected_tlsca_identities = new_certificate_authority.get('config_override', dict()).get('tlsca', dict()).get('registry', dict()).get('identities', list())
-            original_expected_ca_identities = copy.deepcopy(expected_ca_identities)
-            original_expected_tlsca_identities = copy.deepcopy(expected_tlsca_identities)
-            for certificate_authority_to_update in [certificate_authority, new_certificate_authority]:
-                for ca in ['ca', 'tlsca']:
-                    identities = certificate_authority_to_update.get('config_override', dict()).get(ca, dict()).get('registry', dict()).get('identities', list())
-                    for identity in identities:
-                        if 'name' in identity:
-                            identity['name'] = '[redacted]'
-                        if 'pass' in identity:
-                            identity['pass'] = '[redacted]'
+            for ca in ['ca', 'tlsca']:
+                if 'config_override' in expected_certificate_authority:
+                    if ca in expected_certificate_authority['config_override']:
+                        if 'db' in expected_certificate_authority['config_override'][ca]:
+                            raise Exception(f'config_override.{ca}.db cannot be changed for existing certificate authority')
+                        if 'registry' in expected_certificate_authority['config_override'][ca]:
+                            if 'identities' in expected_certificate_authority['config_override'][ca]['registry']:
+                                del expected_certificate_authority['config_override'][ca]['registry']['identities']
+                        if 'registry' in new_certificate_authority['config_override'][ca]:
+                            if 'identities' in new_certificate_authority['config_override'][ca]['registry']:
+                                del new_certificate_authority['config_override'][ca]['registry']['identities']
 
             # Check to see if any banned changes have been made.
             # HACK: zone is documented as a permitted change, but it has no effect.
@@ -561,24 +590,9 @@ def main():
                 if change not in permitted_changes:
                     raise Exception(f'{change} cannot be changed from {certificate_authority[change]} to {new_certificate_authority[change]} for existing certificate authority')
 
-            # HACK: we can't send in certain config override changes, even if they haven't
-            # changed, so we need to check those and then remove them.
-            banned_changes = ['db']
-            for change in banned_changes:
-                for ca in ['ca', 'tlsca']:
-                    expected_config_override = new_certificate_authority.get('config_override', dict()).get(ca, dict()).get(change, None)
-                    actual_config_override = certificate_authority.get('config_override', dict()).get(ca, dict()).get(change, None)
-                    if expected_config_override and not actual_config_override:
-                        # HACK: ignore this case; it can be missing but still present.
-                        pass
-                    elif not expected_config_override and actual_config_override:
-                        # Cannot unset.
-                        raise Exception(f'config_override.{ca}.{change} cannot be changed from {actual_config_override} to {expected_config_override} for existing certificate authority')
-                    elif not equal_dicts(expected_config_override, actual_config_override):
-                        # Cannot modify.
-                        raise Exception(f'config_override.{ca}.{change} cannot be changed from {actual_config_override} to {expected_config_override} for existing certificate authority')
-                    new_certificate_authority.get('config_override', dict()).get(ca, dict()).pop(change, None)
-                    certificate_authority.get('config_override', dict()).get(ca, dict()).pop(change, None)
+            # If a change was supplied to resources, apply the change to the entire resources
+            if module.params['resources'] is not None:
+                diff['resources'] = new_certificate_authority['resources']
 
             # HACK: if the version has not changed, do not send it in. The current
             # version may not be supported by the current version of IBP.
@@ -594,12 +608,9 @@ def main():
                 module.json_log({
                     'msg': 'differences detected, updating certificate authority',
                     'certificate_authority': certificate_authority,
-                    'new_certificate_authority': new_certificate_authority
+                    'new_certificate_authority': new_certificate_authority,
+                    'diff': diff
                 })
-
-                # Restore the unredacted identities.
-                new_certificate_authority.get('config_override', dict()).get('ca', dict()).get('registry', dict())['identities'] = original_expected_ca_identities
-                new_certificate_authority.get('config_override', dict()).get('tlsca', dict()).get('registry', dict())['identities'] = original_expected_tlsca_identities
 
                 # Remove anything that hasn't changed from the updates.
                 things = list(new_certificate_authority.keys())
@@ -608,8 +619,10 @@ def main():
                         del new_certificate_authority[thing]
 
                 # Apply the updates.
-                certificate_authority = console.update_ca(certificate_authority['id'], new_certificate_authority)
+                certificate_authority = console.update_ca(certificate_authority['id'], diff)
                 changed = True
+
+                certificate_authority = console.get_component_by_display_name('fabric-ca', name, deployment_attrs='included')
 
         # Wait for the certificate authority to start.
         certificate_authority = CertificateAuthority.from_json(console.extract_ca_info(certificate_authority))

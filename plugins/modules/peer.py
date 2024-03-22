@@ -8,7 +8,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 import urllib
-from distutils.version import LooseVersion
 
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import _load_params
@@ -236,6 +235,83 @@ options:
                                     - The Kubernetes memory resource request for the chaincode launcher container.
                                 type: str
                                 default: 400M
+    crypto:
+        description:
+            - Component crypto configuration for connecting to a certificate authority
+        type: dict
+        suboptions:
+            enrollment:
+                description:
+                    - Enrollment information for connecting to a certificate authority
+                type: dict
+                suboptions:
+                    component:
+                        description:
+                            - Admin certificates for connecting to a certificate authority
+                        type: dict
+                        suboptions:
+                            admins:
+                                description:
+                                    - An array that contains base 64 encoded PEM identity certificates for administrators. Also known as signing certificates of an organization administrator.
+                                type: dict
+                    ca:
+                        description:
+                            - Configuration for connecting to the certificate authority
+                        type: dict
+                        suboptions:
+                            host:
+                                description:
+                                    - The CA's hostname. Do not include protocol or port. Must be a hostname from a known CA.
+                                type: str
+                            port:
+                                description:
+                                    - The CA's port.
+                                type: str
+                            name:
+                                description:
+                                    - The CA's "CAName" attribute. This name is used to distinguish this CA from the TLS CA.
+                                type: str
+                            tls_cert:
+                                description:
+                                    - The TLS certificate as base 64 encoded PEM. Certificate is used to secure/validate a TLS connection with this component.
+                                type: str
+                            enroll_id:
+                                description:
+                                    - The username of the enroll id.
+                                type: str
+                            enroll_secret:
+                                description:
+                                    - The password of the enroll id.
+                                type: str
+                    tlsca:
+                        description:
+                            - Configuration for connecting to the TLS certificate authority
+                        type: dict
+                        suboptions:
+                            host:
+                                description:
+                                    - The CA's hostname. Do not include protocol or port. Must be a hostname from a known CA.
+                                type: str
+                            port:
+                                description:
+                                    - The CA's port.
+                                type: str
+                            name:
+                                description:
+                                    - The CA's "CAName" attribute. This name is used to distinguish this CA from the TLS CA.
+                                type: str
+                            tls_cert:
+                                description:
+                                    - The TLS certificate as base 64 encoded PEM. Certificate is used to secure/validate a TLS connection with this component.
+                                type: str
+                            enroll_id:
+                                description:
+                                    - The username of the enroll id.
+                                type: str
+                            enroll_secret:
+                                description:
+                                    - The password of the enroll id.
+                                type: str
     storage:
         description:
             - The Kubernetes storage configuration for the peer.
@@ -514,38 +590,7 @@ def main():
         admins=dict(type='list', elements='str', aliases=['admin_certificates']),
         crypto=dict(type='dict'),
         config_override=dict(type='dict', default=dict()),
-        resources=dict(type='dict', default=dict(), options=dict(
-            peer=dict(type='dict', default=dict(), options=dict(
-                requests=dict(type='dict', default=dict(), options=dict(
-                    cpu=dict(type='str', default='200m'),
-                    memory=dict(type='str', default='1G')
-                ))
-            )),
-            proxy=dict(type='dict', default=dict(), options=dict(
-                requests=dict(type='dict', default=dict(), options=dict(
-                    cpu=dict(type='str', default='100m'),
-                    memory=dict(type='str', default='200M')
-                ))
-            )),
-            couchdb=dict(type='dict', default=dict(), options=dict(
-                requests=dict(type='dict', default=dict(), options=dict(
-                    cpu=dict(type='str', default='200m'),
-                    memory=dict(type='str', default='400M')
-                ))
-            )),
-            dind=dict(type='dict', default=dict(), options=dict(
-                requests=dict(type='dict', default=dict(), options=dict(
-                    cpu=dict(type='str', default='1'),
-                    memory=dict(type='str', default='1G')
-                ))
-            )),
-            chaincodelauncher=dict(type='dict', default=dict(), options=dict(
-                requests=dict(type='dict', default=dict(), options=dict(
-                    cpu=dict(type='str', default='200m'),
-                    memory=dict(type='str', default='400M')
-                ))
-            ))
-        )),
+        resources=dict(type='dict'),
         storage=dict(type='dict', default=dict(), options=dict(
             peer=dict(type='dict', default=dict(), options={
                 'size': dict(type='str', default='100Gi'),
@@ -563,11 +608,12 @@ def main():
         )),
         zone=dict(type='str'),
         version=dict(type='str'),
+        ignore_warnings=dict(type='bool', default=False),
         wait_timeout=dict(type='int', default=60)
     )
     required_if = [
         ('api_authtype', 'basic', ['api_secret']),
-        ('state', 'present', ['name', 'msp_id'])
+        ('state', 'present', ['name'])
     ]
     # Ansible doesn't allow us to say "require one of X and Y only if condition A is true",
     # so we need to handle this ourselves by seeing what was passed in.
@@ -589,10 +635,8 @@ def main():
     module = BlockchainModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=required_if,
-        required_one_of=required_one_of,
-        required_together=required_together,
-        mutually_exclusive=mutually_exclusive)
+        required_if=required_if
+    )
 
     # Ensure all exceptions are caught.
     try:
@@ -611,6 +655,14 @@ def main():
             'peer_exists': peer_exists,
             'peer_corrupt': peer_corrupt
         })
+
+        # define a default set of resources
+        default_resources = dict(
+            peer=dict(requests=dict(cpu='200m', memory='1G')),
+            proxy=dict(requests=dict(cpu='100m', memory='200M')),
+            couchdb=dict(requests=dict(cpu='200m', memory='400M')),
+            chaincodelauncher=dict(requests=dict(cpu='200m', memory='400M'))
+        )
 
         # If this is a free cluster, we cannot accept resource/storage configuration,
         # as these are ignored for free clusters. We must also delete the defaults,
@@ -639,55 +691,6 @@ def main():
             # The peer should not exist and doesn't.
             return module.exit_json(changed=False)
 
-        # HACK: strip out the storage class if it is not specified. Can't pass null as the API barfs.
-        storage = module.params['storage']
-        for storage_type in storage:
-            if 'class' not in storage[storage_type]:
-                continue
-            storage_class = storage[storage_type]['class']
-            if storage_class is None:
-                del storage[storage_type]['class']
-
-        # Extract the expected peer configuration.
-        expected_peer = dict(
-            display_name=name,
-            msp_id=module.params['msp_id'],
-            state_db=module.params['state_db'],
-            config_override=module.params['config_override'],
-            resources=module.params['resources'],
-            storage=storage
-        )
-
-        # Add the HSM configuration if it is specified.
-        hsm = module.params['hsm']
-        if hsm is not None:
-            pkcs11endpoint = hsm['pkcs11endpoint']
-            if pkcs11endpoint:
-                expected_peer['hsm'] = dict(pkcs11endpoint=pkcs11endpoint)
-            hsm_config_override = dict(
-                peer=dict(
-                    BCCSP=dict(
-                        Default='PKCS11',
-                        PKCS11=dict(
-                            Label=hsm['label'],
-                            Pin=hsm['pin']
-                        )
-                    )
-                )
-            )
-            merge_dicts(expected_peer['config_override'], hsm_config_override)
-
-        # Add the zone if it is specified.
-        zone = module.params['zone']
-        if zone is not None:
-            expected_peer['zone'] = zone
-
-        # Add the version if it is specified.
-        version = module.params['version']
-        if version is not None:
-            resolved_version = console.resolve_peer_version(version)
-            expected_peer['version'] = resolved_version
-
         # If the peer is corrupt, delete it first. This may happen if somebody imported an external peer
         # with the same name, or if somebody deleted the Kubernetes resources directly.
         changed = False
@@ -701,6 +704,77 @@ def main():
         changed = False
         if state == 'present' and not peer_exists:
 
+            # If this is a create, then add msp_id as required
+            required_if = [
+                ('api_authtype', 'basic', ['api_secret']),
+                ('state', 'present', ['name', 'msp_id'])
+            ]
+
+            # If this is a create, then enforce the needed create parameters
+            module = BlockchainModule(
+                argument_spec=argument_spec,
+                supports_check_mode=True,
+                required_if=required_if,
+                required_one_of=required_one_of,
+                required_together=required_together,
+                mutually_exclusive=mutually_exclusive)
+
+            # HACK: strip out the storage class if it is not specified. Can't pass null as the API barfs.
+            storage = module.params['storage']
+            for storage_type in storage:
+                if 'class' not in storage[storage_type]:
+                    continue
+                storage_class = storage[storage_type]['class']
+                if storage_class is None:
+                    del storage[storage_type]['class']
+
+            # Create a copy of the default resources
+            resources = copy_dict(default_resources)
+
+            # Merge parameters passed in if any
+            if module.params['resources'] is not None:
+                merge_dicts(resources, module.params['resources'])
+
+            # Extract the expected peer configuration.
+            expected_peer = dict(
+                display_name=name,
+                msp_id=module.params['msp_id'],
+                state_db=module.params['state_db'],
+                config_override=module.params['config_override'],
+                resources=resources,
+                storage=storage
+            )
+
+            # Add the HSM configuration if it is specified.
+            hsm = module.params['hsm']
+            if hsm is not None:
+                pkcs11endpoint = hsm['pkcs11endpoint']
+                if pkcs11endpoint:
+                    expected_peer['hsm'] = dict(pkcs11endpoint=pkcs11endpoint)
+                hsm_config_override = dict(
+                    peer=dict(
+                        BCCSP=dict(
+                            Default='PKCS11',
+                            PKCS11=dict(
+                                Label=hsm['label'],
+                                Pin=hsm['pin']
+                            )
+                        )
+                    )
+                )
+                merge_dicts(expected_peer['config_override'], hsm_config_override)
+
+            # Add the zone if it is specified.
+            zone = module.params['zone']
+            if zone is not None:
+                expected_peer['zone'] = zone
+
+            # Add the version if it is specified.
+            version = module.params['version']
+            if version is not None:
+                resolved_version = console.resolve_peer_version(version)
+                expected_peer['version'] = resolved_version
+
             # Delete the resources and storage configuration for a new peer
             # being deployed to a free cluster.
             if console.is_free_cluster():
@@ -709,14 +783,6 @@ def main():
 
             # Get the config.
             expected_peer['crypto'] = get_crypto(console, module)
-
-            # We should only send dind resources if the peer is running Fabric v1.4.
-            # We should only send chaincodelauncher resources if the peer is running Fabric v2.x.
-            if 'version' in expected_peer:
-                if LooseVersion(expected_peer['version']) >= LooseVersion('2.0'):
-                    expected_peer['resources'].pop('dind', None)
-                elif LooseVersion(expected_peer['version']) < LooseVersion('2.0'):
-                    expected_peer['resources'].pop('chaincodelauncher', None)
 
             # Create the peer.
             peer = console.create_peer(expected_peer)
@@ -731,38 +797,51 @@ def main():
                         del peer['resources'][thing]['limits']
 
             # HACK: never send the fluentd and init resources back, as they are rejected.
-            peer['resources'].pop('fluentd', None)
-            peer['resources'].pop('init', None)
+            if peer['resources'] is not None:
+                peer['resources'].pop('fluentd', None)
+                peer['resources'].pop('init', None)
+
+            # Extract the expected peer configuration.
+            expected_peer = dict(
+                config_override=module.params['config_override'],
+                resources=module.params['resources'],
+                crypto=module.params['crypto'],
+                version=module.params['version']
+            )
+
+            if expected_peer['config_override'] is None:
+                del expected_peer['config_override']
+
+            if expected_peer['resources'] is None:
+                del expected_peer['resources']
+
+            if expected_peer['crypto'] is None:
+                del expected_peer['crypto']
+
+            if expected_peer['version'] is None:
+                del expected_peer['version']
+
+            # Add the version if it is specified.
+            version = module.params['version']
+            if version is not None:
+                resolved_version = console.resolve_peer_version(version)
+                expected_peer['version'] = resolved_version
 
             # Update the peer configuration.
             new_peer = copy_dict(peer)
             merge_dicts(new_peer, expected_peer)
 
-            # We should only send dind resources if the peer is running Fabric v1.4.
-            # We should only send chaincodelauncher resources if the peer is running Fabric v2.x.
-            if LooseVersion(new_peer['version']) >= LooseVersion('2.0'):
-                new_peer['resources'].pop('dind', None)
-            elif LooseVersion(new_peer['version']) < LooseVersion('2.0'):
-                new_peer['resources'].pop('chaincodelauncher', None)
-
             # Check to see if any banned changes have been made.
             # HACK: zone is documented as a permitted change, but it has no effect.
-            permitted_changes = ['resources', 'config_override', 'version']
+            permitted_changes = ['resources', 'config_override', 'version', 'crypto']
             diff = diff_dicts(peer, new_peer)
             for change in diff:
                 if change not in permitted_changes:
                     raise Exception(f'{change} cannot be changed from {peer[change]} to {new_peer[change]} for existing peer')
 
-            # HACK: the BCCSP section of the config overrides cannot be specified,
-            # even if it has not changed, so never send it in as part of an update.
-            peer['config_override'].get('peer', dict()).pop('BCCSP', None)
-            new_peer['config_override'].get('peer', dict()).pop('BCCSP', None)
-
-            # HACK: if the version has not changed, do not send it in. The current
-            # version may not be supported by the current version of IBP.
-            if peer['version'] == new_peer['version']:
-                del peer['version']
-                del new_peer['version']
+            # If a change was supplied to resources, apply the change to the entire resources
+            if module.params['resources'] is not None:
+                diff['resources'] = new_peer['resources']
 
             # If the peer has changed, apply the changes.
             peer_changed = not equal_dicts(peer, new_peer)
@@ -771,19 +850,17 @@ def main():
                 # Log the differences.
                 module.json_log({
                     'msg': 'differences detected, updating peer',
-                    'peer': peer,
-                    'new_peer': new_peer
+                    'diff': diff
                 })
 
-                # Remove anything that hasn't changed from the updates.
-                things = list(new_peer.keys())
-                for thing in things:
-                    if thing not in diff:
-                        del new_peer[thing]
+                ignore_warnings = module.params['ignore_warnings']
 
                 # Apply the updates.
-                peer = console.update_peer(peer['id'], new_peer)
+                peer = console.update_peer(peer['id'], diff, ignore_warnings)
                 changed = True
+
+                # retrieve the updated peer
+                peer = console.get_component_by_display_name('fabric-peer', name, deployment_attrs='included')
 
             # Now need to compare the list of admin certs. The admin certs may be passed in via
             # three different parameters (admins, config.enrollment.component.admincerts, and
