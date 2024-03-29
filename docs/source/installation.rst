@@ -168,7 +168,7 @@ You can run a playbook using this Docker image, by volume mounting the playbook 
 
 Note that the UID flag ``-u $(id -u)`` ensures that Ansible can write connection profile and identity files to the volume mount.
 
-Note that the --entrypoint docker/docker-entrypoint-opensource-stack.sh is needed because Dockerfile is using another user: hlf-user
+Note that the --entrypoint /docker-entrypoint-opensource-stack.sh is needed because Dockerfile is using another user: hlf-user
 
 The Docker image is supported for use in Docker, Kubernetes, and Red Hat OpenShift.
 
