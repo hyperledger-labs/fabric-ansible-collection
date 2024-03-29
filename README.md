@@ -54,7 +54,7 @@ The choice will depend on what context you want to use ansible in.
   docker run --entrypoint docker/docker-entrypoint-opensource-stack.sh --rm -u $(id -u) -v /path/to/playbooks:/playbooks ghcr.io/hyperledger-labs/fabric-ansible:sha-c9330b9 ansible-playbook /playbooks/playbook.yml
   ```
 
-- If you are using minikube with docker drive you need to specify the docker minikube network:
+- If you are using minikube with docker driver you need to specify the docker minikube network:
   ```shell
   docker run --network minikube --entrypoint docker/docker-entrypoint-opensource-stack.sh --rm -u $(id -u) -v /path/to/playbooks:/playbooks ghcr.io/hyperledger-labs/fabric-ansible:sha-c9330b9 ansible-playbook /playbooks/playbook.yml
   ```
