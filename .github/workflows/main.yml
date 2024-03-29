@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Use Python 3.9
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
           python-version: 3.9
       - name: Install Python dependencies
@@ -41,7 +41,7 @@ jobs:
           shellcheck tutorial/*.sh
           yamllint .
       - name: Publish collection
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Collection
           path: hyperledger-fabric_ansible_collection.tar.gz
@@ -51,9 +51,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Use Python 3.9
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
           python-version: 3.9
       - name: Install Python dependencies
@@ -65,7 +65,7 @@ jobs:
           cd ..
           tar cf documentation.tar.gz docs/build
       - name: Publish documentation
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Documentation
           path: documentation.tar.gz
@@ -75,9 +75,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Use Python 3.9
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
           python-version: 3.9
       - name: Install Python dependencies
@@ -89,7 +89,7 @@ jobs:
           docker tag hyperledger-labs/fabric-ansible-collection:${VERSION} hyperledger-labs/fabric-ansible-collection:latest
           docker save hyperledger-labs/fabric-ansible-collection:${VERSION} hyperledger-labs/fabric-ansible-collection:latest | gzip -c > image.tar.gz
       - name: Publish Docker image
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Docker image
           path: image.tar.gz
