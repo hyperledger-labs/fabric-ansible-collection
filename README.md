@@ -49,7 +49,7 @@ The choice will depend on what context you want to use ansible in.
   docker pull ghcr.io/hyperledger-labs/fabric-ansible:sha-c9330b9
   docker run --rm -u $(id -u) -v /path/to/playbooks:/playbooks ghcr.io/hyperledger-labs/fabric-ansible:sha-c9330b9 ansible-playbook /playbooks/playbook.yml
   ```
-- For running in environments like ubuntu that does not have the ibp-user (open source stack) you need to override the docker entrypoint:
+- For running in environments like ubuntu that does not have the ibp-user so, you may need to override the docker entrypoint:
   ```shell
   docker run --entrypoint docker/docker-entrypoint-opensource-stack.sh --rm -u $(id -u) -v /path/to/playbooks:/playbooks ghcr.io/hyperledger-labs/fabric-ansible:sha-c9330b9 ansible-playbook /playbooks/playbook.yml
   ```
