@@ -49,6 +49,15 @@ The choice will depend on what context you want to use ansible in.
   docker pull ghcr.io/hyperledger-labs/fabric-ansible:sha-c9330b9
   docker run --rm -u $(id -u) -v /path/to/playbooks:/playbooks ghcr.io/hyperledger-labs/fabric-ansible:sha-c9330b9 ansible-playbook /playbooks/playbook.yml
   ```
+- For running in environments like ubuntu that does not have the ibp-user (open source stack) you need to override the docker entrypoint:
+  ```shell
+  docker run --entrypoint docker/docker-entrypoint-opensource-stack.sh --rm -u $(id -u) -v /path/to/playbooks:/playbooks ghcr.io/hyperledger-labs/fabric-ansible:sha-c9330b9 ansible-playbook /playbooks/playbook.yml
+  ```
+
+- If you are using minikube with docker drive you need to specify the docker minikube network:
+  ```shell
+  docker run --network minikube --entrypoint docker/docker-entrypoint-opensource-stack.sh --rm -u $(id -u) -v /path/to/playbooks:/playbooks ghcr.io/hyperledger-labs/fabric-ansible:sha-c9330b9 ansible-playbook /playbooks/playbook.yml
+  ```
 
 - If you are using github actions for CI/CD there is a [github action](https://github.com/hyperledgendary/fabric-cloud-infrastructure/tree/main/fabric-ansible-action) that uses the same docker image as the basis.
   For example; note this action needs to still be published. In the interim please copy this to your own repository
