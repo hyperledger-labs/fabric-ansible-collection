@@ -103,7 +103,7 @@ class BlockchainModule(AnsibleModule):
             m = p.search(process.stdout)
             if m is None:
                 self.fail_json(msg=wrong_version_bin(binary, '<unknown>', f'>= {min_fabric_version}', url=url), rc=process.returncode, stdout=process.stdout, stderr=process.stderr, cmd=f'{binary} version')
-            version = m.group(1)
+            version = m.group(1).strip('v')
             if not LooseVersion(version) >= LooseVersion(min_fabric_version):
                 self.fail_json(msg=wrong_version_bin(binary, version, f'>= {min_fabric_version}', url=url), rc=process.returncode, stdout=process.stdout, stderr=process.stderr, cmd=f'{binary} version')
 
