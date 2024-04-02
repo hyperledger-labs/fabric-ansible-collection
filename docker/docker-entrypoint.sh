@@ -11,7 +11,7 @@ if ! whoami &> /dev/null; then
     sed '/ibp-user/d' /etc/passwd > /tmp/passwd
     cat /tmp/passwd > /etc/passwd
     rm -f /tmp/passwd
-    echo "ibp-user:x:$(id -u):0::/home/ibp-user:/bin/bash" >> /etc/passwd
+    echo "hlf-user:x:$(id -u):0::/home/hlf-user:/bin/bash" >> /etc/passwd
     export HOME=/home/ibp-user
 fi
 
