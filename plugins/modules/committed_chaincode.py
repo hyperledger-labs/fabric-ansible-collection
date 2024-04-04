@@ -405,7 +405,7 @@ def main():
                 peer_connection.commit_chaincode(channel, msp_ids, name, version, sequence, endorsement_policy_ref, endorsement_policy, endorsement_plugin, validation_plugin, init_required, collections_config, timeout, orderer)
                 changed = True
                 if init_required:
-                    peer_connection.init_chaincode(channel, msp_ids, name, initJsonStr, endorsement_policy_ref, endorsement_policy, endorsement_plugin, validation_plugin, timeout, orderer)
+                    peer_connection.init_chaincode(channel, msp_ids, name, initJsonStr, timeout, orderer)
 
         # Return the committed chaincode.
         return module.exit_json(changed=changed, committed_chaincode=dict(channel=channel, name=name, version=version, sequence=sequence, endorsement_policy_ref=endorsement_policy_ref, endorsement_policy=endorsement_policy, endorsement_plugin=endorsement_plugin, validation_plugin=validation_plugin, init_required=init_required, collections_config=collections_config))
