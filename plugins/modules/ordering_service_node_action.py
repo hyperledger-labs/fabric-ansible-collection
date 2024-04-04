@@ -12,6 +12,7 @@ from ..module_utils.utils import get_console
 from ansible.module_utils._text import to_native
 
 import json
+import time
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
                     'status': ['preview'],
@@ -160,7 +161,7 @@ def main():
         api_token_endpoint=dict(type='str', default='https://iam.cloud.ibm.com/identity/token'),
         name=dict(type='str', required=True),
         action=dict(type='str', required=True, choices=['restart', 'enroll', 'reenroll']),
-        target=dict(type='str', choices=['ecert', 'tls_cert']),
+        type=dict(type='str', choices=['ecert', 'tls_cert']),
         wait_timeout=dict(type='int', default=600)
     )
     required_if = [
@@ -171,11 +172,16 @@ def main():
     # Ensure all exceptions are caught.
     try:
 
+        timeout = module.params['wait_timeout']
+
         # Log in to the console.
         console = get_console(module)
 
         # Determine if the certificate authority exists.
         ordering_service_node = console.get_component_by_display_name('fabric-orderer', module.params['name'], deployment_attrs='included')
+
+        # save a copy of the existing tls-cert
+        existing_tls_cert = ordering_service_node['msp']['component']['tls_cert']
 
         # If it doesn't exist, return now.
         if ordering_service_node is None:
@@ -188,12 +194,12 @@ def main():
             action_obj['restart'] = True
         else:
             # Check to make sure the target is 'enroll' or 'reenroll'
-            if module.params['target'] not in ['ecert', 'tls_cert']:
-                raise Exception('Target must be ecert or tls_cert the enrollment or reenrollment action')
+            if module.params['type'] not in ['ecert', 'tls_cert']:
+                raise Exception('Type must be ecert or tls_cert the enrollment or reenrollment action')
 
             action_obj[module.params['action']] = {}
 
-            action_obj[module.params['action']][module.params['target']] = True
+            action_obj[module.params['action']][module.params['type']] = True
 
         accepted = False
 
@@ -201,6 +207,30 @@ def main():
             'msg': 'Ordering Node Action',
             'Action Object': action_obj
         })
+
+        if accepted:
+
+            if module.params['action'] != 'restart':
+
+                last_e = None
+                renewed = False
+                for x in range(timeout):
+                    try:
+
+                        ordering_service_node = console.get_component_by_display_name('fabric-orderer', module.params['name'], deployment_attrs='included')
+
+                        tls_cert = ordering_service_node['msp']['component']['tls_cert']
+
+                        if existing_tls_cert != tls_cert:
+                            renewed = True
+                            break
+
+                    except Exception as e:
+                        last_e = e
+                    time.sleep(1)
+
+                if not renewed:
+                    raise Exception(f'Certificate authority failed to renew the TLS certificate within {timeout} seconds: {str(last_e)}')
 
         action_response = console.action_ordering_service_node(ordering_service_node['id'], action_obj)
 
