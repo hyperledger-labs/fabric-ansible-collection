@@ -3,7 +3,7 @@ set -e
 cd "$(dirname "$0")"
 IMPORT_EXPORT_REQUIRED=0
 function usage {
-    echo "Usage: renew_ca_tls_cert.sh [-i <Component Name>] [-j <Component Type>]" 1>&2
+    echo "Usage: renew_ca_tls_cert.sh [-i <component Name>] [-j <component Type>] [-k <action flag>]" 1>&2
     exit 1
 }
 OPTSTRING=":i:j:k:"
@@ -33,9 +33,6 @@ while getopts ${OPTSTRING} opt; do
     esac
 done
 shift $((OPTIND-1))
-if [ -z "${component_name}" ] || [ -z "${component_type}" ]; then
-    usage
-fi
 echo "component_name = ${component_name}"
 echo "component_type = ${component_type}"
 echo "all_flag = ${all_flag}"

@@ -3,7 +3,7 @@ set -e
 cd "$(dirname "$0")"
 IMPORT_EXPORT_REQUIRED=0
 function usage {
-    echo "Usage: renew_certificate.sh [-i] [-i <Component Type>] [-j <Certificate Type>] [-k <action>]" 1>&2
+    echo "Usage: renew_certificate.sh [-i] [-i <component Type>] [-j <certificate Type>] [-k <action>]" 1>&2
     exit 1
 }
 OPTSTRING=":i:j:k:"
