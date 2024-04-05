@@ -1,0 +1,36 @@
+- name: Updating Peer "{{ peer.name }}"
+  hyperledger.fabric_ansible_collection.peer:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      name: "{{ peer.name }}"
+      crypto: "{{ crypto }}"
+  register: result
+
+- name: Fail if Peer "{{ peer.name }}" was not updated
+  fail:
+      msg: "Peer {{ peer.name }} was not updated"
+  when: not result.changed
+
+- name: Write the updated peer "{{ peer.name }}" to a file
+  copy:
+      content: "{{ result.peer | to_nice_json }}"
+      dest: "updated_peer.json"
+
+- name: Restarting Peer "{{ peer.name }}"
+  hyperledger.fabric_ansible_collection.peer_action:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      name: "{{ peer.name }}"
+      action: 'restart'
+  register: result
+
+- name: Fail if Peer "{{ peer.name }}" did not accept the message
+  fail:
+      msg: result.response
+  when: not result.accepted

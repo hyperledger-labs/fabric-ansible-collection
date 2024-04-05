@@ -1,0 +1,27 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+- name: Reenroll a Peer TLS Cert
+  hosts: localhost
+  vars:
+    peer_name: "Org1 Peer"
+  vars_files:
+      - org1-vars.yml
+  tasks:
+      - name: Reenroll a Peer TLS/Ecert Cert
+        hyperledger.fabric_ansible_collection.peer_action:
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+            name: "{{ peer_name }}"
+            action: "{{ action }}"
+            type: "{{ cert_type }}"
+        register: result
+
+      - name: Fail if the Certificate Authority did not accept the message
+        fail:
+            msg: result.response
+        when: not result.accepted
