@@ -5,7 +5,7 @@
 Certificate Management
 ======================
 
-This tutorial will demonstrate how to enroll/re-enroll/renew the CA TLS certificate , Peer TLS/Ecert and Orderer TLS/Ecert certificates an existing Hyperledger Fabric network.
+This article will show you how to enroll/re-enroll/renew the following certificates: CA TLS certificate, Peer TLS/Ecert, and Orderer TLS/Ecert certificates on an existing Hyperledger Fabric network.
 
 For this tutorial, you can use the IBM Support for Hyperledger Fabric software running in a Red Hat OpenShift or Kubernetes cluster.
 
@@ -21,8 +21,8 @@ You will need to use the GitHub repositorythat you cloned in the previous tutori
 
         cd ansible-collection/tutorial
 
-Peer/Orderer Enrollment/TLS certificate Enroll/Re-enroll
-========================================================
+Peer/Orderer Ecert/TLS certificate Enroll/Re-enroll
+===================================================
 
 For re-enroll/enroll the Peer TLS/Ecert you have edit the playbook `24-reenroll-peer-tls-and-ecert.yml` and change respective `vars_files` that you want re-enroll/enroll peer certificates. Once you have edited the file. Please execute the below command for the certificate renewal.
 
@@ -63,7 +63,7 @@ Replace ``<component type>`` with the component type like 'peer' or 'orderer'. W
 Replace ``<action flag>``  we are using the flag for renewing all the CA TLS certificates in instance. The flag will be like `all`.
 
 
-For renewing respective CA component in the instance you have to edit the playbook `26-renew-all-ca-tls.yml` and change respective components `vars_files` that you want renew CA TLS certificates. Once you have edited the file. Please execute the below command for the certificate renewal.
+For renewing respective CA component in the instance you have to edit the playbook `30-renew-ca-tls.yml` and change respective components `vars_files` that you want renew CA TLS certificates. Once you have edited the file. Please execute the below command for the certificate renewal.
 
 
     ::
@@ -76,4 +76,4 @@ Replace ``<component name>`` with name of your CA component.
 
 Replace ``<component type>`` with the component type like 'peer' or 'orderer'. We use this flag to associate respective node with the CA..
 
-Once you have replaced the above variable in the command. Execute the command, it will update and restart the CA and also associate the respective nodes. Once the process completes please refresh the certs in in the respective CA component.
+Once you've changed the above variable in the command. When you run the command, the CA will be updated and restarted, as well as the nodes associated with it. Once the process is finished, please refresh the certs in the appropriate CA component in console.
