@@ -15,8 +15,6 @@ Before you start
 ----------------
 You will need to use the GitHub repositorythat you cloned in the previous tutorial. Ensure that you are in the tutorial directory:
 
-    .. highlight:: none
-
     ::
 
         cd ansible-collection/tutorial
