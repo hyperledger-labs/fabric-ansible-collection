@@ -317,6 +317,29 @@ class Console:
                     continue
                 return self.handle_error('Failed to delete certificate authority', e)
 
+    def update_metadata_ca(self, id, data):
+        self._ensure_loggedin()
+        url = urllib.parse.urljoin(self.api_base_url, f'./components/fabric-ca/{id}')
+
+        headers = {
+            'Accepts': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': self.authorization
+        }
+        data = json.dumps(data)
+        for attempt in range(1, self.retries + 1):
+            try:
+                self.module.json_log({'msg': 'attempting to submit update to certificate authority', 'data': data, 'url': url, 'attempt': attempt, 'api_timeout': self.api_timeout})
+                response = open_url(url, data, headers, 'PUT', validate_certs=False, timeout=self.api_timeout, follow_redirects='all')
+                result = json.load(response)
+                self.module.json_log({'msg': 'submitted update to certificate authority', 'result': result})
+                return result
+            except Exception as e:
+                self.module.json_log({'msg': 'failed to submit update to certificate authority', 'error': str(e)})
+                if self.should_retry_error(e, attempt):
+                    continue
+                return self.handle_error('Failed to submit update to certificate authority', e)
+
     def action_ca(self, id, data):
         self._ensure_loggedin()
         url = urllib.parse.urljoin(self.api_base_url, f'./kubernetes/components/fabric-ca/{id}/actions')
@@ -482,6 +505,29 @@ class Console:
                 if self.should_retry_error(e, attempt):
                     continue
                 return self.handle_error('Failed to update peer', e)
+
+    def update_metadata_peer(self, id, data):
+        self._ensure_loggedin()
+        url = urllib.parse.urljoin(self.api_base_url, f'./components/fabric-peer/{id}')
+
+        headers = {
+            'Accepts': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': self.authorization
+        }
+        data = json.dumps(data)
+        for attempt in range(1, self.retries + 1):
+            try:
+                self.module.json_log({'msg': 'attempting to submit update to peer', 'data': data, 'url': url, 'attempt': attempt, 'api_timeout': self.api_timeout})
+                response = open_url(url, data, headers, 'PUT', validate_certs=False, timeout=self.api_timeout, follow_redirects='all')
+                result = json.load(response)
+                self.module.json_log({'msg': 'submitted update to peer', 'result': result})
+                return result
+            except Exception as e:
+                self.module.json_log({'msg': 'failed to submit update to peer', 'error': str(e)})
+                if self.should_retry_error(e, attempt):
+                    continue
+                return self.handle_error('Failed to submit update to peer', e)
 
     def action_peer(self, id, data):
         self._ensure_loggedin()
@@ -778,6 +824,29 @@ class Console:
                 if self.should_retry_error(e, attempt):
                     continue
                 return self.handle_error('Failed to delete ordering service node', e)
+
+    def update_metadata_ordering_service_node(self, id, data):
+        self._ensure_loggedin()
+        url = urllib.parse.urljoin(self.api_base_url, f'./components/fabric-orderer/{id}')
+
+        headers = {
+            'Accepts': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': self.authorization
+        }
+        data = json.dumps(data)
+        for attempt in range(1, self.retries + 1):
+            try:
+                self.module.json_log({'msg': 'attempting to submit update to ordering service node', 'data': data, 'url': url, 'attempt': attempt, 'api_timeout': self.api_timeout})
+                response = open_url(url, data, headers, 'PUT', validate_certs=False, timeout=self.api_timeout, follow_redirects='all')
+                result = json.load(response)
+                self.module.json_log({'msg': 'submitted update to ordering service node', 'result': result})
+                return result
+            except Exception as e:
+                self.module.json_log({'msg': 'failed to submit update to ordering service node', 'error': str(e)})
+                if self.should_retry_error(e, attempt):
+                    continue
+                return self.handle_error('Failed to submit update to ordering service node', e)
 
     def action_ordering_service_node(self, id, data):
         self._ensure_loggedin()

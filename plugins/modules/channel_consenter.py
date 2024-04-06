@@ -83,6 +83,15 @@ options:
             - You can also pass a dict, which must match the result format of one
               of the M(ordering_service_node_info) or M(ordering_service_node) modules.
         type: raw
+        required: true
+    updated_ordering_service_node:
+        description:
+            - The updated ordering service node to use as a consenter for this channel.
+            - This option must used if the host or port is to be updated in the consenter set.
+            - This must be passed as a dict, which must match the result format of one
+              of the M(ordering_service_node_info) or M(ordering_service_node) modules.
+        type: raw
+        required: false
 notes: []
 requirements: []
 '''
@@ -127,7 +136,8 @@ def main():
         api_timeout=dict(type='int', default=60),
         api_token_endpoint=dict(type='str', default='https://iam.cloud.ibm.com/identity/token'),
         path=dict(type='str', required=True),
-        ordering_service_node=dict(type='raw', required=True)
+        ordering_service_node=dict(type='raw', required=True),
+        updated_ordering_service_node=dict(type='raw')
     )
     required_if = [
         ('api_authtype', 'basic', ['api_secret'])
@@ -181,6 +191,26 @@ def main():
                 break
         consenter_exists = consenter_idx > -1
 
+        # use the updated_ordering_service_node if the host or port in the consenter is changing
+        # the existing host and port is needed to determine the consenter to be updated
+        if module.params['updated_ordering_service_node'] is not None:
+
+            # Get the ordering service node.
+            ordering_service_node = get_ordering_service_node_by_module(console, module, 'updated_ordering_service_node')
+
+            # Build the expected consenter based on the new ordering node.
+            parsed_api_url = urllib.parse.urlparse(ordering_service_node.api_url)
+            host = parsed_api_url.hostname
+            port = parsed_api_url.port or 443
+            client_tls_cert = ordering_service_node.client_tls_cert or ordering_service_node.tls_cert
+            server_tls_cert = ordering_service_node.server_tls_cert or ordering_service_node.tls_cert
+            expected_consenter = dict(
+                host=host,
+                port=port,
+                client_tls_cert=client_tls_cert,
+                server_tls_cert=server_tls_cert,
+            )
+
         # Handle the desired state appropriately.
         state = module.params['state']
         if state == 'present' and not consenter_exists:
@@ -227,7 +257,7 @@ def main():
         config_proto = json_to_proto('common.Config', config_json)
         with open(path, 'wb') as file:
             file.write(config_proto)
-        module.exit_json(changed=True)
+        module.exit_json(changed=True, original_config_json=original_config_json, updated_config_json=config_json)
 
     # Notify Ansible of the exception.
     except Exception as e:
