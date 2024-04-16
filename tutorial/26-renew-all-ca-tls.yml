@@ -25,6 +25,4 @@
         include_tasks: 27-renew-ca-tls-task.yml
         loop: "{{ result.certificate_authorities }}"
         loop_control:
-          loop_var: certificate_authority
-
-
+            loop_var: certificate_authority

@@ -1,3 +1,7 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
 - name: Updating Peer "{{ peer.name }}"
   hyperledger.fabric_ansible_collection.peer:
       api_endpoint: "{{ api_endpoint }}"
