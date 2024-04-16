@@ -1,3 +1,7 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
 - name: Updating Ordering Node "{{ ordering_service_node.name }}"
   hyperledger.fabric_ansible_collection.ordering_service_node:
       api_endpoint: "{{ api_endpoint }}"

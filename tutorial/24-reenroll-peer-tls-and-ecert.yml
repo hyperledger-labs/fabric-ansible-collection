@@ -7,10 +7,10 @@
   vars:
     peer_name: "Org2 Peer"
   vars_files:
-      - org2-vars.yml
+    - org2-vars.yml
   tasks:
-      - name: Reenroll a Peer TLS/Ecert Cert
-        hyperledger.fabric_ansible_collection.peer_action:
+    - name: Reenroll a Peer TLS/Ecert Cert
+      hyperledger.fabric_ansible_collection.peer_action:
             api_endpoint: "{{ api_endpoint }}"
             api_authtype: "{{ api_authtype }}"
             api_key: "{{ api_key }}"
@@ -19,9 +19,9 @@
             name: "{{ peer_name }}"
             action: "{{ action }}"
             type: "{{ cert_type }}"
-        register: result
+      register: result
 
-      - name: Fail if the Certificate Authority did not accept the message
-        fail:
-            msg: result.response
-        when: not result.accepted
+    - name: Fail if the Certificate Authority did not accept the message
+      fail:
+          msg: result.response
+      when: not result.accepted
