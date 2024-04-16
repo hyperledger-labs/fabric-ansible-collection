@@ -65,15 +65,12 @@
         include_tasks: 28-update-ordering-node-task.yml
         loop: "{{ nodes.ordering_service_nodes }}"
         loop_control:
-          loop_var: ordering_service_node
+            loop_var: ordering_service_node
         when: "'{{ component_type }}' in ['orderer']"
 
       - name: Update Peers associated with "{{ component_name }}"
         include_tasks: 29-update-peer-task.yml
         loop: "{{ nodes.peers }}"
         loop_control:
-          loop_var: peer
+            loop_var: peer
         when: "'{{ component_type }}' in ['peer']"
-
-
-
