@@ -1,0 +1,61 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+- name: Renew the TLS Certificate for the Certificate Authority "{{ certificate_authority.name }}"
+  hyperledger.fabric_ansible_collection.certificate_authority_action:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      name: "{{ certificate_authority.name }}"
+      action: 'renew'
+  register: result
+
+- name: Fail if the Certificate Authority did not accept the message
+  fail:
+      msg: result.response
+  when: not result.accepted
+
+- name: Get the Certificate Authority
+  hyperledger.fabric_ansible_collection.certificate_authority_info:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      name: "{{ certificate_authority.name }}"
+  register: result
+
+- name: Configure the crypto update
+  set_fact:
+      crypto:
+          enrollment:
+              ca:
+                  tls_cert: "{{ result.certificate_authority.msp.component.tls_cert }}"
+              tlsca:
+                  tls_cert: "{{result.certificate_authority.msp.component.tls_cert}}"
+
+- name: Get the Nodes associated with the Certificate Authority "{{ certificate_authority.name }}"
+  hyperledger.fabric_ansible_collection.certificate_authority_associated_nodes:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      certificate_authority: "{{ certificate_authority.name }}"
+  register: nodes
+
+- name: Update Ordering Nodes associated with "{{ certificate_authority.name }}"
+  include_tasks: 28-update-ordering-node-task.yml
+  loop: "{{ nodes.ordering_service_nodes }}"
+  loop_control:
+    loop_var: ordering_service_node
+
+- name: Update Peers associated with "{{ certificate_authority.name }}"
+  include_tasks: 29-update-peer-task.yml
+  loop: "{{ nodes.peers }}"
+  loop_control:
+    loop_var: peer
+
