@@ -12,14 +12,14 @@
   tasks:
     - name: Restarting Ordering Service Node "{{ ordering_node_name }}"
       hyperledger.fabric_ansible_collection.ordering_service_node_action:
-          api_endpoint: "{{ api_endpoint }}"
-          api_authtype: "{{ api_authtype }}"
-          api_key: "{{ api_key }}"
-          api_secret: "{{ api_secret | default(omit) }}"
-          api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
-          name: "{{ ordering_node_name }}"
-          action: "restart"
-          type: "{{ cert_type }}"
+        api_endpoint: "{{ api_endpoint }}"
+        api_authtype: "{{ api_authtype }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret | default(omit) }}"
+        api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+        name: "{{ ordering_node_name }}"
+        action: "restart"
+        type: "{{ cert_type }}"
       register: result
 
     - name: Fail if Ordering Service Node "{{ ordering_node_name }}" did not accept the message
