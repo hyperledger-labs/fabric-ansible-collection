@@ -231,7 +231,11 @@ def main():
         api_token_endpoint=dict(type='str', default='https://iam.cloud.ibm.com/identity/token'),
         operation=dict(type='str', required=True, choices=['create']),
         organizations_dir=dict(type='str', default='organizations'),
+<<<<<<< HEAD
         wallet_dir=dict(type='str', default='wallet'),
+=======
+        wallet=dict(type='str', default='wallet'),
+>>>>>>> 53dd49d (Add support for local MSP, channel config)
         wait_timeout=dict(type='int', default=60)
     )
     required_if = [
