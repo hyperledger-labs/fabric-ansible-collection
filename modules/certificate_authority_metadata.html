@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>channel_member – Manage a member for a Hyperledger Fabric channel &mdash; Ansible Collection  documentation</title>
+  <title>certificate_authority_metadata – Update metadata for a Hyperledger Fabric certificate authority &mdash; Ansible Collection  documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
 
@@ -23,8 +23,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="channel_member_info – Get information about a member for a Hyperledger Fabric channel" href="channel_member_info.html" />
-    <link rel="prev" title="channel_consenters – Manage the consenters for a Hyperledger Fabric channel" href="channel_consenters.html" /> 
+    <link rel="next" title="chaincode_list_info – Get information about all installed and committed chaincodes on a Hyperledger Fabric channel" href="chaincode_list_info.html" />
+    <link rel="prev" title="certificate_authority_info – Get information about a Hyperledger Fabric certificate authority" href="certificate_authority_info.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -79,7 +79,13 @@
 <li class="toctree-l3"><a class="reference internal" href="certificate_authority.html">certificate_authority – Manage a Hyperledger Fabric certificate authority</a></li>
 <li class="toctree-l3"><a class="reference internal" href="certificate_authority_action.html">certificate_authority_action – Get information about a Hyperledger Fabric certificate authority</a></li>
 <li class="toctree-l3"><a class="reference internal" href="certificate_authority_info.html">certificate_authority_info – Get information about a Hyperledger Fabric certificate authority</a></li>
-<li class="toctree-l3"><a class="reference internal" href="certificate_authority_metadata.html">certificate_authority_metadata – Update metadata for a Hyperledger Fabric certificate authority</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">certificate_authority_metadata – Update metadata for a Hyperledger Fabric certificate authority</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#return-values">Return Values</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="chaincode_list_info.html">chaincode_list_info – Get information about all installed and committed chaincodes on a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="channel_acl.html">channel_acl – Manage an ACL for a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="channel_block.html">channel_block – Fetch blocks for a Hyperledger Fabric channel</a></li>
@@ -87,12 +93,7 @@
 <li class="toctree-l3"><a class="reference internal" href="channel_config.html">channel_config – Manage the configuration for a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="channel_consenter.html">channel_consenter – Manage a consenter for a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="channel_consenters.html">channel_consenters – Manage the consenters for a Hyperledger Fabric channel</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">channel_member – Manage a member for a Hyperledger Fabric channel</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="channel_member.html">channel_member – Manage a member for a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="channel_member_info.html">channel_member_info – Get information about a member for a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="channel_parameters.html">channel_parameters – Manage the parameters for a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="channel_policy.html">channel_policy – Manage a policy for a Hyperledger Fabric channel</a></li>
@@ -147,10 +148,10 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../modules.html">Modules</a></li>
-      <li class="breadcrumb-item active">channel_member – Manage a member for a Hyperledger Fabric channel</li>
+      <li class="breadcrumb-item active">certificate_authority_metadata – Update metadata for a Hyperledger Fabric certificate authority</li>
       <li class="wy-breadcrumbs-aside">
               <!-- User defined GitHub URL -->
-              <a href="https://github.com/IBM-Blockchain/ansible-collection/edit/main/plugins/modules/channel_member.py" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM-Blockchain/ansible-collection/edit/main/plugins/modules/certificate_authority_metadata.py" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -158,86 +159,62 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="channel-member-manage-a-member-for-a-hyperledger-fabric-channel">
-<h1>channel_member – Manage a member for a Hyperledger Fabric channel<a class="headerlink" href="#channel-member-manage-a-member-for-a-hyperledger-fabric-channel" title="Permalink to this heading"></a></h1>
+  <section id="certificate-authority-metadata-update-metadata-for-a-hyperledger-fabric-certificate-authority">
+<h1>certificate_authority_metadata – Update metadata for a Hyperledger Fabric certificate authority<a class="headerlink" href="#certificate-authority-metadata-update-metadata-for-a-hyperledger-fabric-certificate-authority" title="Permalink to this heading"></a></h1>
 <nav class="contents local" id="contents">
 <ul class="simple">
 <li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
 <li><p><a class="reference internal" href="#parameters" id="id2">Parameters</a></p></li>
 <li><p><a class="reference internal" href="#examples" id="id3">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id4">Return Values</a></p></li>
 </ul>
 </nav>
 <section id="synopsis">
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this heading"></a></h2>
-<p>Add, update, and remove members for a Hyperledger Fabric channel.</p>
+<p>Update metadata for a Hyperledger Fabric certificate authority.</p>
 <p>This module works with the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.</p>
 </section>
 <section id="parameters">
 <h2><a class="toc-backref" href="#id2" role="doc-backlink">Parameters</a><a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
 <blockquote>
 <div><dl>
-<dt>api_endpoint (required)</dt><dd><p>The URL for the Fabric operations console.</p>
+<dt>api_endpoint (required)</dt><dd><p>The URL for the the Fabric operations console.</p>
 <div class="line-block">
 <div class="line"><strong>Type</strong>: str</div>
 </div>
 </dd>
-<dt>api_authtype (required)</dt><dd><p><code class="docutils literal notranslate"><span class="pre">basic</span></code> - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using <em>api_key</em> and API secret using <em>api_secret</em>.</p>
+<dt>api_authtype (required)</dt><dd><p><code class="docutils literal notranslate"><span class="pre">basic</span></code> - Authenticate to the the Fabric operations console using basic authentication. You must provide both a valid API key using <em>api_key</em> and API secret using <em>api_secret</em>.</p>
 <div class="line-block">
 <div class="line"><strong>Type</strong>: str</div>
 </div>
 </dd>
-<dt>api_key (required)</dt><dd><p>The API key for the Fabric operations console.</p>
+<dt>api_key (required)</dt><dd><p>The API key for the the Fabric operations console.</p>
 <div class="line-block">
 <div class="line"><strong>Type</strong>: str</div>
 </div>
 </dd>
-<dt>api_secret</dt><dd><p>The API secret for the Fabric operations console.</p>
+<dt>api_secret</dt><dd><p>The API secret for the the Fabric operations console.</p>
 <p>Only required when <em>api_authtype</em> is <code class="docutils literal notranslate"><span class="pre">basic</span></code>.</p>
 <div class="line-block">
 <div class="line"><strong>Type</strong>: str</div>
 </div>
 </dd>
-<dt>api_timeout</dt><dd><p>The timeout, in seconds, to use when interacting with the Fabric operations console.</p>
+<dt>api_timeout</dt><dd><p>The timeout, in seconds, to use when interacting with the the Fabric operations console.</p>
 <div class="line-block">
 <div class="line"><strong>Type</strong>: int</div>
 <div class="line"><strong>Default value</strong>: <code class="docutils literal notranslate"><span class="pre">60</span></code></div>
 </div>
 </dd>
-<dt>state</dt><dd><p><code class="docutils literal notranslate"><span class="pre">absent</span></code> - An organization matching the specified name will be removed from the channel.</p>
-<p><code class="docutils literal notranslate"><span class="pre">present</span></code> - Asserts that an organization matching the specified name and configuration exists in the channel. If no organization matches the specified name, the organization will be added to the channel. If an organization matches the specified name but the configuration does not match, then the organization in the channel will be updated.</p>
-<div class="line-block">
-<div class="line"><strong>Type</strong>: str</div>
-<div class="line"><strong>Default value</strong>: <code class="docutils literal notranslate"><span class="pre">present</span></code></div>
-</div>
+<dt>name (required)</dt><dd><p>The name of the peer.</p>
 </dd>
-<dt>path (required)</dt><dd><p>Path to current the channel configuration file.</p>
-<p>This file can be fetched by using the <strong>ERROR while parsing</strong>: While parsing “M(channel_config)” at index 39: Module name “channel_config” is not a FQCN module.</p>
-<p>This file will be updated in place. You will need to keep a copy of the original file for computing the configuration update.</p>
-<div class="line-block">
-<div class="line"><strong>Type</strong>: str</div>
-</div>
+<dt>preferred_url</dt><dd><p>Preferred URL style for the components.</p>
+<p>os is used the open source style with standard ports (443)</p>
+<p>legacy is the software as a service style URLs</p>
 </dd>
-<dt>organization (required)</dt><dd><p>The organization to add, update, or remove from the channel.</p>
-<p>You can pass a string, which is the display name of an organization registered with the Fabric operations console.</p>
-<p>You can also pass a dictionary, which must match the result format of one of the <strong>ERROR while parsing</strong>: While parsing “M(organization_info)” at index 82: Module name “organization_info” is not a FQCN or <strong>ERROR while parsing</strong>: While parsing “M(organization[])” at index 106: Module name “organization[]” is not a FQCN modules.</p>
+<dt>wait_timeout</dt><dd><p>The timeout, in seconds, to wait until the certificate authority is available.</p>
 <div class="line-block">
-<div class="line"><strong>Type</strong>: raw</div>
-</div>
-</dd>
-<dt>anchor_peers</dt><dd><p>The anchor peers for this organization in this channel.</p>
-<p>You can pass strings, which are the names of peers that are registered with the Fabric operations console.</p>
-<p>You can also pass a dict, which must match the result format of one of the <strong>ERROR while parsing</strong>: While parsing “M(peer_info)” at index 76: Module name “peer_info” is not a FQCN or <strong>ERROR while parsing</strong>: While parsing “M(peer)” at index 92: Module name “peer” is not a FQCN modules.</p>
-<div class="line-block">
-<div class="line"><strong>Type</strong>: list</div>
-<div class="line"><strong>Elements</strong>: raw</div>
-</div>
-</dd>
-<dt>policies</dt><dd><p>The set of policies for the channel member. The keys are the policy names, and the values are the policies.</p>
-<p>You can pass strings, which are paths to JSON files containing policies in the Hyperledger Fabric format (common.Policy).</p>
-<p>You can also pass a dict, which must correspond to a parsed policy in the Hyperledger Fabric format (common.Policy).</p>
-<p>Default policies are provided for the Admins, Writers, Readers, and Endorsement policies. You only need to provide policies if you want to override these default policies, or add additional policies.</p>
-<div class="line-block">
-<div class="line"><strong>Type</strong>: dict</div>
+<div class="line"><strong>Type</strong>: int</div>
+<div class="line"><strong>Default value</strong>: <code class="docutils literal notranslate"><span class="pre">60</span></code></div>
 </div>
 </dd>
 </dl>
@@ -245,39 +222,93 @@
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id3" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add the organization to the channel</span>
-<span class="w">  </span><span class="nt">hyperledger.fabric_ansible_collection.channel_member</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Get certificate authority</span>
+<span class="w">  </span><span class="nt">hyperledger.fabric_ansible_collection.certificate_authority_action</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">api_endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://console.example.org:32000</span>
 <span class="w">    </span><span class="nt">api_authtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
 <span class="w">    </span><span class="nt">api_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxx</span>
 <span class="w">    </span><span class="nt">api_secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
-<span class="w">    </span><span class="nt">organization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Org2</span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">channel_config.bin</span>
-
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update the organization in the channel with anchor peers</span>
-<span class="w">  </span><span class="nt">hyperledger.fabric_ansible_collection.channel_member</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
-<span class="w">    </span><span class="nt">api_endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://console.example.org:32000</span>
-<span class="w">    </span><span class="nt">api_authtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
-<span class="w">    </span><span class="nt">api_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxx</span>
-<span class="w">    </span><span class="nt">api_secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
-<span class="w">    </span><span class="nt">organization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Org2</span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">channel_config.bin</span>
-<span class="w">    </span><span class="nt">anchor_peers</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Org2 Peer</span>
-
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Remove the organization from the channel</span>
-<span class="w">  </span><span class="nt">hyperledger.fabric_ansible_collection.channel_member</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
-<span class="w">    </span><span class="nt">api_endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://console.example.org:32000</span>
-<span class="w">    </span><span class="nt">api_authtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
-<span class="w">    </span><span class="nt">api_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxx</span>
-<span class="w">    </span><span class="nt">api_secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
-<span class="w">    </span><span class="nt">organization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Org2</span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">channel_config.bin</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Org1 Peer</span>
+<span class="w">    </span><span class="nt">preferred_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">os</span>
 </pre></div>
 </div>
+</section>
+<section id="return-values">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><dl>
+<dt>exists</dt><dd><p>True if the certificate authority exists, false otherwise.</p>
+<div class="line-block">
+<div class="line"><strong>Returned</strong>: always</div>
+<div class="line"><strong>Type</strong>: boolean</div>
+</div>
+</dd>
+<dt>certificate_authority</dt><dd><p>The certificate authority.</p>
+<div class="line-block">
+<div class="line"><strong>Returned</strong>: if certificate authority exists</div>
+<div class="line"><strong>Type</strong>: dict</div>
+</div>
+<dl>
+<dt>name</dt><dd><p>The name of the certificate authority.</p>
+<div class="line-block">
+<div class="line"><strong>Type</strong>: str</div>
+<div class="line"><strong>Sample</strong>: <code class="docutils literal notranslate"><span class="pre">Org1</span> <span class="pre">CA</span></code></div>
+</div>
+</dd>
+<dt>api_url</dt><dd><p>The URL for the API of the certificate authority.</p>
+<div class="line-block">
+<div class="line"><strong>Type</strong>: str</div>
+<div class="line"><strong>Sample</strong>: <code class="docutils literal notranslate"><span class="pre">https://org1ca-api.example.org:32000</span></code></div>
+</div>
+</dd>
+<dt>operations_url</dt><dd><p>The URL for the operations service of the certificate authority.</p>
+<div class="line-block">
+<div class="line"><strong>Type</strong>: str</div>
+<div class="line"><strong>Sample</strong>: <code class="docutils literal notranslate"><span class="pre">https://org1ca-operations.example.org:32000</span></code></div>
+</div>
+</dd>
+<dt>ca_url</dt><dd><p>The URL for the API of the certificate authority.</p>
+<div class="line-block">
+<div class="line"><strong>Type</strong>: str</div>
+<div class="line"><strong>Sample</strong>: <code class="docutils literal notranslate"><span class="pre">https://org1ca-api.example.org:32000</span></code></div>
+</div>
+</dd>
+<dt>ca_name</dt><dd><p>The certificate authority name to use for enrollment requests.</p>
+<div class="line-block">
+<div class="line"><strong>Type</strong>: str</div>
+<div class="line"><strong>Sample</strong>: <code class="docutils literal notranslate"><span class="pre">ca</span></code></div>
+</div>
+</dd>
+<dt>tlsca_name</dt><dd><p>The certificate authority name to use for TLS enrollment requests.</p>
+<div class="line-block">
+<div class="line"><strong>Type</strong>: str</div>
+<div class="line"><strong>Sample</strong>: <code class="docutils literal notranslate"><span class="pre">tlsca</span></code></div>
+</div>
+</dd>
+<dt>location</dt><dd><p>The location of the certificate authority.</p>
+<div class="line-block">
+<div class="line"><strong>Type</strong>: str</div>
+<div class="line"><strong>Sample</strong>: <code class="docutils literal notranslate"><span class="pre">ibmcloud</span></code></div>
+</div>
+</dd>
+<dt>pem</dt><dd><p>The TLS certificate chain for the certificate authority.</p>
+<p>The TLS certificate chain is returned as a base64 encoded PEM.</p>
+<div class="line-block">
+<div class="line"><strong>Type</strong>: str</div>
+<div class="line"><strong>Sample</strong>: <code class="docutils literal notranslate"><span class="pre">LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0t...</span></code></div>
+</div>
+</dd>
+<dt>tls_cert</dt><dd><p>The TLS certificate chain for the certificate authority.</p>
+<p>The TLS certificate chain is returned as a base64 encoded PEM.</p>
+<div class="line-block">
+<div class="line"><strong>Type</strong>: str</div>
+<div class="line"><strong>Sample</strong>: <code class="docutils literal notranslate"><span class="pre">LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0t...</span></code></div>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
 </section>
 </section>
 
@@ -285,8 +316,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="channel_consenters.html" class="btn btn-neutral float-left" title="channel_consenters – Manage the consenters for a Hyperledger Fabric channel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="channel_member_info.html" class="btn btn-neutral float-right" title="channel_member_info – Get information about a member for a Hyperledger Fabric channel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="certificate_authority_info.html" class="btn btn-neutral float-left" title="certificate_authority_info – Get information about a Hyperledger Fabric certificate authority" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="chaincode_list_info.html" class="btn btn-neutral float-right" title="chaincode_list_info – Get information about all installed and committed chaincodes on a Hyperledger Fabric channel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

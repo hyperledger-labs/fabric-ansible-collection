@@ -23,8 +23,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="chaincode_list_info – Get information about all installed and committed chaincodes on a Hyperledger Fabric channel" href="chaincode_list_info.html" />
-    <link rel="prev" title="certificate_authority – Manage a Hyperledger Fabric certificate authority" href="certificate_authority.html" /> 
+    <link rel="next" title="certificate_authority_metadata – Update metadata for a Hyperledger Fabric certificate authority" href="certificate_authority_metadata.html" />
+    <link rel="prev" title="certificate_authority_action – Get information about a Hyperledger Fabric certificate authority" href="certificate_authority_action.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -57,6 +57,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/hlfsupport-installing.html">Installing IBM Support for Hyperledger Fabric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/building.html">Building a network</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/joining.html">Joining a network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/certificate-management.html">Certificate Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/certificate-management.html#peer-orderer-ecert-tls-certificate-enroll-re-enroll">Peer/Orderer Ecert/TLS certificate Enroll/Re-enroll</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/certificate-management.html#ca-tls-certificate-renewal">CA TLS certificate Renewal</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/deploying.html">Deploying a smart contract</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tasks</span></p>
@@ -74,6 +77,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../modules.html#module-reference">Module reference</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="approved_chaincode.html">approved_chaincode – Manage an approved chaincode on a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="certificate_authority.html">certificate_authority – Manage a Hyperledger Fabric certificate authority</a></li>
+<li class="toctree-l3"><a class="reference internal" href="certificate_authority_action.html">certificate_authority_action – Get information about a Hyperledger Fabric certificate authority</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">certificate_authority_info – Get information about a Hyperledger Fabric certificate authority</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
@@ -81,6 +85,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#return-values">Return Values</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="certificate_authority_metadata.html">certificate_authority_metadata – Update metadata for a Hyperledger Fabric certificate authority</a></li>
 <li class="toctree-l3"><a class="reference internal" href="chaincode_list_info.html">chaincode_list_info – Get information about all installed and committed chaincodes on a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="channel_acl.html">channel_acl – Manage an ACL for a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="channel_block.html">channel_block – Fetch blocks for a Hyperledger Fabric channel</a></li>
@@ -200,8 +205,6 @@
 <div class="line"><strong>Default value</strong>: <code class="docutils literal notranslate"><span class="pre">60</span></code></div>
 </div>
 </dd>
-<dt>name (required)</dt><dd><p>The name of the certificate authority.</p>
-</dd>
 <dt>wait_timeout</dt><dd><p>The timeout, in seconds, to wait until the certificate authority is available.</p>
 <div class="line-block">
 <div class="line"><strong>Type</strong>: int</div>
@@ -306,8 +309,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="certificate_authority.html" class="btn btn-neutral float-left" title="certificate_authority – Manage a Hyperledger Fabric certificate authority" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="chaincode_list_info.html" class="btn btn-neutral float-right" title="chaincode_list_info – Get information about all installed and committed chaincodes on a Hyperledger Fabric channel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="certificate_authority_action.html" class="btn btn-neutral float-left" title="certificate_authority_action – Get information about a Hyperledger Fabric certificate authority" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="certificate_authority_metadata.html" class="btn btn-neutral float-right" title="certificate_authority_metadata – Update metadata for a Hyperledger Fabric certificate authority" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificate Management &mdash; Ansible Collection  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Deploying a smart contract" href="deploying.html" />
+    <link rel="prev" title="Joining a network" href="joining.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Ansible Collection
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../migrating-v12-v2.html">Migrating from v1.2 to version 2</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="oss-installing.html">Installing the Hyperledger Fabric Open Source Stack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlfsupport-installing.html">Installing IBM Support for Hyperledger Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building a network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="joining.html">Joining a network</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Certificate Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#before-you-start">Before you start</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#peer-orderer-ecert-tls-certificate-enroll-re-enroll">Peer/Orderer Ecert/TLS certificate Enroll/Re-enroll</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#ca-tls-certificate-renewal">CA TLS certificate Renewal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deploying.html">Deploying a smart contract</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tasks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tasks/addadmincert.html">Adding an administrator certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tasks/enable-fabricv2-capability.html">Enable Hyperledger Fabric v2.x capabilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tasks/haca.html">Creating a highly available Certificate Authority</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tasks/intermediateCA.html">Creating an Intermediate Certificate Authority</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tasks/update-channel-parameters.html">Updating channel parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../roles.html">Roles</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Support</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">Getting support</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Ansible Collection</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Certificate Management</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/docs/source/tutorials/certificate-management.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="certificate-management">
+<h1>Certificate Management<a class="headerlink" href="#certificate-management" title="Permalink to this heading"></a></h1>
+<p>This article will show you how to enroll/re-enroll/renew the following certificates: CA TLS certificate, Peer TLS/Ecert, and Orderer TLS/Ecert certificates on an existing Hyperledger Fabric network.</p>
+<p>For this tutorial, you can use the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric Open Source Stack  running in a Red Hat OpenShift or Kubernetes cluster.</p>
+<p>Note: If the Orderer TLS certificate expired. We will not able renew the certificate using this process.</p>
+<section id="before-you-start">
+<h2>Before you start<a class="headerlink" href="#before-you-start" title="Permalink to this heading"></a></h2>
+<p>You will need to use the GitHub repositorythat you cloned in the previous tutorial. Ensure that you are in the tutorial directory:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">ansible</span><span class="o">-</span><span class="n">collection</span><span class="o">/</span><span class="n">tutorial</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+<section id="peer-orderer-ecert-tls-certificate-enroll-re-enroll">
+<h1>Peer/Orderer Ecert/TLS certificate Enroll/Re-enroll<a class="headerlink" href="#peer-orderer-ecert-tls-certificate-enroll-re-enroll" title="Permalink to this heading"></a></h1>
+<p>For re-enroll/enroll the Peer TLS/Ecert you have edit the playbook <cite>24-reenroll-peer-tls-and-ecert.yml</cite> and change respective <cite>vars_files</cite>  and respective peer/orderer that you want re-enroll/enroll peer certificates. Once you have edited the file. Please execute the below command for the certificate renewal.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">enroll_or_reenroll_peer_and_orderer_cert</span><span class="o">.</span><span class="n">sh</span> <span class="p">[</span><span class="o">-</span><span class="n">i</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="o">&lt;</span><span class="n">component</span> <span class="nb">type</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">j</span> <span class="o">&lt;</span><span class="n">certificate</span> <span class="nb">type</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">k</span> <span class="o">&lt;</span><span class="n">action</span><span class="o">&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Next, you will need to replace the variable placeholders with the required values.</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;component</span> <span class="pre">type&gt;</span></code> with your component type for your HLF Console like <cite>peer</cite> or <cite>orderer</cite>.</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;certificate</span> <span class="pre">type&gt;</span></code> with the certificate type that you want enroll/re-enroll like <cite>ecert</cite> OR <cite>tls_cert</cite>.</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;action&gt;</span></code> with the action that you want to take enroll/re-enroll like <cite>enroll</cite> OR <cite>reenroll</cite> OR <cite>restart</cite>.</p>
+<p>Once you have replaced the above variable in the command. Execute the command,It will update and restart the peer. If the peer restarted successfully, please refresh the certs in the console of the corresponding component.</p>
+</section>
+<section id="ca-tls-certificate-renewal">
+<h1>CA TLS certificate Renewal<a class="headerlink" href="#ca-tls-certificate-renewal" title="Permalink to this heading"></a></h1>
+<p>We will examine the process for renewing the CA TLS certificate in this section. We offer two options here: either renew the specific CA TLS certificate or renew all CA TLS certificates in the instance.</p>
+<p>For renewing all the CA components in the instance you have to edit the playbook <cite>26-renew-all-ca-tls.yml</cite> and change respective components <cite>vars_files</cite> that you want renew CA TLS certificates. Once you have edited the file. Please execute the below command for the certificate renewal.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">renew_ca_tls_cert</span><span class="o">.</span><span class="n">sh</span> <span class="p">[</span><span class="o">-</span><span class="n">k</span> <span class="o">&lt;</span><span class="n">action</span> <span class="n">flag</span><span class="o">&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Next, you will need to replace the variable placeholders with the required values.</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;component</span> <span class="pre">name&gt;</span></code> with name of your CA component.</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;component</span> <span class="pre">type&gt;</span></code> with the component type like ‘peer’ or ‘orderer’. We use this flag to associate respective node with the CA.</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;action</span> <span class="pre">flag&gt;</span></code>  we are using the flag for renewing all the CA TLS certificates in instance. The flag will be like <cite>all</cite>.</p>
+<p>For renewing respective CA component in the instance you have to edit the playbook <cite>30-renew-ca-tls.yml</cite> and change respective components <cite>vars_files</cite> that you want renew CA TLS certificates. Once you have edited the file. Please execute the below command for the certificate renewal.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">renew_ca_tls_cert</span><span class="o">.</span><span class="n">sh</span> <span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="o">&lt;</span><span class="n">component</span> <span class="n">name</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">j</span> <span class="o">&lt;</span><span class="n">component</span> <span class="nb">type</span><span class="o">&gt;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Next, you will need to replace the variable placeholders with the required values.</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;component</span> <span class="pre">name&gt;</span></code> with name of your CA component.</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;component</span> <span class="pre">type&gt;</span></code> with the component type like ‘peer’ or ‘orderer’. We use this flag to associate respective node with the CA..</p>
+<p>Once you’ve changed the above variable in the command. When you run the command, the CA will be updated and restarted, as well as the nodes associated with it. Once the process is finished, please refresh the certs in the appropriate CA component in console.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="joining.html" class="btn btn-neutral float-left" title="Joining a network" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="deploying.html" class="btn btn-neutral float-right" title="Deploying a smart contract" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright IBM Corporation 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

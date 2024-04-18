@@ -261,6 +261,101 @@ Parameters
 
 
 
+  crypto
+    Component crypto configuration for connecting to a certificate authority
+
+    | **Type**: dict
+
+    enrollment
+      Enrollment information for connecting to a certificate authority
+
+      | **Type**: dict
+
+      component
+        Admin certificates for connecting to a certificate authority
+
+        | **Type**: dict
+
+        admins
+          An array that contains base 64 encoded PEM identity certificates for administrators. Also known as signing certificates of an organization administrator.
+
+          | **Type**: dict
+
+
+      ca
+        Configuration for connecting to the certificate authority
+
+        | **Type**: dict
+
+        host
+          The CA's hostname. Do not include protocol or port. Must be a hostname from a known CA.
+
+          | **Type**: str
+
+        port
+          The CA's port.
+
+          | **Type**: str
+
+        name
+          The CA's "CAName" attribute. This name is used to distinguish this CA from the TLS CA.
+
+          | **Type**: str
+
+        tls_cert
+          The TLS certificate as base 64 encoded PEM. Certificate is used to secure/validate a TLS connection with this component.
+
+          | **Type**: str
+
+        enroll_id
+          The username of the enroll id.
+
+          | **Type**: str
+
+        enroll_secret
+          The password of the enroll id.
+
+          | **Type**: str
+
+
+      tlsca
+        Configuration for connecting to the TLS certificate authority
+
+        | **Type**: dict
+
+        host
+          The CA's hostname. Do not include protocol or port. Must be a hostname from a known CA.
+
+          | **Type**: str
+
+        port
+          The CA's port.
+
+          | **Type**: str
+
+        name
+          The CA's "CAName" attribute. This name is used to distinguish this CA from the TLS CA.
+
+          | **Type**: str
+
+        tls_cert
+          The TLS certificate as base 64 encoded PEM. Certificate is used to secure/validate a TLS connection with this component.
+
+          | **Type**: str
+
+        enroll_id
+          The username of the enroll id.
+
+          | **Type**: str
+
+        enroll_secret
+          The password of the enroll id.
+
+          | **Type**: str
+
+
+
+
   storage
     The Kubernetes storage configuration for the peer.
 

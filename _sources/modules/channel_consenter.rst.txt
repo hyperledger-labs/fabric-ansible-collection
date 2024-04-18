@@ -73,12 +73,21 @@ Parameters
 
     | **Type**: str
 
-  ordering_service_node
+  ordering_service_node (required)
     The ordering service node to use as a consenter for this channel.
 
     You can pass a string, which is the name of an ordering service node that is registered with the Fabric operations console.
 
     You can also pass a dict, which must match the result format of one of the \ :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service\_node\_info)" at index 76: Module name "ordering\_service\_node\_info" is not a FQCN\  or \ :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service\_node)" at index 109: Module name "ordering\_service\_node" is not a FQCN\  modules.
+
+    | **Type**: raw
+
+  updated_ordering_service_node
+    The updated ordering service node to use as a consenter for this channel.
+
+    This option must used if the host or port is to be updated in the consenter set.
+
+    This must be passed as a dict, which must match the result format of one of the \ :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service\_node\_info)" at index 81: Module name "ordering\_service\_node\_info" is not a FQCN\  or \ :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service\_node)" at index 114: Module name "ordering\_service\_node" is not a FQCN\  modules.
 
     | **Type**: raw
 

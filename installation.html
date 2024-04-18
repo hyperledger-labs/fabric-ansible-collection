@@ -71,6 +71,9 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorials/hlfsupport-installing.html">Installing IBM Support for Hyperledger Fabric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/building.html">Building a network</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/joining.html">Joining a network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/certificate-management.html">Certificate Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/certificate-management.html#peer-orderer-ecert-tls-certificate-enroll-re-enroll">Peer/Orderer Ecert/TLS certificate Enroll/Re-enroll</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/certificate-management.html#ca-tls-certificate-renewal">CA TLS certificate Renewal</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/deploying.html">Deploying a smart contract</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tasks</span></p>
@@ -229,10 +232,11 @@ This will build the stable <cite>release-1.2</cite> branch for v1.2.; use the <c
 <p>If you do not want to, or cannot, install all of the required software for this collection on your system, you may wish to build a Docker image that contains all of the software required to run Ansible playbooks which use this collection.</p>
 <p>A Docker image, <code class="docutils literal notranslate"><span class="pre">ghcr.io/hyperledger-labs/fabric-ansible:latest</span></code>, has been published to Docker Hub.</p>
 <p>You can run a playbook using this Docker image, by volume mounting the playbook into the Docker container and running the <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code> command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run --rm -u $(id -u) -v /path/to/playbooks:/playbooks docker pull ghcr.io/hyperledger-labs/fabric-ansible:latest /playbooks/playbook.yml
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run --rm --entrypoint /docker-entrypoint-opensource-stack.sh -u $(id -u) -v /path/to/playbooks:/playbooks docker pull ghcr.io/hyperledger-labs/fabric-ansible:latest /playbooks/playbook.yml
 </pre></div>
 </div>
 <p>Note that the UID flag <code class="docutils literal notranslate"><span class="pre">-u</span> <span class="pre">$(id</span> <span class="pre">-u)</span></code> ensures that Ansible can write connection profile and identity files to the volume mount.</p>
+<p>Note that the –entrypoint /docker-entrypoint-opensource-stack.sh is needed because Dockerfile is using another user: hlf-user</p>
 <p>The Docker image is supported for use in Docker, Kubernetes, and Red Hat OpenShift.</p>
 <p>If you need to build or customize the Docker image, you can find the Dockerfile here: <a class="reference external" href="https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/Dockerfile">https://github.com/hyperledger-labs/fabric-ansible-collection/blob/main/Dockerfile</a></p>
 </section>

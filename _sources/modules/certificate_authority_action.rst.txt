@@ -2,11 +2,11 @@
 .. SPDX-License-Identifier: Apache-2.0
 ..
 
-:github_url: https://github.com/IBM-Blockchain/ansible-collection/edit/main/plugins/modules/certificate_authority_info.py
+:github_url: https://github.com/IBM-Blockchain/ansible-collection/edit/main/plugins/modules/certificate_authority_action.py
 
 
-certificate_authority_info -- Get information about a Hyperledger Fabric certificate authority
-==============================================================================================
+certificate_authority_action -- Get information about a Hyperledger Fabric certificate authority
+================================================================================================
 
 .. contents::
    :local:
@@ -56,6 +56,18 @@ Parameters
     | **Type**: int
     | **Default value**: ``60``
 
+  name (required)
+    The name of the peer.
+
+
+  action (required)
+    Action requested.  Must be restart, enroll or reenroll
+
+
+  type (required)
+    Type of enrollment or reenrollment.  Must be ecert or tls\_cert
+
+
   wait_timeout
     The timeout, in seconds, to wait until the certificate authority is available.
 
@@ -76,12 +88,14 @@ Examples
 
     
     - name: Get certificate authority
-      hyperledger.fabric_ansible_collection.certificate_authority_info:
+      hyperledger.fabric_ansible_collection.certificate_authority_action:
         api_endpoint: https://console.example.org:32000
         api_authtype: basic
         api_key: xxxxxxxx
         api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-        name: Org1 CA
+        name: Org1 Peer
+        action: reenroll
+        type: tls_cert
 
 
 

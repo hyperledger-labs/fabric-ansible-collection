@@ -57,6 +57,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/hlfsupport-installing.html">Installing IBM Support for Hyperledger Fabric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/building.html">Building a network</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/joining.html">Joining a network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/certificate-management.html">Certificate Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/certificate-management.html#peer-orderer-ecert-tls-certificate-enroll-re-enroll">Peer/Orderer Ecert/TLS certificate Enroll/Re-enroll</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/certificate-management.html#ca-tls-certificate-renewal">CA TLS certificate Renewal</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/deploying.html">Deploying a smart contract</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tasks</span></p>
@@ -74,7 +77,9 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../modules.html#module-reference">Module reference</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="approved_chaincode.html">approved_chaincode – Manage an approved chaincode on a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="certificate_authority.html">certificate_authority – Manage a Hyperledger Fabric certificate authority</a></li>
+<li class="toctree-l3"><a class="reference internal" href="certificate_authority_action.html">certificate_authority_action – Get information about a Hyperledger Fabric certificate authority</a></li>
 <li class="toctree-l3"><a class="reference internal" href="certificate_authority_info.html">certificate_authority_info – Get information about a Hyperledger Fabric certificate authority</a></li>
+<li class="toctree-l3"><a class="reference internal" href="certificate_authority_metadata.html">certificate_authority_metadata – Update metadata for a Hyperledger Fabric certificate authority</a></li>
 <li class="toctree-l3"><a class="reference internal" href="chaincode_list_info.html">chaincode_list_info – Get information about all installed and committed chaincodes on a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="channel_acl.html">channel_acl – Manage an ACL for a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="channel_block.html">channel_block – Fetch blocks for a Hyperledger Fabric channel</a></li>
@@ -212,9 +217,16 @@
 <div class="line"><strong>Type</strong>: str</div>
 </div>
 </dd>
-<dt>ordering_service_node</dt><dd><p>The ordering service node to use as a consenter for this channel.</p>
+<dt>ordering_service_node (required)</dt><dd><p>The ordering service node to use as a consenter for this channel.</p>
 <p>You can pass a string, which is the name of an ordering service node that is registered with the Fabric operations console.</p>
 <p>You can also pass a dict, which must match the result format of one of the <strong>ERROR while parsing</strong>: While parsing “M(ordering_service_node_info)” at index 76: Module name “ordering_service_node_info” is not a FQCN or <strong>ERROR while parsing</strong>: While parsing “M(ordering_service_node)” at index 109: Module name “ordering_service_node” is not a FQCN modules.</p>
+<div class="line-block">
+<div class="line"><strong>Type</strong>: raw</div>
+</div>
+</dd>
+<dt>updated_ordering_service_node</dt><dd><p>The updated ordering service node to use as a consenter for this channel.</p>
+<p>This option must used if the host or port is to be updated in the consenter set.</p>
+<p>This must be passed as a dict, which must match the result format of one of the <strong>ERROR while parsing</strong>: While parsing “M(ordering_service_node_info)” at index 81: Module name “ordering_service_node_info” is not a FQCN or <strong>ERROR while parsing</strong>: While parsing “M(ordering_service_node)” at index 114: Module name “ordering_service_node” is not a FQCN modules.</p>
 <div class="line-block">
 <div class="line"><strong>Type</strong>: raw</div>
 </div>
