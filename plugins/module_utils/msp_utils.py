@@ -28,14 +28,17 @@ BocEfwAAATAKBggqhkjOPQQDAgNIADBFAiEA7OHP7yH7tE0ko6Gp98o/EkhTqo4o
 '''
 
 
-def convert_identity_to_msp_path(identity):
+def convert_identity_to_msp_path(identity, path='temp'):
 
     # Ensure the identity has a CA, otherwise we cannot use it.
     if not identity.ca:
         raise Exception('The specified identity cannot be used as it does not have a CA field')
 
     # Create a temporary directory.
-    msp_path = tempfile.mkdtemp()
+    if path == 'temp':
+        msp_path = tempfile.mkdtemp()
+    else:
+        msp_path = path
 
     # Create the admin certificates directory (ideally would be empty, but
     # needs something in it to keep the CLI quiet).

@@ -17,6 +17,8 @@ from subprocess import CalledProcessError
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import _load_params, env_fallback
 
+from pathlib import Path
+
 from ..module_utils.dict_utils import diff_dicts
 from ..module_utils.fabric_utils import get_fabric_cfg_path
 from ..module_utils.file_utils import get_temp_file
@@ -761,6 +763,67 @@ def sign_update(module):
         shutil.rmtree(fabric_cfg_path)
 
 
+def sign_update_organizations(module):
+
+    # Get the channel and target path.
+    path = module.params['path']
+
+    organizations_dir_param = module.params['organizations_dir']
+
+    organizations_dir = Path(organizations_dir_param).resolve()
+
+    hsm = module.params['hsm']
+
+    # Load in the existing config update file and see if we've already signed it.
+    with open(path, 'rb') as file:
+        config_update_envelope_json = proto_to_json('common.Envelope', file.read())
+    signatures = config_update_envelope_json['payload']['data'].get('signatures', list())
+
+    module.json_log({
+        'msg': 'Organizations for signing the update',
+        'Organizations': module.params['organizations']
+    })
+
+    for msp_id in module.params['organizations']:
+
+        for signature in signatures:
+            if msp_id == signature['signature_header']['creator']['mspid']:
+                continue
+
+        # Need to sign it.
+        msp_path = os.path.join(organizations_dir, msp_id, "msp")
+        fabric_cfg_path = get_fabric_cfg_path()
+
+        module.json_log({
+            'msg': 'Adding signature to change',
+            'CORE_PEER_MSPCONFIGPATH': msp_path,
+            'CORE_PEER_LOCALMSPID': msp_id,
+            'FABRIC_CFG_PATH': fabric_cfg_path
+        })
+
+        try:
+            env = os.environ.copy()
+            env['CORE_PEER_MSPCONFIGPATH'] = msp_path
+            env['CORE_PEER_LOCALMSPID'] = msp_id
+            env['FABRIC_CFG_PATH'] = fabric_cfg_path
+            if hsm:
+                env['CORE_PEER_BCCSP_DEFAULT'] = 'PKCS11'
+                env['CORE_PEER_BCCSP_PKCS11_LIBRARY'] = hsm['pkcs11library']
+                env['CORE_PEER_BCCSP_PKCS11_LABEL'] = hsm['label']
+                env['CORE_PEER_BCCSP_PKCS11_PIN'] = hsm['pin']
+                env['CORE_PEER_BCCSP_PKCS11_HASH'] = 'SHA2'
+                env['CORE_PEER_BCCSP_PKCS11_SECURITY'] = '256'
+                env['CORE_PEER_BCCSP_PKCS11_FILEKEYSTORE_KEYSTORE'] = os.path.join(msp_path, 'keystore')
+            subprocess.run([
+                'peer', 'channel', 'signconfigtx', '-f', path
+            ], env=env, text=True, close_fds=True, check=True, capture_output=True)
+
+        finally:
+            shutil.rmtree(fabric_cfg_path)
+
+    module.exit_json(changed=True, path=path)
+
+
 def apply_update(module):
 
     # Log in to the console.
@@ -801,7 +864,7 @@ def main():
         api_secret=dict(type='str', no_log=True),
         api_timeout=dict(type='int', default=60),
         api_token_endpoint=dict(type='str', default='https://iam.cloud.ibm.com/identity/token'),
-        operation=dict(type='str', required=True, choices=['create', 'fetch', 'compute_update', 'sign_update', 'apply_update']),
+        operation=dict(type='str', required=True, choices=['create', 'fetch', 'compute_update', 'sign_update', 'sign_update_organizations', 'apply_update']),
         ordering_service=dict(type='raw'),
         ordering_service_nodes=dict(type='list', elements='raw'),
         tls_handshake_time_shift=dict(type='str', fallback=(env_fallback, ['IBP_TLS_HANDSHAKE_TIME_SHIFT'])),   # TODO: Look into renaming this env variable
@@ -817,6 +880,7 @@ def main():
         original=dict(type='str'),
         updated=dict(type='str'),
         organizations=dict(type='list', elements='raw'),
+        organizations_dir=dict(type='str', default='organizations'),
         policies=dict(type='dict'),
         acls=dict(type='dict'),
         capabilities=dict(type='dict', default=dict(), options=dict(
@@ -839,6 +903,7 @@ def main():
         ('operation', 'fetch', ['api_endpoint', 'api_authtype', 'api_key', 'identity', 'msp_id', 'name', 'path']),
         ('operation', 'compute_update', ['name', 'path', 'original', 'updated']),
         ('operation', 'sign_update', ['identity', 'msp_id', 'name', 'path']),
+        ('operation', 'sign_update_organizations', ['organizations', 'organizations_dir', 'name', 'path']),
         ('operation', 'apply_update', ['api_endpoint', 'api_authtype', 'api_key', 'identity', 'msp_id', 'name', 'path'])
     ]
     # Ansible doesn't allow us to say "require one of X and Y only if condition A is true",
@@ -867,6 +932,8 @@ def main():
             compute_update(module)
         elif operation == 'sign_update':
             sign_update(module)
+        elif operation == 'sign_update_organizations':
+            sign_update_organizations(module)
         elif operation == 'apply_update':
             apply_update(module)
         else:
