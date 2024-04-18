@@ -79,7 +79,6 @@ EXAMPLES = '''
     api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     name: Ordering Service_1
     preferred_url: os
-    type: tls_cert
 '''
 
 RETURN = '''

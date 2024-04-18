@@ -243,6 +243,27 @@ def get_all_orderering_service_nodes(console):
     return ordering_service_nodes
 
 
+def get_all_organizations(console):
+
+    # Go over each peer.
+    organizations = list()
+
+    components = console.get_all_components_by_type('msp')
+
+    if len(components) == 0:
+        return None
+
+    for component in components:
+
+        data = console.extract_organization_info(component)
+
+        # Add the ordering service node.
+        organizations.append(Organization.from_json(data))
+
+    # Return the list of ordering service nodes.
+    return organizations
+
+
 def get_ordering_service_by_name(console, name, fail_on_missing=True):
 
     # Look up the ordering service by name.
