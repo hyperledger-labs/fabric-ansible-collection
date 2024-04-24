@@ -1,0 +1,28 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+- name: Reenroll a Peer TLS Cert
+  hosts: localhost
+  vars:
+    ordering_msp_id: OrdererMSP
+    ordering_node_name: "{{ ordering_node_name }}"
+  vars_files:
+    - ordering-org-vars.yml
+  tasks:
+    - name: Restarting Ordering Service Node "{{ ordering_node_name }}"
+      hyperledger.fabric_ansible_collection.ordering_service_node_action:
+        api_endpoint: "{{ api_endpoint }}"
+        api_authtype: "{{ api_authtype }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret | default(omit) }}"
+        api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+        name: "{{ ordering_node_name }}"
+        action: "restart"
+        type: "{{ cert_type }}"
+      register: result
+
+    - name: Fail if Ordering Service Node "{{ ordering_node_name }}" did not accept the message
+      fail:
+        msg: result.response
+      when: not result.accepted

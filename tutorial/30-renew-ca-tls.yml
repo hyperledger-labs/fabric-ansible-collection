@@ -1,0 +1,76 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+- name: Renew the TLS Certificate for all Certificate Authorities and Associated Nodes
+  hosts: localhost
+  vars_files:
+      - org1-vars.yml
+  tasks:
+      - name: Get the ALL Certificate Authorities
+        hyperledger.fabric_ansible_collection.certificate_authority_list_info:
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+        register: result_list
+
+      - name: Renew the TLS Certificate for the Certificate Authority "{{ component_name }}"
+        hyperledger.fabric_ansible_collection.certificate_authority_action:
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+            name: "{{ component_name }}"
+            action: 'renew'
+        register: result
+
+      - name: Fail if the Certificate Authority did not accept the message
+        fail:
+            msg: result.response
+        when: not result.accepted
+
+      - name: Get the Certificate Authority
+        hyperledger.fabric_ansible_collection.certificate_authority_info:
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+            name: "{{ component_name }}"
+        register: result
+
+      - name: Configure the crypto update
+        set_fact:
+            crypto:
+                enrollment:
+                    ca:
+                        tls_cert: "{{ result.certificate_authority.msp.component.tls_cert }}"
+                    tlsca:
+                        tls_cert: "{{result.certificate_authority.msp.component.tls_cert}}"
+
+      - name: Get the Nodes associated with the Certificate Authority "{{ component_name }}"
+        hyperledger.fabric_ansible_collection.certificate_authority_associated_nodes:
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+            certificate_authority: "{{ component_name }}"
+        register: nodes
+
+      - name: Update Ordering Nodes associated with "{{ component_name }}"
+        include_tasks: 28-update-ordering-node-task.yml
+        loop: "{{ nodes.ordering_service_nodes }}"
+        loop_control:
+            loop_var: ordering_service_node
+        when: "'{{ component_type }}' in ['orderer']"
+
+      - name: Update Peers associated with "{{ component_name }}"
+        include_tasks: 29-update-peer-task.yml
+        loop: "{{ nodes.peers }}"
+        loop_control:
+            loop_var: peer
+        when: "'{{ component_type }}' in ['peer']"

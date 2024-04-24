@@ -1,0 +1,40 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+- name: Updating Ordering Node "{{ ordering_service_node.name }}"
+  hyperledger.fabric_ansible_collection.ordering_service_node:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      name: "{{ ordering_service_node.name }}"
+      crypto: "{{ crypto }}"
+  register: result
+
+- name: Fail if Ordering Service Node "{{ ordering_service_node.name }}" was not updated
+  fail:
+      msg: "Ordering Service Node {{ ordering_service_node.name }} was not updated"
+  when: not result.changed
+
+- name: Write the updated Ordering Service Node "{{ ordering_service_node.name }}" to a file
+  copy:
+      content: "{{ result.ordering_service_node | to_nice_json }}"
+      dest: "updated_ordering_service_node.json"
+
+- name: Restarting Ordering Service Node "{{ ordering_service_node.name }}"
+  hyperledger.fabric_ansible_collection.ordering_service_node_action:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      name: "{{ ordering_service_node.name }}"
+      action: 'restart'
+  register: result
+
+- name: Fail if Ordering Service Node "{{ ordering_service_node.name }}" did not accept the message
+  fail:
+      msg: result.response
+  when: not result.accepted

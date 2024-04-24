@@ -779,6 +779,11 @@ def sign_update_organizations(module):
         config_update_envelope_json = proto_to_json('common.Envelope', file.read())
     signatures = config_update_envelope_json['payload']['data'].get('signatures', list())
 
+    module.json_log({
+        'msg': 'Organizations for signing the update',
+        'Organizations': module.params['organizations']
+    })
+
     for msp_id in module.params['organizations']:
 
         for signature in signatures:
@@ -789,16 +794,18 @@ def sign_update_organizations(module):
         msp_path = os.path.join(organizations_dir, msp_id, "msp")
         fabric_cfg_path = get_fabric_cfg_path()
 
+        module.json_log({
+            'msg': 'Adding signature to change',
+            'CORE_PEER_MSPCONFIGPATH': msp_path,
+            'CORE_PEER_LOCALMSPID': msp_id,
+            'FABRIC_CFG_PATH': fabric_cfg_path
+        })
+
         try:
             env = os.environ.copy()
             env['CORE_PEER_MSPCONFIGPATH'] = msp_path
             env['CORE_PEER_LOCALMSPID'] = msp_id
             env['FABRIC_CFG_PATH'] = fabric_cfg_path
-            module.json_log({
-                'CORE_PEER_MSPCONFIGPATH': msp_path,
-                'CORE_PEER_LOCALMSPID': msp_id,
-                'FABRIC_CFG_PATH': fabric_cfg_path
-            })
             if hsm:
                 env['CORE_PEER_BCCSP_DEFAULT'] = 'PKCS11'
                 env['CORE_PEER_BCCSP_PKCS11_LIBRARY'] = hsm['pkcs11library']
@@ -814,8 +821,8 @@ def sign_update_organizations(module):
         finally:
             shutil.rmtree(fabric_cfg_path)
 
-        module.exit_json(changed=True, path=path)
-
+    module.exit_json(changed=True, path=path)
+    
 
 def apply_update(module):
 
