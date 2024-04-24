@@ -375,7 +375,8 @@ class Console:
             'pem': ca.get('msp').get('component').get('tls_cert'),
             'tls_cert': ca.get('msp').get('component').get('tls_cert'),
             'location': 'kubernetes' if ca['location'] == 'ibm_saas' else ca['location'],
-            'msp': ca['msp']
+            'msp': ca['msp'],
+            'imported': ca['imported']
         }
 
     def create_ext_ca(self, data):
@@ -582,7 +583,8 @@ class Console:
             'tls_ca_root_cert': peer.get('msp').get('tlsca').get('root_certs')[0],
             'tls_cert': peer.get('msp').get('component').get('tls_cert'),
             'location': 'kubernetes' if peer['location'] == 'ibm_saas' else peer['location'],
-            'msp': peer['msp']
+            'msp': peer['msp'],
+            'imported': peer['imported']
         }
 
     def create_ext_peer(self, data):
@@ -892,7 +894,8 @@ class Console:
             'id': ordering_service_node['id'],
             'display_name': ordering_service_node['display_name'],
             'osnadmin_url': ordering_service_node.get('osnadmin_url', None),
-            'msp': ordering_service_node['msp']
+            'msp': ordering_service_node['msp'],
+            'imported': ordering_service_node['imported']
         }
 
     def create_ext_ordering_service_node(self, data):

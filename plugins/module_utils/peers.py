@@ -27,7 +27,7 @@ from .proto_utils import proto_to_json
 
 class Peer:
 
-    def __init__(self, name, api_url, operations_url, grpcwp_url, msp_id, pem, tls_ca_root_cert, tls_cert, location, msp):
+    def __init__(self, name, api_url, operations_url, grpcwp_url, msp_id, pem, tls_ca_root_cert, tls_cert, location, msp, imported):
         self.name = name
         self.api_url = api_url
         self.operations_url = operations_url
@@ -38,6 +38,7 @@ class Peer:
         self.tls_cert = tls_cert
         self.location = location
         self.msp = msp
+        self.imported = imported
 
     def clone(self):
         return Peer(
@@ -50,7 +51,8 @@ class Peer:
             tls_ca_root_cert=self.tls_ca_root_cert,
             tls_cert=self.tls_cert,
             location=self.location,
-            msp=self.msp
+            msp=self.msp,
+            imported=self.imported
         )
 
     def equals(self, other):
@@ -64,7 +66,8 @@ class Peer:
             self.tls_ca_root_cert == other.tls_ca_root_cert and
             self.tls_cert == other.tls_cert and
             self.location == other.location and
-            self.msp == other.msp
+            self.msp == other.msp and
+            self.imported == other.imported
         )
 
     def to_json(self):
@@ -79,7 +82,8 @@ class Peer:
             tls_ca_root_cert=self.tls_ca_root_cert,
             tls_cert=self.tls_cert,
             location=self.location,
-            msp=self.msp
+            msp=self.msp,
+            imported=self.imported
         )
 
     @staticmethod
@@ -94,7 +98,8 @@ class Peer:
             tls_ca_root_cert=data['tls_ca_root_cert'],
             tls_cert=data['tls_cert'],
             location=data['location'],
-            msp=data['msp']
+            msp=data['msp'],
+            imported=data['imported']
         )
 
     def wait_for(self, timeout):
