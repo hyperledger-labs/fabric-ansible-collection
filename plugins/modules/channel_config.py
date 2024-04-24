@@ -822,7 +822,7 @@ def sign_update_organizations(module):
             shutil.rmtree(fabric_cfg_path)
 
     module.exit_json(changed=True, path=path)
-    
+
 
 def apply_update(module):
 
