@@ -24,7 +24,7 @@ from .msp_utils import convert_identity_to_msp_path
 
 class OrderingServiceNode:
 
-    def __init__(self, name, api_url, operations_url, grpcwp_url, msp_id, pem, tls_ca_root_cert, tls_cert, location, system_channel_id, cluster_id, cluster_name, client_tls_cert, server_tls_cert, consenter_proposal_fin, id, display_name, osnadmin_url, msp):
+    def __init__(self, name, api_url, operations_url, grpcwp_url, msp_id, pem, tls_ca_root_cert, tls_cert, location, system_channel_id, cluster_id, cluster_name, client_tls_cert, server_tls_cert, consenter_proposal_fin, id, display_name, osnadmin_url, msp, imported):
         self.name = name
         self.api_url = api_url
         self.operations_url = operations_url
@@ -44,6 +44,7 @@ class OrderingServiceNode:
         self.display_name = display_name
         self.osnadmin_url = osnadmin_url
         self.msp = msp
+        self.imported = imported
 
     def clone(self):
         return OrderingServiceNode(
@@ -65,7 +66,8 @@ class OrderingServiceNode:
             id=self.id,
             display_name=self.display_name,
             osnadmin_url=self.osnadmin_url,
-            msp=self.msp
+            msp=self.msp,
+            imported=self.imported
         )
 
     def equals(self, other):
@@ -88,7 +90,8 @@ class OrderingServiceNode:
             self.id == other.id and
             self.display_name == other.display_name and
             self.osnadmin_url == other.osnadmin_url and
-            self.msp == other.msp
+            self.msp == other.msp and
+            self.imported == other.imported
         )
 
     def to_json(self):
@@ -112,7 +115,8 @@ class OrderingServiceNode:
             display_name=self.display_name,
             osnadmin_url=self.osnadmin_url,
             consenter_proposal_fin=self.consenter_proposal_fin,
-            msp=self.msp
+            msp=self.msp,
+            imported=self.imported
         )
 
     @staticmethod
@@ -136,7 +140,8 @@ class OrderingServiceNode:
             id=data['id'],
             display_name=data['display_name'],
             osnadmin_url=data['osnadmin_url'],
-            msp=data['msp']
+            msp=data['msp'],
+            imported=data['imported']
         )
 
     def wait_for(self, timeout):
