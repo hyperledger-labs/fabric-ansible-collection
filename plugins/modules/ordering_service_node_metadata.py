@@ -9,6 +9,7 @@ __metaclass__ = type
 from ..module_utils.module import BlockchainModule
 from ..module_utils.ordering_services import OrderingServiceNode
 from ..module_utils.utils import get_console
+from ..module_utils.url_utils import translate_url_to_os_format
 
 from ansible.module_utils._text import to_native
 
@@ -183,9 +184,19 @@ def main():
         if module.params['preferred_url'] is None:
             return module.exit_json(exists=False)
 
-        ordering_service_node_metadata_update = dict(
-            preferred_url=module.params['preferred_url']
-        )
+        if ordering_service_node['imported'] == False:
+
+            ordering_service_node_metadata_update = dict(
+                preferred_url=module.params['preferred_url']
+            )
+
+        else:
+
+            ordering_service_node_metadata_update = dict(
+                api_url = translate_url_to_os_format(ordering_service_node['api_url'], 'orderer'),
+                operations_url = translate_url_to_os_format(ordering_service_node['operations_url'], 'operations'),
+                grpcwp_url = translate_url_to_os_format(ordering_service_node['grpcwp_url'], 'grpcweb')
+            )
 
         ordering_service_node = console.update_metadata_ordering_service_node(ordering_service_node['id'], ordering_service_node_metadata_update)
         changed = True
