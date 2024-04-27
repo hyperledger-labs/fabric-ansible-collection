@@ -184,7 +184,7 @@ def main():
         if module.params['preferred_url'] is None:
             return module.exit_json(exists=False)
 
-        if peer['imported'] == False:
+        if not peer['imported']:
 
             peer_metadata_update = dict(
                 preferred_url=module.params['preferred_url']
@@ -193,9 +193,9 @@ def main():
         else:
 
             peer_metadata_update = dict(
-                api_url = translate_url_to_os_format(peer['api_url'], 'peer'),
-                operations_url = translate_url_to_os_format(peer['operations_url'], 'operations'),
-                grpcwp_url = translate_url_to_os_format(peer['grpcwp_url'], 'grpcweb')
+                api_url=translate_url_to_os_format(peer['api_url'], 'peer'),
+                operations_url=translate_url_to_os_format(peer['operations_url'], 'operations'),
+                grpcwp_url=translate_url_to_os_format(peer['grpcwp_url'], 'grpcweb')
             )
 
         peer = console.update_metadata_ca(peer['id'], peer_metadata_update)

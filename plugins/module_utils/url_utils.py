@@ -4,6 +4,7 @@
 #
 from urllib.parse import urlparse, urlunparse
 
+
 def translate_url_to_os_format(source_url, type):
 
     translated_url = source_url
