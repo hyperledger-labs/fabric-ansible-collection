@@ -13,8 +13,6 @@ from ..module_utils.url_utils import translate_url_to_os_format
 
 from ansible.module_utils._text import to_native
 
-import json
-
 ANSIBLE_METADATA = {'metadata_version': '1.1',
                     'status': ['preview'],
                     'supported_by': 'community'}
@@ -187,7 +185,7 @@ def main():
         if module.params['preferred_url'] is None:
             return module.exit_json(exists=False)
 
-        if certificate_authority['imported'] == False:
+        if not certificate_authority['imported']:
 
             certificate_authority_metadata_update = dict(
                 preferred_url=module.params['preferred_url']
@@ -196,8 +194,8 @@ def main():
         else:
 
             certificate_authority_metadata_update = dict(
-                api_url = translate_url_to_os_format(certificate_authority['api_url'], 'ca'),
-                operations_url = translate_url_to_os_format(certificate_authority['operations_url'], 'operations')
+                api_url=translate_url_to_os_format(certificate_authority['api_url'], 'ca'),
+                operations_url=translate_url_to_os_format(certificate_authority['operations_url'], 'operations')
             )
 
         certificate_authority = console.update_metadata_ca(certificate_authority['id'], certificate_authority_metadata_update)

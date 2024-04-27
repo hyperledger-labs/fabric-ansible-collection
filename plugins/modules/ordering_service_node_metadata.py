@@ -184,7 +184,7 @@ def main():
         if module.params['preferred_url'] is None:
             return module.exit_json(exists=False)
 
-        if ordering_service_node['imported'] == False:
+        if not ordering_service_node['imported']:
 
             ordering_service_node_metadata_update = dict(
                 preferred_url=module.params['preferred_url']
@@ -193,9 +193,9 @@ def main():
         else:
 
             ordering_service_node_metadata_update = dict(
-                api_url = translate_url_to_os_format(ordering_service_node['api_url'], 'orderer'),
-                operations_url = translate_url_to_os_format(ordering_service_node['operations_url'], 'operations'),
-                grpcwp_url = translate_url_to_os_format(ordering_service_node['grpcwp_url'], 'grpcweb')
+                api_url=translate_url_to_os_format(ordering_service_node['api_url'], 'orderer'),
+                operations_url=translate_url_to_os_format(ordering_service_node['operations_url'], 'operations'),
+                grpcwp_url=translate_url_to_os_format(ordering_service_node['grpcwp_url'], 'grpcweb')
             )
 
         ordering_service_node = console.update_metadata_ordering_service_node(ordering_service_node['id'], ordering_service_node_metadata_update)
