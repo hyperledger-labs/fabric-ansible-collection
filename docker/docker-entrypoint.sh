@@ -8,11 +8,11 @@ set -euo pipefail
 # the user is not in the /etc/passwd file. This causes Ansible to fail, so we need
 # to add the user to /etc/passwd now before Ansible runs.
 if ! whoami &> /dev/null; then
-    sed '/ibp-user/d' /etc/passwd > /tmp/passwd
+    sed '/hlf-user/d' /etc/passwd > /tmp/passwd
     cat /tmp/passwd > /etc/passwd
     rm -f /tmp/passwd
-    echo "ibp-user:x:$(id -u):0::/home/ibp-user:/bin/bash" >> /etc/passwd
-    export HOME=/home/ibp-user
+    echo "hlf-user:x:$(id -u):0::/home/hlf-user:/bin/bash" >> /etc/passwd
+    export HOME=/home/hlf-user
 fi
 
 # Run a shell or the specified command.
