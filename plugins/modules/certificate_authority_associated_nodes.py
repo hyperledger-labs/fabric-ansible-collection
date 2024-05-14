@@ -171,29 +171,31 @@ def main():
         peers_list = get_all_peers(console)
 
         peers = list()
-        for peer in peers_list:
+        if peers_list is not None:
+            for peer in peers_list:
 
-            peer_root_certs = peer.to_json()['msp']['tlsca']['root_certs']
+                peer_root_certs = peer.to_json()['msp']['tlsca']['root_certs']
 
-            intersection_list = list(set(ca_tls_root_certs) & set(peer_root_certs))
+                intersection_list = list(set(ca_tls_root_certs) & set(peer_root_certs))
 
-            # if the peer tls root cert intersects with the CA tls root certs, then add the peer
-            if len(intersection_list) > 0:
-                peers.append(peer.to_json())
+                # if the peer tls root cert intersects with the CA tls root certs, then add the peer
+                if len(intersection_list) > 0:
+                    peers.append(peer.to_json())
 
         # Get all of the ordering nodes
         ordering_service_nodes_list = get_all_orderering_service_nodes(console)
 
         ordering_service_nodes = list()
-        for ordering_service_node in ordering_service_nodes_list:
+        if ordering_service_nodes_list is not None:
+            for ordering_service_node in ordering_service_nodes_list:
 
-            # Get the ordering node tls root certs
-            ordering_service_node_root_certs = ordering_service_node.to_json()['msp']['tlsca']['root_certs']
-            intersection_list = list(set(ca_tls_root_certs) & set(ordering_service_node_root_certs))
+                # Get the ordering node tls root certs
+                ordering_service_node_root_certs = ordering_service_node.to_json()['msp']['tlsca']['root_certs']
+                intersection_list = list(set(ca_tls_root_certs) & set(ordering_service_node_root_certs))
 
-            # if the ordering node tls root cert intersects with the CA tls root certs, then add the ordering node
-            if len(intersection_list) > 0:
-                ordering_service_nodes.append(ordering_service_node.to_json())
+                # if the ordering node tls root cert intersects with the CA tls root certs, then add the ordering node
+                if len(intersection_list) > 0:
+                    ordering_service_nodes.append(ordering_service_node.to_json())
 
         # Return peer and orderering services nodes information.
         module.exit_json(exists=True, peers=peers, ordering_service_nodes=ordering_service_nodes)
