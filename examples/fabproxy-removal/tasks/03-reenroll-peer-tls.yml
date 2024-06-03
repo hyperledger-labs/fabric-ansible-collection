@@ -1,0 +1,20 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+- name: Reenrolling Peer TLS for "{{ peer.name }}"
+  hyperledger.fabric_ansible_collection.peer_action:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      name: "{{ peer.name }}"
+      action: 'reenroll'
+      type: 'tls_cert'
+  register: result
+
+- name: Fail if Peer "{{ peer.name }}" did not accept the message
+  fail:
+      msg: result.response
+  when: not result.accepted

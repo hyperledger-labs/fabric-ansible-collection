@@ -1,0 +1,31 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+- name: Renew the TLS Certificate for all Certificate Authorities and Associated Nodes
+  hosts: localhost
+  vars_files:
+      - common-vars.yml
+  tasks:
+      - name: Get the ALL Certificate Authorities
+        hyperledger.fabric_ansible_collection.certificate_authority_list_info:
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+        register: result
+
+      - name: List Certificate Authorities
+        debug: "msg='Found Certificate Authority {{ certificate_authority.name}}'"
+        loop: "{{ result.certificate_authorities }}"
+        loop_control:
+            loop_var: certificate_authority
+            label: "{{ certificate_authority.name }}"
+
+      - name: Renew TLS Certificates for Certificate Authorities
+        include_tasks: tasks/02-create-crypto-update.yml
+        loop: "{{ result.certificate_authorities }}"
+        loop_control:
+            loop_var: certificate_authority
+            label: "{{ certificate_authority.name }}"

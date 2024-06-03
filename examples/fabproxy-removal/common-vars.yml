@@ -1,0 +1,16 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+api_endpoint: https://ibp-console.example.org:32000
+api_authtype: basic
+api_key: xxxxxxxx
+api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+preferred_url_os: "os"
+preferred_url_legacy: "legacy"
+ordering_service_name: "Orderer"
+ordering_service_node_name: "Orderer_1"
+ordering_service_admin_identity: "Orderer MSP Admin_identity.json"
+ordering_service_msp_id: osmsp
+dry_run: false
+wait_timeout: 600

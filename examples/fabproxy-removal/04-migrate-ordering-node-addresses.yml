@@ -1,0 +1,85 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+- name: Migrate Ordering Service Node
+  hosts: localhost
+  vars_files:
+      - common-vars.yml
+      - channels.yml
+  tasks:
+
+      - name: Reenroll Ordering Service Node "{{ ordering_service_node_name }}" TLS
+        hyperledger.fabric_ansible_collection.ordering_service_node_action:
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            name: "{{ ordering_service_node_name }}"
+            action: 'reenroll'
+            type: 'tls_cert'
+        register: result
+
+      - name: Fail if the Certificate Authority did not accept the message
+        fail:
+            msg: result.response
+        when: not result.accepted
+
+      - name: Temporarily change Ordering Service Node "{{ ordering_service_node_name }}" to use the new URLs and record settings
+        hyperledger.fabric_ansible_collection.ordering_service_node_metadata:
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+            name: "{{ ordering_service_node_name }}"
+            preferred_url: "{{ preferred_url_os }}"
+        register: ordering_node_new_url
+
+      - name: Change Ordering Node "{{ ordering_service_node_name }}" to use the legacy URLs
+        hyperledger.fabric_ansible_collection.ordering_service_node_metadata:
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+            name: "{{ ordering_service_node_name }}"
+            preferred_url: "{{ preferred_url_legacy }}"
+        register: ordering_node_legacy_url
+
+      - name: Store the ordering service node to a file
+        copy:
+            content: "{{ ordering_node_new_url.ordering_service_node | to_nice_json }}"
+            dest: "{{ ordering_service_node_name }}.json"
+
+      - name: Remove the previous channels directory if it exists
+        ansible.builtin.file:
+            path: channels
+            state: absent
+
+      - name: Remove the previous completed channels
+        ansible.builtin.file:
+            path: completed_channels.txt
+            state: absent
+
+      - name: Update channels
+        include_tasks: tasks/04-update-channel.yml
+        loop: "{{ channel_names }}"
+        loop_control:
+            loop_var: channel_name
+
+      - name: Change Ordering Service Node "{{ ordering_service_node_name }}" to use the new URLs
+        hyperledger.fabric_ansible_collection.ordering_service_node_metadata:
+            api_endpoint: "{{ api_endpoint }}"
+            api_authtype: "{{ api_authtype }}"
+            api_key: "{{ api_key }}"
+            api_secret: "{{ api_secret | default(omit) }}"
+            api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+            name: "{{ ordering_service_node_name }}"
+            preferred_url: "{{ preferred_url_os }}"
+        when: not (dry_run | bool)
+
+      - name: Warn if dry run
+        debug:
+            msg: Dry run, not signing or applying channel configuration update
+        when: (dry_run | bool)

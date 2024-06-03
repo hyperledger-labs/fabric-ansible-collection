@@ -1,0 +1,66 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+- name: Get the Certificate Authority
+  hyperledger.fabric_ansible_collection.certificate_authority_info:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      name: "{{ certificate_authority.name }}"
+  register: result
+
+- name: Configure the crypto update
+  set_fact:
+      crypto:
+          enrollment:
+              ca:
+                  host: "{{ result.certificate_authority.api_url | urlsplit('hostname') }}"
+                  port: "{{ result.certificate_authority.api_url | urlsplit('port') }}"
+                  tls_cert: "{{ result.certificate_authority.msp.component.tls_cert }}"
+              tlsca:
+                  host: "{{ result.certificate_authority.api_url | urlsplit('hostname') }}"
+                  port: "{{ result.certificate_authority.api_url | urlsplit('port') }}"
+                  tls_cert: "{{result.certificate_authority.msp.component.tls_cert}}"
+
+- name: Get the Nodes associated with the Certificate Authority "{{ certificate_authority.name }}"
+  hyperledger.fabric_ansible_collection.certificate_authority_associated_nodes:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      certificate_authority: "{{ certificate_authority.name }}"
+  register: nodes
+
+- name: List the Ordering Nodes
+  debug: "msg='Found Ordering Node {{ ordering_service_node.name}}'"
+  loop: "{{ nodes.ordering_service_nodes }}"
+  loop_control:
+      loop_var: ordering_service_node
+      label: "{{ ordering_service_node.name }}"
+
+- name: Update Ordering Nodes associated with "{{ certificate_authority.name }}"
+  include_tasks: tasks/02-update-ordering-node.yml
+  loop: "{{ nodes.ordering_service_nodes }}"
+  loop_control:
+      loop_var: ordering_service_node
+      label: "{{ ordering_service_node.name }}"
+  when: ordering_service_node.imported == False
+
+- name: List the Peers
+  debug: "msg='Found Peer {{ peer.name}}'"
+  loop: "{{ nodes.peers }}"
+  loop_control:
+      loop_var: peer
+      label: "{{ peer.name }}"
+
+- name: Update Peers associated with "{{ certificate_authority.name }}"
+  include_tasks: tasks/02-update-peer.yml
+  loop: "{{ nodes.peers }}"
+  loop_control:
+      loop_var: peer
+      label: "{{ peer.name }}"
+  when: peer.imported == False
