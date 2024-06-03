@@ -32,6 +32,6 @@
         include_tasks: tasks/01-update-ca-metadata.yml
         loop: "{{ result.certificate_authorities }}"
         loop_control:
-          loop_var: certificate_authority
-          label: "{{ certificate_authority.name }}"
+            loop_var: certificate_authority
+            label: "{{ certificate_authority.name }}"
         when: certificate_authority.imported == False

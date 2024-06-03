@@ -17,4 +17,3 @@
   fail:
       msg: "Ordering Service Node {{ ordering_service_node.name }} was not updated"
   when: not result.changed
-
