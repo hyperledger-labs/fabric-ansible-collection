@@ -1,0 +1,20 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+- name: Change the Ordering Service Node "{{ ordering_service_node.name }}" to use the new URLs
+  hyperledger.fabric_ansible_collection.ordering_service_node_metadata:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      name: "{{ ordering_service_node.name }}"
+      preferred_url: "{{ preferred_url_os }}"
+  register: result
+
+- name: Fail if the Ordering Service Node was not updated
+  fail:
+      msg: "Ordering Service Node {{ ordering_service_node.name }} was not updated"
+  when: not result.changed
+

@@ -1,0 +1,28 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+- name: Update the Certificate Authority metadata for "{{ certificate_authority.name }}"
+  hyperledger.fabric_ansible_collection.certificate_authority_metadata:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      name: "{{ certificate_authority.name }}"
+      preferred_url: "{{ preferred_url_os }}"
+  register: update_result
+
+- name: Fail if the Certificate Authority "{{ certificate_authority.name }}" was not updated
+  fail:
+      msg: "Certificate Authority {{ certificate_authority.name }} was not updated"
+  when: not update_result.changed
+
+- name: Write the updated certficate authority "{{ certificate_authority.name }}" to a file
+  copy:
+      content: "{{ update_result.certificate_authority | to_nice_json }}"
+      dest: "updated_certficat_authority.json"
+
+- name: Renew TLS Certificates for Certificate Authorities
+  include_tasks: tasks/01-renew-ca-tls.yml
+  when: certificate_authority.imported == False

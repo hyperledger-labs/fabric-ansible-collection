@@ -1,0 +1,20 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+- name: Renew the TLS Certificate for the Certificate Authority "{{ certificate_authority.name }}"
+  hyperledger.fabric_ansible_collection.certificate_authority_action:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      name: "{{ certificate_authority.name }}"
+      action: 'renew'
+  register: result
+  when: certificate_authority.imported == False
+
+- name: Fail if the Certificate Authority "{{ certificate_authority.name }}" did not accept the message
+  fail:
+      msg: result.response
+  when: not result.accepted

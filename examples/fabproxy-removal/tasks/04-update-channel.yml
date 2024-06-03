@@ -1,0 +1,99 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+- name: Fetch the channel configuration for channel "{{ channel_name }}"
+  hyperledger.fabric_ansible_collection.channel_config:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      ordering_service: "{{ ordering_service_name }}"
+      identity: "wallet/{{ ordering_service_admin_identity }}"
+      msp_id: "{{ ordering_node_new_url.ordering_service_node.msp_id }}"
+      operation: fetch
+      name: "{{ channel_name }}"
+      path: original_config.bin
+  changed_when: False
+
+- name: Create a copy of channel "{{ channel_name }}" configuration
+  copy:
+      src: original_config.bin
+      dest: updated_config.bin
+  changed_when: False
+
+- name: Update the consenters for channel "{{ channel_name }}"
+  hyperledger.fabric_ansible_collection.channel_consenter:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      path: updated_config.bin
+      ordering_service_node: "{{ ordering_node_legacy_url.ordering_service_node }}"
+      updated_ordering_service_node: "{{ ordering_node_new_url.ordering_service_node }}"
+  register: update_consenter
+
+- name: Create a channel directory if it does not exist
+  ansible.builtin.file:
+      path: "channels/{{ channel_name }}"
+      state: directory
+      mode: '0755'
+
+- name: Save a copy of the orginal channel config "{{ channel_name }}" to a file
+  copy:
+      content: "{{ update_consenter.original_config_json | to_nice_json }}"
+      dest: "channels/{{ channel_name }}/original_channel_config.json"
+
+- name: Save a copy of the orginal channel config "{{ channel_name }}" to a file
+  copy:
+      content: "{{ update_consenter.updated_config_json | to_nice_json }}"
+      dest: "channels/{{ channel_name }}/updated_channel_config.json"
+
+- name: Compute the channel configuration update for channel "{{ channel_name }}"
+  hyperledger.fabric_ansible_collection.channel_config:
+      operation: compute_update
+      name: "{{ channel_name }}"
+      original: original_config.bin
+      updated: updated_config.bin
+      path: config_update.bin
+  register: compute_update
+  changed_when: False
+
+- name: Sign the channel configuration update for channel "{{ channel_name }}"
+  hyperledger.fabric_ansible_collection.channel_config:
+      # These fields are required here because we need to handle identities
+      # that have been exported from the IBM Blockchain Platform console.
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      operation: sign_update
+      identity: "wallet/{{ ordering_service_admin_identity }}"
+      msp_id: "{{ ordering_node_new_url.ordering_service_node.msp_id }}"
+      name: "{{ channel_name }}"
+      path: config_update.bin
+  when: compute_update.path and not (dry_run | bool)
+
+- name: Apply the channel configuration update for channel "{{ channel_name }}"
+  hyperledger.fabric_ansible_collection.channel_config:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      operation: apply_update
+      ordering_service: "{{ ordering_service_name }}"
+      identity: "wallet/{{ ordering_service_admin_identity }}"
+      msp_id: "{{ ordering_node_new_url.ordering_service_node.msp_id }}"
+      name: "{{ channel_name }}"
+      path: config_update.bin
+  when: compute_update.path and not (dry_run | bool)
+
+- name: Add the channel to the completed list
+  ansible.builtin.lineinfile:
+      path: completed_channels.txt
+      line: "  - {{ channel_name }}"
+      create: yes

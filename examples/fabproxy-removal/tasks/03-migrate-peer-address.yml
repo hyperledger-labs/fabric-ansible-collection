@@ -1,0 +1,23 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+- name: Change the Peer "{{ peer.name }}" to use the new URLs
+  hyperledger.fabric_ansible_collection.peer_metadata:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      name: "{{ peer.name }}"
+      preferred_url: "{{ preferred_url_os }}"
+  register: result
+
+- name: Fail if the Peer "{{ peer.name }}" was not updated
+  fail:
+      msg: "Peer {{ peer.name }} was not updated"
+  when: not result.changed
+
+- name: Reenroll TLS Certificates for Peer "{{ peer.name }}"
+  include_tasks: tasks/03-reenroll-peer-tls.yml
+  when: peer.imported == False

@@ -1,0 +1,35 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+---
+- name: Get the Peers associated with the Certificate Authority "{{ certificate_authority.name }}"
+  hyperledger.fabric_ansible_collection.certificate_authority_associated_nodes:
+      api_endpoint: "{{ api_endpoint }}"
+      api_authtype: "{{ api_authtype }}"
+      api_key: "{{ api_key }}"
+      api_secret: "{{ api_secret | default(omit) }}"
+      api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+      certificate_authority: "{{ certificate_authority.name }}"
+  register: nodes
+
+- name: List the Peers
+  debug: "msg='Found Peer {{ peer.name}}'"
+  loop: "{{ nodes.peers }}"
+  loop_control:
+      loop_var: peer
+      label: "{{ peer.name }}"
+
+- name: Migrage Peer addresses associated with "{{ certificate_authority.name }}"
+  include_tasks: tasks/03-migrate-peer-address.yml
+  loop: "{{ nodes.peers }}"
+  loop_control:
+      loop_var: peer
+      label: "{{ peer.name }}"
+
+- name: Migrage imported Ordering Service Node addresses associated with "{{ certificate_authority.name }}"
+  include_tasks: tasks/03-migrate-imported-orderering-node-address.yml
+  loop: "{{ nodes.ordering_service_nodes }}"
+  loop_control:
+      loop_var: ordering_service_node
+      label: "{{ ordering_service_node.name }}"
+  when: ordering_service_node.imported == True
