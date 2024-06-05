@@ -60,6 +60,7 @@ COPY --from=fabric /go/src/github.com/hyperledger/fabric/build/bin /opt/fabric/b
 COPY --from=fabric /go/src/github.com/hyperledger/fabric/sampleconfig /opt/fabric/config
 COPY docker/docker-entrypoint.sh /
 COPY docker/docker-entrypoint-opensource-stack.sh /
+ADD examples/fabproxy-removal /opt/fabproxy-removal
 RUN mkdir /home/hlf-user/.kube
 ENV FABRIC_CFG_PATH=/opt/fabric/config
 ENV PATH=/opt/fabric/bin:/home/hlf-user/.local/bin:$PATH
