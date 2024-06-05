@@ -1,7 +1,17 @@
 # Fabproxy Removal
 
-This is a support project for removing Fabproxy from migrated instances from IBM Blockchain Platform Software as a Service.The customer who are migrated from SaaS to HLF Support instance still using fabproxy. This section will help to remove the fabproxy from migrated instances. We are using ansible script for remove fabproxy from the HLF Support instances. its has following section.
+This is a support project for removing Fabproxy from migrated instances from IBM Blockchain Platform Software as a Service.  Instances that migrated from IBM Blockchain Platform Software as a Service (SaaS) to HLF Support instance are still using fabproxy.  The ports used by fabproxy are non-standard ports and should be migrated to the standard port (443) and host names used by HLF Support.
 
+Fabproxy removal is included as an open source example and will work with the open source operator and console.  It can be used a a reference sample for automating common maintenance tasks.   Some examples include:
+- Renewing TLS certificates for CAs.
+- Reenrolling enrollment and TLS certificates for peers and ordering nodes
+- Updating metadata for CAs, peers and ordering nodes
+- Listing and iterating on CAs
+- Listing and iterating on peers and ordering nodes by associated CAs
+
+Fabproxy removal will remove fabproxy from migrated instances. Ansible scripts are used for removing fabproxy from the HLF Support instances.
+
+The fabproxy removal process will use the following high level steps:
 
 - Migrate the All CA address.
 - Update associated nodes.
@@ -10,55 +20,101 @@ This is a support project for removing Fabproxy from migrated instances from IBM
 - Update anchor peer in the channel.
 
 
-## Prerequisites
+## Step 1: Install Prerequisites for the Hyperledger Fabric Ansible Collection
 
-This script is executed using the Hyperledger Fabric Ansible collection. Therefore, the customer needs to set up their environment so that the script may run.  Kindly click the link below to set up the prerequisites needed to run this ansible script.
+There are two methods for running the ansible playbooks.  Ansible and its prerequisites can be installed locally, or the Hyperledger Fabric ansible collection image can be used.
 
-- [Fabric Ansible Collction Pre-requisite](https://labs.hyperledger.org/fabric-ansible-collection/installation.html#requirements)
+### Option 1 - Use the Ansible collection image (recommended)
 
-Alternative way of executing  this script is using docker image. It's easier to exec into a running ansible docker image with the command below, then change to the playbooks directory, then run the playbooks.
+
+The ansible collection docker image is available for automatic download.  This method provides a simpler setup and does not require any local installation with the exception of docker.
+
+Create a directory on the local machine before beginning.
+
+Execute the following docker command to create a container based on the ansible collection:
 
 ```
 docker run -it --rm -u $(id -u) -v "local fully qualified path to fabproxy removal playbooks":/playbooks ghcr.io/hyperledger-labs/fabric-ansible:sha-c9330b9 bash
 
 ```
 
-E.g:
+Example:
 
 ```
 docker run -it --rm -u $(id -u) -v ./examples/fabproxy-removal:/playbooks ghcr.io/hyperledger-labs/fabric-ansible:sha-c9330b9 bash
 ```
 
-Once the pre-requisite configured in the execution environement. Customer need to checkout the `fabric-ansible-collection`  and navigate to the `examples/fabproxy-removal` directory. This directory contains the execution playbook.  The Customer HLF console and the components shoud be in following version.
+At the command prompt, change directory to '/playbooks' and copy the fabproxy removal playbooks.
 
-| **Component name** | **Version** |
-| ------- | ------- |
-| Peer  | 2.5.7-20240507 |
-| Orderer  | 2.5.7-20240507 |
-| CA  | 1.5.10-20240507 |
-| Console  | 1.0.9-20240507	 |
+```
+[hlf-user@f401182e9510 /]$ cd playbooks/
+
+[hlf-user@f401182e9510 playbooks]$ cp -R /opt/fabproxy-removal/* .
+```
+
+Execute an ls and you should see the fabproxy-removal playbooks:
+
+```
+[hlf-user@f401182e9510 playbooks]$ ls
+01-migrate-all-ca-addresses.yml  03-migrate-peer-and-imported-addresses.yml  05-update_anchor_peers.yml  channels.yml	  tasks
+02-update-associated-nodes.yml	 04-migrate-ordering-node-addresses.yml      README.md			 common-vars.yml
+
+```
+
+### Option 2 - Install the ansible playbook prerequisites locally
+
+
+The fabproxy-removal playbooks can be executed locally.  This requires a more detailed setup on the local machine.  Installation requirements can be found here:
+
+- [Fabric Ansible Collection Pre-requisites](https://labs.hyperledger.org/fabric-ansible-collection/installation.html#requirements)
+
+Once all prerequisites have been installed, clone the ansible collection to a local directory.
+
+```
+git clone git@github.com:hyperledger-labs/fabric-ansible-collection.git
+```
+
+Once the collection has been successfully clone, change directory to the "examples/fabproxy-removal" directory.
+
+Execute and "ls" and you should see the fabproxy-removal playbooks:
+
+```
+[fabric-ansible-collection] $ cd examples/fabproxy-removal/
+
+[fabproxy-removal] $ ls
+01-migrate-all-ca-addresses.yml			04-migrate-ordering-node-addresses.yml		channels.yml
+02-update-associated-nodes.yml			05-update_anchor_peers.yml			common-vars.yml
+03-migrate-peer-and-imported-addresses.yml	README.md					tasks
+
+```
 
 
 The customer should carry out the script under the supervision of an IBM HLF SRE team member. If the client is confident  in the Ansible script's execution process they can execute the script therself. They must gather logs and communicate them via support tickets in the event that there are failures in the sequential execution flow. It is necessary to complete each step in order.
 {: important}
 
-## Step 1: Download Hyperledger Fabric Binaries.
-
-Excute the following shell script from the playbook directory.  it will download the all the fabroc binaries.
-
-***Note:***
-If docker images are being used, this step can be omitted.
-```
-./setup.sh
-```
 
 ## Step 2: Download Identies from the HLF Support Console.
 
-To export data in bulk, navigate to the Settings tab in the left hand navigation. You will see a section called Bulk data management followed by two buttons. The Export button will open a panel on the right, where you have several options of what to export.
+The fabproxy-removal playbooks require admin identities in order to complete changes to the channels.
+
+First create a "wallet" directory in the same directory as the fabproxy removal playbooks:
+
+```
+[playbooks]$ mkdir wallet
+[playbooks]$ ls
+01-migrate-all-ca-addresses.yml  03-migrate-peer-and-imported-addresses.yml  05-update_anchor_peers.yml  channels.yml	  tasks        wallet
+02-update-associated-nodes.yml	 04-migrate-ordering-node-addresses.yml      README.md			 common-vars.yml  testing.txt
+```
+
+On the Fabric Operations console, go to the wallet tab and export each wallet entry into the wallet directory.
+
+Optionally, export the data in bulk:
+
+Navigate to the Settings tab in the left hand navigation. You will see a section called Bulk data management followed by two buttons. The Export button will open a panel on the right, where you have several options of what to export.
 
 - By default, the Identities box in the export panel is left deselected. Download the peer, CA, and orderer identities by selecting the identities box.
 
-- Under the `fabproxy-removal `directory, create a `wallet` directory and add all of the identification files to it.
+- Unzip the bulk export file and copy all of the identities in the 'Wallet' directory to the 'wallet' directory in the fabroxy removal directory.
 
 ## Step 3: Editing the variable files.
 
@@ -78,9 +134,7 @@ An alternate method for determining the channel list. Please execute the below c
 ```
 kubectl exec -it [Ordrer Node Name] -c orderer -n [Namespace] -- ls /ordererdata/ledger/ibporderer/chains | xargs printf ' - %s \n'
 ```
-
-
-
+s
 This is how the `common-vars.yml` definition appears. Edit the variable file.
 
 - Determine the URL of your instance’s console.
@@ -159,12 +213,11 @@ After migrating all CA addresses. Before proceeding to the next step. If the cus
  ## Step 7: Migrate the orderering node address.
 
 
-
   1. The steps migrate renew the Orderer TLS certificate and migrate the Orderer address.
 
   2. Verify that everything is configured appropriately by reviewing your variable configuration files before running the script. If a customer uses the RAFT ordering service, we must update the name of the ordering service node in the `common-vars.yml` file after each execution.
 
- 3. We require each execution to Verify that the election process is proceeding as planned and that the RAFT leader is being replaced by looking through the Orderer logs. The script needs to be applied for the subsequent ordering service if everything is operating as it should.
+ 3. The ordering node logs for the ordering nodes should be reviewed before proceeding. The script needs to be applied for the subsequent ordering service if everything is operating as it should.
 
  4. Execute the following command.
 
