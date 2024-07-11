@@ -245,16 +245,36 @@ In the `common-vars.yml`, set the `dry-run` variable to true for the first run. 
 
 # Verify the HLF Instance of the Post execution
 
-**Step 1:** Verify that the ports for the HLF components(Peer/CA/Orderer) have been updated to 1.
+**Step 1:** Remove the Peer and Orderer external addresses from their respective CRSpec using the following commands.
 
-**Step 2:** Scale down the fabproxy deployments in `ibpinfra` namespace  using the below command.
+```
+kubectl get ibppeer -n [Namespace]  --no-headers=true -o custom-columns=":metadata.name" | xargs kubectl patch ibppeer [Peer Name] -n [Namespace]   --type merge --patch '{"spec":{"peerExternalEndpoint":""}}'
 
+kubectl get ibporderer -n [Namespace]  --no-headers=true -o custom-columns=":metadata.name" | xargs kubectl patch ibporderer [Orderer Name] -n [Namespace]  --type merge --patch '{"spec":{"externalAddress":""}}'
+```
+
+**Step 2:** Remove the deployments of Peer, Orderer, and CA. Once removed, the operator will restart the deployments. Ensure the deployments are up.
+
+```
+kubectl delete deployment [peer/orderer/ca] -n [Namespace]
+```
+Note: When deleting deployments, delete them one by one and ensure that the corresponding pods are up and running.
+
+**Step 3** Recommend deleting all ingresses in the namespace where the blockchain components are hosted.
+
+**Step 4** Restart the operator by deleting the operator pods.
+
+```
+kubectl delete pod [operator-pod-name] -n [Namespace]
+```
+**Step 5:** Verify that the ports for the HLF components(Peer/CA/Orderer) have been updated to 443.
+
+**Step 6:** Scale down the fabproxy deployments in `ibpinfra` namespace  using the below command.
 ```
 kubectl scale deployment --replicas=0 proxy-fabproxy -n ibpinfra
 ```
+**Step 7:** Once the fabproxy pods are scale down to zero. Check the console all the compoents are in green state.
 
-**Step 3:** Once the fabproxy pods are scale down to zero. Check the console all the compoents are in green state.
+**Step 8:**  Download the latest connection profile from your console and configure it in your client application. Execute the transaction and verify that the console is functioning as it did previously.
 
-**Step 4:**  Complete the transaction and verify that the console is operating as it did previously.
-
-**Step 4:**  If eveything working as expected. User can remove `ibpinfra` namespace.
+**Step 9:**  If eveything working as expected. User can remove `ibpinfra` namespace.
