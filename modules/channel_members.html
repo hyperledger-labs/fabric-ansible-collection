@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>connection_profile – Manage a connection profile for a Hyperledger Fabric network &mdash; Ansible Collection  documentation</title>
+  <title>channel_members – Manage anchor peers for a channel &mdash; Ansible Collection  documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
 
@@ -23,8 +23,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="console_user – Manage the list of users for an Fabric operations console" href="console_user.html" />
-    <link rel="prev" title="committed_chaincode – Manage an committed chaincode on a Hyperledger Fabric channel" href="committed_chaincode.html" /> 
+    <link rel="next" title="channel_parameters – Manage the parameters for a Hyperledger Fabric channel" href="channel_parameters.html" />
+    <link rel="prev" title="channel_member_info – Get information about a member for a Hyperledger Fabric channel" href="channel_member_info.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -89,16 +89,16 @@
 <li class="toctree-l3"><a class="reference internal" href="channel_consenters.html">channel_consenters – Manage the consenters for a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="channel_member.html">channel_member – Manage a member for a Hyperledger Fabric channel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="channel_member_info.html">channel_member_info – Get information about a member for a Hyperledger Fabric channel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="channel_members.html">channel_members – Manage anchor peers for a channel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="channel_parameters.html">channel_parameters – Manage the parameters for a Hyperledger Fabric channel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="channel_policy.html">channel_policy – Manage a policy for a Hyperledger Fabric channel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="committed_chaincode.html">committed_chaincode – Manage an committed chaincode on a Hyperledger Fabric channel</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">connection_profile – Manage a connection profile for a Hyperledger Fabric network</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">channel_members – Manage anchor peers for a channel</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#synopsis">Synopsis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="channel_parameters.html">channel_parameters – Manage the parameters for a Hyperledger Fabric channel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="channel_policy.html">channel_policy – Manage a policy for a Hyperledger Fabric channel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="committed_chaincode.html">committed_chaincode – Manage an committed chaincode on a Hyperledger Fabric channel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="connection_profile.html">connection_profile – Manage a connection profile for a Hyperledger Fabric network</a></li>
 <li class="toctree-l3"><a class="reference internal" href="console_user.html">console_user – Manage the list of users for an Fabric operations console</a></li>
 <li class="toctree-l3"><a class="reference internal" href="consortium_member.html">consortium_member – Manage a consortium member for a Hyperledger Fabric ordering service</a></li>
 <li class="toctree-l3"><a class="reference internal" href="consortium_member_info.html">consortium_member_info – Get information about a consortium member for a Hyperledger Fabric ordering service</a></li>
@@ -150,10 +150,10 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../modules.html">Modules</a></li>
-      <li class="breadcrumb-item active">connection_profile – Manage a connection profile for a Hyperledger Fabric network</li>
+      <li class="breadcrumb-item active">channel_members – Manage anchor peers for a channel</li>
       <li class="wy-breadcrumbs-aside">
               <!-- User defined GitHub URL -->
-              <a href="https://github.com/IBM-Blockchain/ansible-collection/edit/main/plugins/modules/connection_profile.py" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/IBM-Blockchain/ansible-collection/edit/main/plugins/modules/channel_members.py" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -161,8 +161,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="connection-profile-manage-a-connection-profile-for-a-hyperledger-fabric-network">
-<h1>connection_profile – Manage a connection profile for a Hyperledger Fabric network<a class="headerlink" href="#connection-profile-manage-a-connection-profile-for-a-hyperledger-fabric-network" title="Permalink to this heading"></a></h1>
+  <section id="channel-members-manage-anchor-peers-for-a-channel">
+<h1>channel_members – Manage anchor peers for a channel<a class="headerlink" href="#channel-members-manage-anchor-peers-for-a-channel" title="Permalink to this heading"></a></h1>
 <nav class="contents local" id="contents">
 <ul class="simple">
 <li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
@@ -172,7 +172,8 @@
 </nav>
 <section id="synopsis">
 <h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Permalink to this heading"></a></h2>
-<p>Create, update, or delete a connection profile for a Hyperledger Fabric network.</p>
+<p>Manage anchor peers for the whole channel.</p>
+<p>Migrate anchor peer addresses to the newer open source format</p>
 <p>This module works with the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.</p>
 </section>
 <section id="parameters">
@@ -206,38 +207,16 @@
 <div class="line"><strong>Default value</strong>: <code class="docutils literal notranslate"><span class="pre">60</span></code></div>
 </div>
 </dd>
-<dt>state</dt><dd><p><code class="docutils literal notranslate"><span class="pre">absent</span></code> - If a connection profile exists at the specified path, it will be removed.</p>
-<p><code class="docutils literal notranslate"><span class="pre">present</span></code> - Asserts that a connection profile exists at the specified path. If no connection profile exists, a connection profile will be created. If a connection profile exists, but does not match the specfied configuration, then the connection profile will be updated, if it can be. If it cannot be updated, it will be removed and re-created with the specified configuration.</p>
-<div class="line-block">
-<div class="line"><strong>Type</strong>: str</div>
-<div class="line"><strong>Default value</strong>: <code class="docutils literal notranslate"><span class="pre">present</span></code></div>
-</div>
-</dd>
-<dt>name</dt><dd><p>The name of this connection profile.</p>
-<p>Only required when <em>state</em> is <code class="docutils literal notranslate"><span class="pre">present</span></code>.</p>
+<dt>path (required)</dt><dd><p>Path to current the channel configuration file.</p>
+<p>This file can be fetched by using the <strong>ERROR while parsing</strong>: While parsing “M(channel_config)” at index 39: Module name “channel_config” is not a FQCN module.</p>
+<p>This file will be updated in place. You will need to keep a copy of the original file for computing the configuration update.</p>
 <div class="line-block">
 <div class="line"><strong>Type</strong>: str</div>
 </div>
 </dd>
-<dt>path (required)</dt><dd><p>The path to the JSON file where the connection profile will be stored.</p>
-</dd>
-<dt>organization</dt><dd><p>The organization for this connection profile.</p>
-<p>Only required when <em>state</em> is <code class="docutils literal notranslate"><span class="pre">present</span></code>.</p>
-</dd>
-<dt>certificate_authority</dt><dd><p>The certificate authority to reference in this connection profile.</p>
-<p>You can pass a string, which is the display name of a certificate authority registered with the Fabric operations console.</p>
-<p>You can also pass a dictionary, which must match the result format of one of the <strong>ERROR while parsing</strong>: While parsing “M(certificate_authority_info)” at index 82: Module name “certificate_authority_info” is not a FQCN or <strong>ERROR while parsing</strong>: While parsing “M(certificate_authority)” at index 115: Module name “certificate_authority” is not a FQCN modules.</p>
+<dt>operation (required)</dt><dd><p><code class="docutils literal notranslate"><span class="pre">migrate_addresses_to_os</span></code> - Convert the anchor peer addresses in the channel to open source standards</p>
 <div class="line-block">
-<div class="line"><strong>Type</strong>: raw</div>
-</div>
-</dd>
-<dt>peers</dt><dd><p>The peers to reference in this connection profile.</p>
-<p>You can pass strings, which are the display names of peers registered with the Fabric operations console.</p>
-<p>You can also pass dictionaries, which must match the result format of one of the <strong>ERROR while parsing</strong>: While parsing “M(peer_info)” at index 82: Module name “peer_info” is not a FQCN or <strong>ERROR while parsing</strong>: While parsing “M(peer)” at index 98: Module name “peer” is not a FQCN modules.</p>
-<p>Only required when <em>state</em> is <code class="docutils literal notranslate"><span class="pre">present</span></code>.</p>
-<div class="line-block">
-<div class="line"><strong>Type</strong>: list</div>
-<div class="line"><strong>Elements</strong>: raw</div>
+<div class="line"><strong>Type</strong>: str</div>
 </div>
 </dd>
 </dl>
@@ -245,28 +224,15 @@
 </section>
 <section id="examples">
 <h2><a class="toc-backref" href="#id3" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
-<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create a connection profile</span>
-<span class="w">  </span><span class="nt">hyperledger.fabric_ansible_collection.connection_profile</span><span class="p">:</span>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Add the organization to the channel</span>
+<span class="w">  </span><span class="nt">hyperledger.fabric_ansible_collection.channel_member</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
 <span class="w">    </span><span class="nt">api_endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://console.example.org:32000</span>
 <span class="w">    </span><span class="nt">api_authtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
 <span class="w">    </span><span class="nt">api_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxx</span>
 <span class="w">    </span><span class="nt">api_secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Org1 Gateway</span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Org1 Gateway.json</span>
-<span class="w">    </span><span class="nt">organization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Org1</span>
-<span class="w">    </span><span class="nt">certificate_authority</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Org1 CA</span>
-<span class="w">    </span><span class="nt">peers</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Org1 Peer</span>
-
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete a connection profile</span>
-<span class="w">  </span><span class="nt">hyperledger.fabric_ansible_collection.connection_profile</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
-<span class="w">    </span><span class="nt">api_endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://console.example.org:32000</span>
-<span class="w">    </span><span class="nt">api_authtype</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic</span>
-<span class="w">    </span><span class="nt">api_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxx</span>
-<span class="w">    </span><span class="nt">api_secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
-<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Org1 Gateway.json</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">updated_config.bin</span>
+<span class="w">    </span><span class="nt">operation</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;migrate_addresses_to_os&#39;</span>
 </pre></div>
 </div>
 </section>
@@ -276,8 +242,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="committed_chaincode.html" class="btn btn-neutral float-left" title="committed_chaincode – Manage an committed chaincode on a Hyperledger Fabric channel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="console_user.html" class="btn btn-neutral float-right" title="console_user – Manage the list of users for an Fabric operations console" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="channel_member_info.html" class="btn btn-neutral float-left" title="channel_member_info – Get information about a member for a Hyperledger Fabric channel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="channel_parameters.html" class="btn btn-neutral float-right" title="channel_parameters – Manage the parameters for a Hyperledger Fabric channel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

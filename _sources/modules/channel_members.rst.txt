@@ -1,0 +1,99 @@
+..
+.. SPDX-License-Identifier: Apache-2.0
+..
+
+:github_url: https://github.com/IBM-Blockchain/ansible-collection/edit/main/plugins/modules/channel_members.py
+
+
+channel_members -- Manage anchor peers for a channel
+====================================================
+
+.. contents::
+   :local:
+   :depth: 1
+
+
+Synopsis
+--------
+
+Manage anchor peers for the whole channel.
+
+Migrate anchor peer addresses to the newer open source format
+
+This module works with the IBM Support for Hyperledger Fabric software or the Hyperledger Fabric Open Source Stack running in a Red Hat OpenShift or Kubernetes cluster.
+
+
+
+
+
+
+Parameters
+----------
+
+  api_endpoint (required)
+    The URL for the Fabric operations console.
+
+    | **Type**: str
+
+  api_authtype (required)
+    \ :literal:`basic`\  - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using \ :emphasis:`api\_key`\  and API secret using \ :emphasis:`api\_secret`\ .
+
+    | **Type**: str
+
+  api_key (required)
+    The API key for the Fabric operations console.
+
+    | **Type**: str
+
+  api_secret
+    The API secret for the Fabric operations console.
+
+    Only required when \ :emphasis:`api\_authtype`\  is \ :literal:`basic`\ .
+
+    | **Type**: str
+
+  api_timeout
+    The timeout, in seconds, to use when interacting with the Fabric operations console.
+
+    | **Type**: int
+    | **Default value**: ``60``
+
+  path (required)
+    Path to current the channel configuration file.
+
+    This file can be fetched by using the \ :strong:`ERROR while parsing`\ : While parsing "M(channel\_config)" at index 39: Module name "channel\_config" is not a FQCN\  module.
+
+    This file will be updated in place. You will need to keep a copy of the original file for computing the configuration update.
+
+    | **Type**: str
+
+  operation (required)
+    \ :literal:`migrate\_addresses\_to\_os`\  - Convert the anchor peer addresses in the channel to open source standards
+
+    | **Type**: str
+
+
+
+
+
+
+
+
+Examples
+--------
+
+.. code-block:: yaml+jinja
+
+    
+    - name: Add the organization to the channel
+      hyperledger.fabric_ansible_collection.channel_member:
+        state: present
+        api_endpoint: https://console.example.org:32000
+        api_authtype: basic
+        api_key: xxxxxxxx
+        api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        path: updated_config.bin
+        operation: 'migrate_addresses_to_os'
+
+
+
