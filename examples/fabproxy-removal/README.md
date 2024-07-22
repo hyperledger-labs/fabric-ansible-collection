@@ -19,6 +19,8 @@ The fabproxy removal process will use the following high level steps:
 - Migrate the orderering node address.
 - Update anchor peer in the channel.
 
+**Note:**
+ This script is not compatible with Single Ordering node setups.
 
 ## Step 1: Install Prerequisites for the Hyperledger Fabric Ansible Collection
 
