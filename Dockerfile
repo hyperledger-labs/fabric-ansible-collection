@@ -40,14 +40,14 @@ RUN microdnf install -y git make tar gzip which findutils gcc \
 RUN ARCH=$(uname -m) \
     && if [ "${ARCH}" = "x86_64" ]; then ARCH=amd64; fi \
     && if [ "${ARCH}" = "aarch64" ]; then ARCH=arm64; fi \
-    && curl -sSL https://go.dev/dl/go1.21.9.linux-${ARCH}.tar.gz | tar xzf - -C /usr/local
+    && curl -sSL https://go.dev/dl/go1.22.5.linux-${ARCH}.tar.gz | tar xzf - -C /usr/local
 ENV GOPATH=/go
 ENV PATH=/usr/local/go/bin:$PATH
 RUN mkdir -p /go/src/github.com/hyperledger \
     && cd /go/src/github.com/hyperledger \
     && git clone -n https://github.com/hyperledger/fabric.git \
     && cd fabric \
-    && git checkout v2.5.7
+    && git checkout v2.5.9
 RUN cd /go/src/github.com/hyperledger/fabric \
     && make configtxlator osnadmin peer GO_TAGS=pkcs11 EXECUTABLES=
 
