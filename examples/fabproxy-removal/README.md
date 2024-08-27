@@ -134,7 +134,7 @@ Navigate to the Settings tab in the left hand navigation. You will see a section
 An alternate method for determining the channel list. Please execute the below command to find the list of channel associated with the network and update channel variable files.
 
 ```
-kubectl exec -it [Ordrer Node Name] -c orderer -n [Namespace] -- ls /ordererdata/ledger/ibporderer/chains | xargs printf ' - %s \n'
+kubectl exec -it [Ordrer Node Name] -c orderer -n [namespace] -- ls /ordererdata/ledger/ibporderer/chains | xargs printf ' - %s \n'
 ```
 s
 This is how the `common-vars.yml` definition appears. Edit the variable file.
@@ -245,29 +245,35 @@ In the `common-vars.yml`, set the `dry-run` variable to true for the first run. 
   ```
  3. Once the above steps executed check the application channel config. The peer address are migrated.
 
-# Verify the HLF Instance of the Post execution
+# Verify the IBM Support for Hyperledger Fabric instance after the FabProxy migration:
 
 **Step 1:** Remove the Peer and Orderer external addresses from their respective CRSpec using the following commands.
 
 ```
-kubectl get ibppeer -n [Namespace]  --no-headers=true -o custom-columns=":metadata.name" | xargs kubectl patch ibppeer [Peer Name] -n [Namespace]   --type merge --patch '{"spec":{"peerExternalEndpoint":""}}'
+kubectl get ibppeer -n [namespace]  --no-headers=true -o custom-columns=":metadata.name" | xargs kubectl patch ibppeer [Peer Name] -n [namespace]   --type merge --patch '{"spec":{"peerExternalEndpoint":""}}'
 
-kubectl get ibporderer -n [Namespace]  --no-headers=true -o custom-columns=":metadata.name" | xargs kubectl patch ibporderer [Orderer Name] -n [Namespace]  --type merge --patch '{"spec":{"externalAddress":""}}'
+kubectl get ibporderer -n [namespace]  --no-headers=true -o custom-columns=":metadata.name" | xargs kubectl patch ibporderer [Orderer Name] -n [namespace]  --type merge --patch '{"spec":{"externalAddress":""}}'
 ```
 
 **Step 2:** Remove the deployments of Peer, Orderer, and CA. Once removed, the operator will restart the deployments. Ensure the deployments are up.
 
 ```
-kubectl delete deployment [peer/orderer/ca] -n [Namespace]
+kubectl delete deployment [peer/orderer/ca] -n [namespace]
 ```
 Note: When deleting deployments, delete them one by one and ensure that the corresponding pods are up and running.
 
-**Step 3** Recommend deleting all ingresses in the namespace where the blockchain components are hosted.
+**Step 3** Recommend deleting all ingresses in the namespace where the blockchain components are hosted. Delete the components ingress using the below comments.
+
+```
+kubectl get ingress -n [namespace]
+
+kubectl delete ingress [component-ingress-name] -n [namespace]
+```
 
 **Step 4** Restart the operator by deleting the operator pods.
 
 ```
-kubectl delete pod [operator-pod-name] -n [Namespace]
+kubectl delete pod [operator-pod-name] -n [namespace]
 ```
 **Step 5:** Verify that the ports for the HLF components(Peer/CA/Orderer) have been updated to 443.
 
