@@ -120,9 +120,13 @@ Navigate to the Settings tab in the left hand navigation. You will see a section
 
 ## Step 3: Editing the variable files.
 
- Variable files are used to store variables that are used across multiple Ansible playbooks. Each organization has their own variable file, and you must edit these files to specify the connection details for the instance for that organization.The playbook repository has two ansible variable files such as` chanels.yml` and `common-vars.yml`.
+ Variable files are used to store variables that are used across multiple Ansible playbooks. Each organization has their own variable file, and you must edit these files to specify the connection details for the instance for that organization.The playbook repository has two ansible variable files such as` channels.yml` and `common-vars.yml`.
 
- This is how the `console.yml` definition appears. It has the System channel name and the Application channel name by default. if the client's orderer node with system channel. Since `testchainid` is the default system channel name, they don't need to modify it. The customer must alter the name of the appropriate application channel. They have entered each name individually if they have more than one application channel name. If the customer has the orderer node without system channel, they don't need mention the system channel name `testchainid`.
+ This is how the `channels.yml` definition appears. It has the System channel name and the Application channel name by default. if the client's orderer node with system channel. Since `testchainid` is the default system channel name, they don't need to modify it. The customer must alter the name of the appropriate application channel. They have entered each name individually if they have more than one application channel name. If the customer has the orderer node without system channel, they don't need mention the system channel name `testchainid`.
+
+ ***Note:***
+
+If you exclude any channel in the configuration below, those channels will be unused after the FabProxy migration, and there will be no way to recover them. Ensure that you include all the channels you wish to migrate.
 
 
  ```
@@ -136,7 +140,7 @@ An alternate method for determining the channel list. Please execute the below c
 ```
 kubectl exec -it [Ordrer Node Name] -c orderer -n [namespace] -- ls /ordererdata/ledger/ibporderer/chains | xargs printf ' - %s \n'
 ```
-s
+
 This is how the `common-vars.yml` definition appears. Edit the variable file.
 
 - Determine the URL of your instance’s console.
@@ -262,7 +266,7 @@ kubectl delete deployment [peer/orderer/ca] -n [namespace]
 ```
 Note: When deleting deployments, delete them one by one and ensure that the corresponding pods are up and running.
 
-**Step 3** Recommend deleting all ingresses in the namespace where the blockchain components are hosted. Delete the components ingress using the below comments.
+**Step 3** Recommend deleting all ingresses in the namespace where the blockchain components are hosted. Delete each component's ingress using the commands below.
 
 ```
 kubectl get ingress -n [namespace]
