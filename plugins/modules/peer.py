@@ -447,6 +447,63 @@ EXAMPLES = '''
       label: Org1 CA label
       pin: 12345678
 
+- name: Create multiple peers with advanced crypto configuration (CSR Hosts with SANs) and K8S builder
+  hyperledger.fabric_ansible_collection.peer:
+    state: present
+    api_endpoint: https://console.example.org:32000
+    api_authtype: basic
+    api_key: xxxxxxxx
+    api_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    api_token_endpoint: "{{ api_token_endpoint | default(omit) }}"
+    api_timeout: "{{ api_timeout | default(omit) }}"
+    name: "Org Peer{{ item }}"
+    msp_id: "Org1MSP"
+    state_db: "{{ peer_state_db }}"
+    resources: "{{ peer_resources | default(omit) }}"
+    storage: "{{ peer_storage | default(omit) }}"
+    version: "{{ peer_version | default(omit) }}"
+    zone: "{{ peer_zones[peer_idx] | default(omit) }}"
+    wait_timeout: "{{ wait_timeout | default(omit) }}"
+    crypto:
+      enrollment:
+        component:
+          admin_certs:
+            - "{{ endorsing_organization_org_admin.enrolled_identity.cert | default(omit) }}"
+        ca:
+          host: "console_namespace-ca-ca.your.own.domain.localh.st"
+          port: "443"
+          name: "ca"
+          tls_cert: "{{ organization_ca.certificate_authority.pem }}"
+          enroll_id: "{{ peer_enrollment_id }}{{ item }}"
+          enroll_secret: "{{ peer_enrollment_secret }}"
+        tlsca:
+          host: "console_namespace-ca-ca.your.own.domain.localh.st"
+          port: "443"
+          name: "tlsca"
+          tls_cert: "{{ organization_ca.certificate_authority.pem }}"
+          enroll_id: "{{ peer_enrollment_id }}{{ item }}"
+          enroll_secret: "{{ peer_enrollment_secret }}"
+          csr_hosts:
+              - peers.your.own.domain.localh.st
+              - peer.your.own.domain.localh.st
+              - "127.0.0.1"
+   config_override:
+      chaincode:
+        externalBuilders:
+          - name: k8s_builder
+            path: /opt/hyperledger/k8s_builder
+            propagateEnvironment:
+              - CORE_PEER_ID
+              - FABRIC_K8S_BUILDER_DEBUG
+              - FABRIC_K8S_BUILDER_NAMESPACE
+              - FABRIC_K8S_BUILDER_OBJECT_NAME_PREFIX
+              - FABRIC_K8S_BUILDER_SERVICE_ACCOUNT
+              - KUBERNETES_SERVICE_HOST
+              - KUBERNETES_SERVICE_PORT
+  loop: "{{ range(1, number_of_peers|int + 1, 1) | list }}"
+  loop_control:
+    index_var: peer_idx      
+
 - name: Destroy peer
   hyperledger.fabric_ansible_collection.peer:
     state: absent
@@ -516,13 +573,11 @@ peer:
 
 
 def get_crypto(console, module):
-
     # Get the crypto configuration.
     return {'enrollment': get_crypto_enrollment_config(console, module)}
 
 
 def get_crypto_enrollment_config(console, module):
-
     # Get the crypto configuration.
     return {
         'component': get_crypto_enrollment_component_config(console, module),
@@ -537,7 +592,6 @@ def get_crypto_enrollment_component_config(console, module):
 
 
 def get_crypto_enrollment_ca_config(console, module):
-
     # Get the enrollment configuration for the ordering services MSP.
     certificate_authority = get_certificate_authority_by_module(console, module)
     certificate_authority_url = urllib.parse.urlsplit(certificate_authority.api_url)
@@ -554,7 +608,6 @@ def get_crypto_enrollment_ca_config(console, module):
 
 
 def get_crypto_enrollment_tlsca_config(console, module):
-
     # Get the enrollment configuration for the ordering services TLS.
     certificate_authority = get_certificate_authority_by_module(console, module)
     certificate_authority_url = urllib.parse.urlsplit(certificate_authority.api_url)
@@ -571,7 +624,6 @@ def get_crypto_enrollment_tlsca_config(console, module):
 
 
 def main():
-
     # Create the module.
     argument_spec = dict(
         state=dict(type='str', default='present', choices=['present', 'absent']),
@@ -781,8 +833,18 @@ def main():
                 del expected_peer['resources']
                 del expected_peer['storage']
 
-            # Get the config.
-            expected_peer['crypto'] = get_crypto(console, module)
+            # Get the crypto configuration.
+            # When configuring cryptography in your Ansible playbook for the peer component creating, you have two
+            # choices: provide all the necessary settings directly, or use a Certificate Authority (CA). These options
+            # are mutually exclusive, meaning youcan only choose one. If you opt to use a CA, ensure you provide all
+            # the required CA details, including its name, to avoid errors.
+            # OBS: (Without this, the get_crypto(console, module) will return an error because the
+            # ca name won ´t be provided under certificate_authority ansible parameter.
+            crypto = module.params['crypto']
+            if crypto is not None:
+                expected_peer['crypto'] = crypto
+            else:
+                expected_peer['crypto'] = get_crypto(console, module)
 
             # Create the peer.
             peer = console.create_peer(expected_peer)
@@ -837,7 +899,8 @@ def main():
             diff = diff_dicts(peer, new_peer)
             for change in diff:
                 if change not in permitted_changes:
-                    raise Exception(f'{change} cannot be changed from {peer[change]} to {new_peer[change]} for existing peer')
+                    raise Exception(
+                        f'{change} cannot be changed from {peer[change]} to {new_peer[change]} for existing peer')
 
             # If a change was supplied to resources, apply the change to the entire resources
             if module.params['resources'] is not None:
@@ -846,7 +909,6 @@ def main():
             # If the peer has changed, apply the changes.
             peer_changed = not equal_dicts(peer, new_peer)
             if peer_changed:
-
                 # Log the differences.
                 module.json_log({
                     'msg': 'differences detected, updating peer',
@@ -872,7 +934,8 @@ def main():
                 crypto = module.params['crypto']
                 if crypto:
                     for config_type in ['enrollment', 'msp']:
-                        expected_admins = crypto.get(config_type, dict()).get('component', dict()).get('admincerts', None)
+                        expected_admins = crypto.get(config_type, dict()).get('component', dict()).get('admincerts',
+                                                                                                       None)
                         if expected_admins:
                             break
             if expected_admins:
