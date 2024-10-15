@@ -487,7 +487,7 @@ EXAMPLES = '''
             - peers.your.own.domain.localh.st
             - peer.your.own.domain.localh.st
             - "127.0.0.1"
-   config_override:
+    config_override:
       chaincode:
         externalBuilders:
           - name: k8s_builder
