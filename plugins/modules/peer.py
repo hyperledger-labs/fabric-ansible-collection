@@ -502,7 +502,7 @@ EXAMPLES = '''
               - KUBERNETES_SERVICE_PORT
   loop: "{{ range(1, number_of_peers|int + 1, 1) | list }}"
   loop_control:
-    index_var: peer_idx      
+    index_var: peer_idx
 
 - name: Destroy peer
   hyperledger.fabric_ansible_collection.peer:
