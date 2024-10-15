@@ -573,11 +573,13 @@ peer:
 
 
 def get_crypto(console, module):
+
     # Get the crypto configuration.
     return {'enrollment': get_crypto_enrollment_config(console, module)}
 
 
 def get_crypto_enrollment_config(console, module):
+
     # Get the crypto configuration.
     return {
         'component': get_crypto_enrollment_component_config(console, module),
@@ -592,6 +594,7 @@ def get_crypto_enrollment_component_config(console, module):
 
 
 def get_crypto_enrollment_ca_config(console, module):
+
     # Get the enrollment configuration for the ordering services MSP.
     certificate_authority = get_certificate_authority_by_module(console, module)
     certificate_authority_url = urllib.parse.urlsplit(certificate_authority.api_url)
@@ -608,6 +611,7 @@ def get_crypto_enrollment_ca_config(console, module):
 
 
 def get_crypto_enrollment_tlsca_config(console, module):
+
     # Get the enrollment configuration for the ordering services TLS.
     certificate_authority = get_certificate_authority_by_module(console, module)
     certificate_authority_url = urllib.parse.urlsplit(certificate_authority.api_url)
@@ -624,6 +628,7 @@ def get_crypto_enrollment_tlsca_config(console, module):
 
 
 def main():
+
     # Create the module.
     argument_spec = dict(
         state=dict(type='str', default='present', choices=['present', 'absent']),
@@ -899,8 +904,7 @@ def main():
             diff = diff_dicts(peer, new_peer)
             for change in diff:
                 if change not in permitted_changes:
-                    raise Exception(
-                        f'{change} cannot be changed from {peer[change]} to {new_peer[change]} for existing peer')
+                    raise Exception(f'{change} cannot be changed from {peer[change]} to {new_peer[change]} for existing peer')
 
             # If a change was supplied to resources, apply the change to the entire resources
             if module.params['resources'] is not None:
@@ -909,6 +913,7 @@ def main():
             # If the peer has changed, apply the changes.
             peer_changed = not equal_dicts(peer, new_peer)
             if peer_changed:
+
                 # Log the differences.
                 module.json_log({
                     'msg': 'differences detected, updating peer',
@@ -934,8 +939,7 @@ def main():
                 crypto = module.params['crypto']
                 if crypto:
                     for config_type in ['enrollment', 'msp']:
-                        expected_admins = crypto.get(config_type, dict()).get('component', dict()).get('admincerts',
-                                                                                                       None)
+                        expected_admins = crypto.get(config_type, dict()).get('component', dict()).get('admincerts', None)
                         if expected_admins:
                             break
             if expected_admins:
