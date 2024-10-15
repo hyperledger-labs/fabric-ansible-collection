@@ -484,9 +484,9 @@ EXAMPLES = '''
           enroll_id: "{{ peer_enrollment_id }}{{ item }}"
           enroll_secret: "{{ peer_enrollment_secret }}"
           csr_hosts:
-              - peers.your.own.domain.localh.st
-              - peer.your.own.domain.localh.st
-              - "127.0.0.1"
+            - peers.your.own.domain.localh.st
+            - peer.your.own.domain.localh.st
+            - "127.0.0.1"
    config_override:
       chaincode:
         externalBuilders:
