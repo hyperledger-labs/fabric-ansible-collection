@@ -34,7 +34,7 @@ Parameters
     | **Type**: str
 
   api_authtype (required)
-    \ :literal:`basic`\  - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using \ :emphasis:`api\_key`\  and API secret using \ :emphasis:`api\_secret`\ .
+    :literal:`basic` - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using :emphasis:`api\_key` and API secret using :emphasis:`api\_secret`.
 
     | **Type**: str
 
@@ -46,7 +46,7 @@ Parameters
   api_secret
     The API secret for the Fabric operations console.
 
-    Only required when \ :emphasis:`api\_authtype`\  is \ :literal:`basic`\ .
+    Only required when :emphasis:`api\_authtype` is :literal:`basic`.
 
     | **Type**: str
 
@@ -57,9 +57,9 @@ Parameters
     | **Default value**: ``60``
 
   state
-    \ :literal:`absent`\  - If the peer has joined the channel with the specified name, then an error will be thrown, as it is not possible for a peer to leave a channel.
+    :literal:`absent` - If the peer has joined the channel with the specified name, then an error will be thrown, as it is not possible for a peer to leave a channel.
 
-    \ :literal:`present`\  - Asserts that the peer has joined the channel with the specified name. If the peer has not joined the channel with the specified name, then the peer will be joined to the channel using the specified configuration block.
+    :literal:`present` - Asserts that the peer has joined the channel with the specified name. If the peer has not joined the channel with the specified name, then the peer will be joined to the channel using the specified configuration block.
 
     | **Type**: str
     | **Default value**: ``present``
@@ -69,7 +69,7 @@ Parameters
 
     You can pass a string, which is the display name of a peer registered with the Fabric operations console.
 
-    You can also pass a dict, which must match the result format of one of the \ :strong:`ERROR while parsing`\ : While parsing "M(peer\_info)" at index 76: Module name "peer\_info" is not a FQCN\  or \ :strong:`ERROR while parsing`\ : While parsing "M(peer)" at index 92: Module name "peer" is not a FQCN\  modules.
+    You can also pass a dict, which must match the result format of one of the :strong:`ERROR while parsing`\ : While parsing "M(peer\_info)" at index 76: Module name "peer\_info" is not a FQCN or :strong:`ERROR while parsing`\ : While parsing "M(peer)" at index 92: Module name "peer" is not a FQCN modules.
 
     | **Type**: raw
 
@@ -78,7 +78,7 @@ Parameters
 
     You can pass a string, which is the path to the JSON file where the enrolled identity is stored.
 
-    You can also pass a dict, which must match the result format of one of the \ :strong:`ERROR while parsing`\ : While parsing "M(enrolled\_identity\_info)" at index 76: Module name "enrolled\_identity\_info" is not a FQCN\  or \ :strong:`ERROR while parsing`\ : While parsing "M(enrolled\_identity)" at index 105: Module name "enrolled\_identity" is not a FQCN\  modules.
+    You can also pass a dict, which must match the result format of one of the :strong:`ERROR while parsing`\ : While parsing "M(enrolled\_identity\_info)" at index 76: Module name "enrolled\_identity\_info" is not a FQCN or :strong:`ERROR while parsing`\ : While parsing "M(enrolled\_identity)" at index 105: Module name "enrolled\_identity" is not a FQCN modules.
 
     | **Type**: raw
 
@@ -90,7 +90,7 @@ Parameters
   hsm
     The PKCS #11 compliant HSM configuration to use for digital signatures.
 
-    Only required if the identity specified in \ :emphasis:`identity`\  was enrolled using an HSM.
+    Only required if the identity specified in :emphasis:`identity` was enrolled using an HSM.
 
     | **Type**: dict
 
@@ -113,14 +113,14 @@ Parameters
   name
     The name of the channel.
 
-    Only required when \ :emphasis:`state`\  is \ :literal:`absent`\ .
+    Only required when :emphasis:`state` is :literal:`absent`.
 
     | **Type**: str
 
   path
     The path to the file where the channel genesis block is stored.
 
-    Only required when \ :emphasis:`state`\  is \ :literal:`present`\ .
+    Only required when :emphasis:`state` is :literal:`present`.
 
     | **Type**: str
 

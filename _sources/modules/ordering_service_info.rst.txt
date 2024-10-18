@@ -34,7 +34,7 @@ Parameters
     | **Type**: str
 
   api_authtype
-    \ :literal:`basic`\  - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using \ :emphasis:`api\_key`\  and API secret using \ :emphasis:`api\_secret`\ .
+    :literal:`basic` - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using :emphasis:`api\_key` and API secret using :emphasis:`api\_secret`.
 
     | **Type**: str
 
@@ -46,7 +46,7 @@ Parameters
   api_secret
     The API secret for the Fabric operations console.
 
-    Only required when \ :emphasis:`api\_authtype`\  is \ :literal:`basic`\ .
+    Only required when :emphasis:`api\_authtype` is :literal:`basic`.
 
     | **Type**: str
 

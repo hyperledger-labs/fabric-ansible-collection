@@ -34,7 +34,7 @@ Parameters
     | **Type**: str
 
   api_authtype (required)
-    \ :literal:`basic`\  - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using \ :emphasis:`api\_key`\  and API secret using \ :emphasis:`api\_secret`\ .
+    :literal:`basic` - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using :emphasis:`api\_key` and API secret using :emphasis:`api\_secret`.
 
     | **Type**: str
 
@@ -46,7 +46,7 @@ Parameters
   api_secret
     The API secret for the Fabric operations console.
 
-    Only required when \ :emphasis:`api\_authtype`\  is \ :literal:`basic`\ .
+    Only required when :emphasis:`api\_authtype` is :literal:`basic`.
 
     | **Type**: str
 
@@ -57,9 +57,9 @@ Parameters
     | **Default value**: ``60``
 
   state
-    \ :literal:`absent`\  - An organization matching the specified name will be removed from the channel.
+    :literal:`absent` - An organization matching the specified name will be removed from the channel.
 
-    \ :literal:`present`\  - Asserts that an organization matching the specified name and configuration exists in the channel. If no organization matches the specified name, the organization will be added to the channel. If an organization matches the specified name but the configuration does not match, then the organization in the channel will be updated.
+    :literal:`present` - Asserts that an organization matching the specified name and configuration exists in the channel. If no organization matches the specified name, the organization will be added to the channel. If an organization matches the specified name but the configuration does not match, then the organization in the channel will be updated.
 
     | **Type**: str
     | **Default value**: ``present``
@@ -67,7 +67,7 @@ Parameters
   path (required)
     Path to current the channel configuration file.
 
-    This file can be fetched by using the \ :strong:`ERROR while parsing`\ : While parsing "M(channel\_config)" at index 39: Module name "channel\_config" is not a FQCN\  module.
+    This file can be fetched by using the :strong:`ERROR while parsing`\ : While parsing "M(channel\_config)" at index 39: Module name "channel\_config" is not a FQCN module.
 
     This file will be updated in place. You will need to keep a copy of the original file for computing the configuration update.
 
@@ -78,7 +78,7 @@ Parameters
 
     You can pass a string, which is the display name of an organization registered with the Fabric operations console.
 
-    You can also pass a dictionary, which must match the result format of one of the \ :strong:`ERROR while parsing`\ : While parsing "M(organization\_info)" at index 82: Module name "organization\_info" is not a FQCN\  or \ :strong:`ERROR while parsing`\ : While parsing "M(organization[])" at index 106: Module name "organization[]" is not a FQCN\  modules.
+    You can also pass a dictionary, which must match the result format of one of the :strong:`ERROR while parsing`\ : While parsing "M(organization\_info)" at index 82: Module name "organization\_info" is not a FQCN or :strong:`ERROR while parsing`\ : While parsing "M(organization[])" at index 106: Module name "organization[]" is not a FQCN modules.
 
     | **Type**: raw
 
@@ -87,7 +87,7 @@ Parameters
 
     You can pass strings, which are the names of peers that are registered with the Fabric operations console.
 
-    You can also pass a dict, which must match the result format of one of the \ :strong:`ERROR while parsing`\ : While parsing "M(peer\_info)" at index 76: Module name "peer\_info" is not a FQCN\  or \ :strong:`ERROR while parsing`\ : While parsing "M(peer)" at index 92: Module name "peer" is not a FQCN\  modules.
+    You can also pass a dict, which must match the result format of one of the :strong:`ERROR while parsing`\ : While parsing "M(peer\_info)" at index 76: Module name "peer\_info" is not a FQCN or :strong:`ERROR while parsing`\ : While parsing "M(peer)" at index 92: Module name "peer" is not a FQCN modules.
 
     | **Type**: list
     | **Elements**: raw

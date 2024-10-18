@@ -36,7 +36,7 @@ Parameters
     | **Type**: str
 
   api_authtype (required)
-    \ :literal:`basic`\  - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using \ :emphasis:`api\_key`\  and API secret using \ :emphasis:`api\_secret`\ .
+    :literal:`basic` - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using :emphasis:`api\_key` and API secret using :emphasis:`api\_secret`.
 
     | **Type**: str
 
@@ -48,7 +48,7 @@ Parameters
   api_secret
     The API secret for the Fabric operations console.
 
-    Only required when \ :emphasis:`api\_authtype`\  is \ :literal:`basic`\ .
+    Only required when :emphasis:`api\_authtype` is :literal:`basic`.
 
     | **Type**: str
 
@@ -59,9 +59,9 @@ Parameters
     | **Default value**: ``60``
 
   state
-    \ :literal:`absent`\  - An organization matching the specified name will be stopped and removed.
+    :literal:`absent` - An organization matching the specified name will be stopped and removed.
 
-    \ :literal:`present`\  - Asserts that an organization matching the specified name and configuration exists. If no organization matches the specified name, an organization will be created. If an organization matches the specified name but the configuration does not match, then the organization will be updated, if it can be. If it cannot be updated, it will be removed and re-created with the specified configuration.
+    :literal:`present` - Asserts that an organization matching the specified name and configuration exists. If no organization matches the specified name, an organization will be created. If an organization matches the specified name but the configuration does not match, then the organization will be updated, if it can be. If it cannot be updated, it will be removed and re-created with the specified configuration.
 
     | **Type**: str
     | **Default value**: ``present``
@@ -69,14 +69,14 @@ Parameters
   name
     The name of the external organization.
 
-    Only required when \ :emphasis:`state`\  is \ :literal:`absent`\ .
+    Only required when :emphasis:`state` is :literal:`absent`.
 
     | **Type**: str
 
   organization
     The definition of the external organization
 
-    Only required when \ :emphasis:`state`\  is \ :literal:`present`\ .
+    Only required when :emphasis:`state` is :literal:`present`.
 
     | **Type**: dict
 
@@ -95,7 +95,7 @@ Parameters
 
       You can pass a string, which is the display name of a certificate authority registered with the Fabric operations console.
 
-      You can also pass a dictionary, which must match the result format of one of the \ :strong:`ERROR while parsing`\ : While parsing "M(certificate\_authority\_info)" at index 82: Module name "certificate\_authority\_info" is not a FQCN\  or \ :strong:`ERROR while parsing`\ : While parsing "M(certificate\_authority)" at index 115: Module name "certificate\_authority" is not a FQCN\  modules.
+      You can also pass a dictionary, which must match the result format of one of the :strong:`ERROR while parsing`\ : While parsing "M(certificate\_authority\_info)" at index 82: Module name "certificate\_authority\_info" is not a FQCN or :strong:`ERROR while parsing`\ : While parsing "M(certificate\_authority)" at index 115: Module name "certificate\_authority" is not a FQCN modules.
 
       | **Type**: raw
 
@@ -294,7 +294,7 @@ Return Values
   organization
     The organization.
 
-    | **Returned**: when \ :emphasis:`state`\  is \ :literal:`present`\ 
+    | **Returned**: when :emphasis:`state` is :literal:`present`
     | **Type**: dict
 
     name

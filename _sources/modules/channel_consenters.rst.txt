@@ -34,7 +34,7 @@ Parameters
     | **Type**: str
 
   api_authtype (required)
-    \ :literal:`basic`\  - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using \ :emphasis:`api\_key`\  and API secret using \ :emphasis:`api\_secret`\ .
+    :literal:`basic` - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using :emphasis:`api\_key` and API secret using :emphasis:`api\_secret`.
 
     | **Type**: str
 
@@ -46,7 +46,7 @@ Parameters
   api_secret
     The API secret for the Fabric operations console.
 
-    Only required when \ :emphasis:`api\_authtype`\  is \ :literal:`basic`\ .
+    Only required when :emphasis:`api\_authtype` is :literal:`basic`.
 
     | **Type**: str
 
@@ -59,7 +59,7 @@ Parameters
   path (required)
     Path to current the channel configuration file.
 
-    This file can be fetched by using the \ :strong:`ERROR while parsing`\ : While parsing "M(channel\_config)" at index 39: Module name "channel\_config" is not a FQCN\  module.
+    This file can be fetched by using the :strong:`ERROR while parsing`\ : While parsing "M(channel\_config)" at index 39: Module name "channel\_config" is not a FQCN module.
 
     This file will be updated in place. You will need to keep a copy of the original file for computing the configuration update.
 
@@ -70,9 +70,9 @@ Parameters
 
     You can pass a string, which is the cluster name of a ordering service registered with the Fabric operations console.
 
-    You can also pass a list, which must match the result format of one of the \ :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service\_info)" at index 76: Module name "ordering\_service\_info" is not a FQCN\  or \ :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service)" at index 104: Module name "ordering\_service" is not a FQCN\  modules.
+    You can also pass a list, which must match the result format of one of the :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service\_info)" at index 76: Module name "ordering\_service\_info" is not a FQCN or :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service)" at index 104: Module name "ordering\_service" is not a FQCN modules.
 
-    Cannot be specified with \ :emphasis:`ordering\_service\_nodes`\ .
+    Cannot be specified with :emphasis:`ordering\_service\_nodes`.
 
     | **Type**: raw
 
@@ -81,9 +81,9 @@ Parameters
 
     You can pass strings, which are the names of ordering service nodes that are registered with the Fabric operations console.
 
-    You can also pass a dict, which must match the result format of one of the \ :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service\_node\_info)" at index 76: Module name "ordering\_service\_node\_info" is not a FQCN\  or \ :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service\_node)" at index 109: Module name "ordering\_service\_node" is not a FQCN\  modules.
+    You can also pass a dict, which must match the result format of one of the :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service\_node\_info)" at index 76: Module name "ordering\_service\_node\_info" is not a FQCN or :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service\_node)" at index 109: Module name "ordering\_service\_node" is not a FQCN modules.
 
-    Cannot be specified with \ :emphasis:`ordering\_service`\ .
+    Cannot be specified with :emphasis:`ordering\_service`.
 
     | **Type**: list
     | **Elements**: raw

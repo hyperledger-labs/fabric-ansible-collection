@@ -34,7 +34,7 @@ Parameters
     | **Type**: str
 
   api_authtype (required)
-    \ :literal:`basic`\  - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using \ :emphasis:`api\_key`\  and API secret using \ :emphasis:`api\_secret`\ .
+    :literal:`basic` - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using :emphasis:`api\_key` and API secret using :emphasis:`api\_secret`.
 
     | **Type**: str
 
@@ -46,7 +46,7 @@ Parameters
   api_secret
     The API secret for the Fabric operations console.
 
-    Only required when \ :emphasis:`api\_authtype`\  is \ :literal:`basic`\ .
+    Only required when :emphasis:`api\_authtype` is :literal:`basic`.
 
     | **Type**: str
 
@@ -57,9 +57,9 @@ Parameters
     | **Default value**: ``60``
 
   state
-    \ :literal:`absent`\  - A user matching the specified email will be removed from the IBM Blockchain Platform console.
+    :literal:`absent` - A user matching the specified email will be removed from the IBM Blockchain Platform console.
 
-    \ :literal:`present`\  - Asserts that a user matching the specified email and configuration exists in the Fabric operations console. If no user matches the specified email, the user will be added to the Fabric operations console. If a user matches the specified email but the configuration does not match, then the user in the Fabric operations console will be updated.
+    :literal:`present` - Asserts that a user matching the specified email and configuration exists in the Fabric operations console. If no user matches the specified email, the user will be added to the Fabric operations console. If a user matches the specified email but the configuration does not match, then the user in the Fabric operations console will be updated.
 
     | **Type**: str
     | **Default value**: ``present``
@@ -70,9 +70,9 @@ Parameters
     | **Type**: str
 
   roles
-    The roles for the user. A user must have one or more roles from the list of roles \ :literal:`reader`\ , \ :literal:`writer`\ , and \ :literal:`manager`\ .
+    The roles for the user. A user must have one or more roles from the list of roles :literal:`reader`\ , :literal:`writer`\ , and :literal:`manager`.
 
-    If you specify \ :literal:`manager`\ , then the roles \ :literal:`reader`\  and \ :literal:`writer`\  will be automatically specified for you. If you specify \ :literal:`writer`\ , then the role \ :literal:`reader`\  will be automatically specified for you.
+    If you specify :literal:`manager`\ , then the roles :literal:`reader` and :literal:`writer` will be automatically specified for you. If you specify :literal:`writer`\ , then the role :literal:`reader` will be automatically specified for you.
 
     | **Type**: list
     | **Elements**: str
@@ -141,7 +141,7 @@ Return Values
   console_user
     The user.
 
-    | **Returned**: when \ :emphasis:`state`\  is \ :literal:`present`\ 
+    | **Returned**: when :emphasis:`state` is :literal:`present`
     | **Type**: dict
 
     uuid

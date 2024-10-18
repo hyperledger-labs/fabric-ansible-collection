@@ -34,7 +34,7 @@ Parameters
     | **Type**: str
 
   api_authtype (required)
-    \ :literal:`basic`\  - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using \ :emphasis:`api\_key`\  and API secret using \ :emphasis:`api\_secret`\ .
+    :literal:`basic` - Authenticate to the Fabric operations console using basic authentication. You must provide both a valid API key using :emphasis:`api\_key` and API secret using :emphasis:`api\_secret`.
 
     | **Type**: str
 
@@ -46,7 +46,7 @@ Parameters
   api_secret
     The API secret for the Fabric operations console.
 
-    Only required when \ :emphasis:`api\_authtype`\  is \ :literal:`basic`\ .
+    Only required when :emphasis:`api\_authtype` is :literal:`basic`.
 
     | **Type**: str
 
@@ -57,9 +57,9 @@ Parameters
     | **Default value**: ``60``
 
   state
-    \ :literal:`absent`\  - If a block exists at the specified \ :emphasis:`path`\ , it will be removed.
+    :literal:`absent` - If a block exists at the specified :emphasis:`path`\ , it will be removed.
 
-    \ :literal:`present`\  - Fetch the block from the specified channel and store it at the specified \ :emphasis:`path`\ .
+    :literal:`present` - Fetch the block from the specified channel and store it at the specified :emphasis:`path`.
 
     | **Type**: str
     | **Default value**: ``present``
@@ -69,11 +69,11 @@ Parameters
 
     You can pass a string, which is the cluster name of a ordering service registered with the Fabric operations console.
 
-    You can also pass a list, which must match the result format of one of the \ :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service\_info)" at index 76: Module name "ordering\_service\_info" is not a FQCN\  or \ :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service)" at index 104: Module name "ordering\_service" is not a FQCN\  modules.
+    You can also pass a list, which must match the result format of one of the :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service\_info)" at index 76: Module name "ordering\_service\_info" is not a FQCN or :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service)" at index 104: Module name "ordering\_service" is not a FQCN modules.
 
-    Only required when \ :emphasis:`operation`\  is \ :literal:`fetch`\ .
+    Only required when :emphasis:`operation` is :literal:`fetch`.
 
-    Cannot be specified with \ :emphasis:`ordering\_service\_nodes`\ .
+    Cannot be specified with :emphasis:`ordering\_service\_nodes`.
 
     | **Type**: raw
 
@@ -82,11 +82,11 @@ Parameters
 
     You can pass strings, which are the names of ordering service nodes that are registered with the Fabric operations console.
 
-    You can also pass a dict, which must match the result format of one of the \ :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service\_node\_info)" at index 76: Module name "ordering\_service\_node\_info" is not a FQCN\  or \ :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service\_node)" at index 109: Module name "ordering\_service\_node" is not a FQCN\  modules.
+    You can also pass a dict, which must match the result format of one of the :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service\_node\_info)" at index 76: Module name "ordering\_service\_node\_info" is not a FQCN or :strong:`ERROR while parsing`\ : While parsing "M(ordering\_service\_node)" at index 109: Module name "ordering\_service\_node" is not a FQCN modules.
 
-    Only required when \ :emphasis:`operation`\  is \ :literal:`fetch`\ .
+    Only required when :emphasis:`operation` is :literal:`fetch`.
 
-    Cannot be specified with \ :emphasis:`ordering\_service`\ .
+    Cannot be specified with :emphasis:`ordering\_service`.
 
     | **Type**: raw
 
@@ -95,7 +95,7 @@ Parameters
 
     You can pass a string, which is the path to the JSON file where the enrolled identity is stored.
 
-    You can also pass a dict, which must match the result format of one of the \ :strong:`ERROR while parsing`\ : While parsing "M(enrolled\_identity\_info)" at index 76: Module name "enrolled\_identity\_info" is not a FQCN\  or \ :strong:`ERROR while parsing`\ : While parsing "M(enrolled\_identity)" at index 105: Module name "enrolled\_identity" is not a FQCN\  modules.
+    You can also pass a dict, which must match the result format of one of the :strong:`ERROR while parsing`\ : While parsing "M(enrolled\_identity\_info)" at index 76: Module name "enrolled\_identity\_info" is not a FQCN or :strong:`ERROR while parsing`\ : While parsing "M(enrolled\_identity)" at index 105: Module name "enrolled\_identity" is not a FQCN modules.
 
     | **Type**: raw
 
@@ -107,7 +107,7 @@ Parameters
   hsm
     The PKCS #11 compliant HSM configuration to use for digital signatures.
 
-    Only required if the identity specified in \ :emphasis:`identity`\  was enrolled using an HSM.
+    Only required if the identity specified in :emphasis:`identity` was enrolled using an HSM.
 
     | **Type**: dict
 
@@ -135,7 +135,7 @@ Parameters
   target (required)
     The target block to fetch.
 
-    Can be the number of the block to fetch, or one of \ :literal:`newest`\ , \ :literal:`oldest`\  or \ :literal:`config`\ .
+    Can be the number of the block to fetch, or one of :literal:`newest`\ , :literal:`oldest` or :literal:`config`.
 
     | **Type**: str
 
@@ -149,7 +149,7 @@ Parameters
 
     Only use this option if the ordering service TLS certificates have expired.
 
-    The value must be a duration, for example \ :emphasis:`30m`\ , \ :emphasis:`24h`\ , or \ :emphasis:`6h30m`\ .
+    The value must be a duration, for example :emphasis:`30m`\ , :emphasis:`24h`\ , or :emphasis:`6h30m`.
 
     | **Type**: str
 
